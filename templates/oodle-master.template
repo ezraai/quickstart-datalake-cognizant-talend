@@ -1014,10 +1014,7 @@
             "Fn::Equals": [ "", { "Ref": "RedshiftHost" } ]
         },
         "CreateEmrCondition": {
-            "Fn::Equals": [
-                { "Ref": "CreateEmr" },
-                "true"
-            ]
+            "Fn::Equals": [ "true", { "Ref": "CreateEmr" } ]
         },
         "CreateStudioCondition": {
             "Fn::Equals": [
@@ -1027,9 +1024,7 @@
         },
         "CreateBastionCondition": {
             "Fn::Not": [
-                {
-                    "Fn::Equals": [ { "Ref": "NumBastionHosts" }, "0" ]
-                }
+                { "Fn::Equals": [ { "Ref": "NumBastionHosts" }, "0" ] }
             ]
         },
         "isSaveCredentialsEnabled": {
@@ -1067,14 +1062,46 @@
             }
         },
         
-        "SecurityGroupsStack": {
-            "DependsOn": [ "VpcStack" ],
+        "BastionStack": {
             "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "VpcStack",
+            "Condition": "CreateBastionCondition",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
+                "Parameters": {
+                    "BastionAMIOS": "Amazon-Linux-HVM",
+                    "BastionInstanceType": { "Ref": "BastionInstanceType" },
+                    "BastionBanner": "not used",
+                    "EnableBanner": "false",
+                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
+                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" },
+                    "KeyPairName": { "Ref": "KeyPairName" },
+                    "NumBastionHosts": { "Ref": "NumBastionHosts" },
+                    "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
+                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/bastion/" },
+                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
+                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] }
+                }
+            }
+        },
+
+        "SecurityGroupsStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [ "VpcStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-securitygroups.template" },
                 "Parameters": {
                     "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" }
+                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
+                    "BastionSecurityGroup": { 
+                        "Fn::If": [ 
+                            "CreateBastionCondition", 
+                            { "Fn::GetAtt": [ "BastionStack", "Outputs.BastionSecurityGroupID"] },
+                            { "Ref" : "AWS::NoValue" } 
+                        ]
+                    }
                 }
             }
         },
@@ -1099,6 +1126,30 @@
                     "MasterDbPassword": { "Ref": "MasterDbPassword" }
                 }
             }
+        },
+
+		"StudioStack": {
+			"Type" : "AWS::CloudFormation::Stack",
+            "DependsOn": [ "VpcStack", "SecurityGroupsStack" ],
+            "Condition" : "CreateStudioCondition",
+			"Properties" : {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
+				"Parameters" : {
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
+                    "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
+                    "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
+					"InstanceType": { "Ref": "StudioInstanceType" },
+					"KeyName": { "Ref": "KeyPairName" },
+                    "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
+                    "PrivateSubnet": "public",
+                    "SecurityGroupIds": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.StudioSecurityGroup" ] },
+					"TalendLicenseUrl":  { "Ref": "TalendLicenseUrl" },
+                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
+                    "TalendResourceBucketRepoPath": { "Ref": "TalendResourceBucketRepoPath" }
+				},
+				"TimeoutInMinutes" : "10"
+			}
         },
 
         "GitStack": {
@@ -1245,54 +1296,6 @@
             }
         },
 
-		"StudioStack": {
-			"Type" : "AWS::CloudFormation::Stack",
-            "Condition" : "CreateStudioCondition",
-			"Properties" : {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
-				"Parameters" : {
-                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
-                    "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
-                    "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
-					"InstanceType": { "Ref": "StudioInstanceType" },
-					"KeyName": { "Ref": "KeyPairName" },
-                    "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "PrivateSubnet": "public",
-                    "SecurityGroupIds": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.StudioSecurityGroup" ] },
-					"TalendLicenseUrl":  { "Ref": "TalendLicenseUrl" },
-                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
-                    "TalendResourceBucketRepoPath": { "Ref": "TalendResourceBucketRepoPath" }
-				},
-				"TimeoutInMinutes" : "10"
-			}
-        },
-
-        "BastionStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": "VpcStack",
-            "Condition": "CreateBastionCondition",
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
-                "Parameters": {
-                    "BastionAMIOS": "Amazon-Linux-HVM",
-                    "BastionInstanceType": { "Ref": "BastionInstanceType" },
-                    "BastionBanner": "not used",
-                    "EnableBanner": "false",
-                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
-                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" },
-                    "KeyPairName": { "Ref": "KeyPairName" },
-                    "NumBastionHosts": { "Ref": "NumBastionHosts" },
-                    "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },
-                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/bastion/" },
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
-                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] }
-                }
-            }
-        },
-        
         "VpcEndpoint": {
             "Type": "AWS::EC2::VPCEndpoint",
             "Properties": {

@@ -4,3 +4,6 @@
 [submodule "submodules/datasource"]
 	path = submodules/datasource
 	url = https://github.com/Talend/datasource.quickstart.talend.git
+[submodule "submodules/bastion"]
+	path = submodules/bastion
+	url = https://github.com/Talend/quickstart-linux-bastion.git

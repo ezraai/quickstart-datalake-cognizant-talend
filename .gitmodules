@@ -7,3 +7,6 @@
 [submodule "submodules/bastion"]
 	path = submodules/bastion
 	url = https://github.com/Talend/quickstart-linux-bastion.git
+[submodule "pci/submodules/quickstart-compliance-common"]
+	path = pci/submodules/quickstart-compliance-common
+	url = https://github.com/aws-quickstart/quickstart-compliance-common.git

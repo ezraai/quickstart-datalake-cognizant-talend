@@ -1,0 +1,41 @@
+        "EmrEndpoint": {
+            "Type": "AWS::EC2::VPCEndpoint",
+            "DependsOn": [ "VpcStack" ],
+            "Properties": {
+                "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
+                "ServiceName": { "Fn::Sub": "com.amazonaws.${AWS::Region}.s3" },
+                "RouteTableIds": [
+                    { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1ARouteTable" ] }
+                ],
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "AmazonLinuxAMIRepositoryAccess",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Action": "s3:GetObject",
+                            "Resource": [
+                                "arn:aws:s3:::packages.*.amazonaws.com/*",
+                                "arn:aws:s3:::repo.*.amazonaws.com/*"
+                            ]
+                        },
+                        {
+                            "Sid": "AccessToEMRLogBucketsForSupport",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Action": [
+                                "s3:Put*",
+                                "s3:Get*",
+                                "s3:Create*",
+                                "s3:Abort*",
+                                "s3:List*"
+                            ],
+                            "Resource": [
+                                "arn:aws:s3*"
+                            ]
+                        }
+                    ]
+                }
+            }
+        },

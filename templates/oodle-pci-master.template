@@ -1,0 +1,1559 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Oodle integration with Talend quickstart",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "Please provide the following oodle values:"
+                    },
+                    "Parameters": [
+                        "pDBPassword",
+                        "pRSPassword",
+                        "pNotifyEmail",
+                        "pEC2KeyPairBastion",
+                        "pEC2KeyPair",
+                        "pSupportsConfig",
+                        "pAvailabilityZoneA",
+                        "pAvailabilityZoneB"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Please provide the following Talend values:"
+                    },
+                    "Parameters": [
+                        "TalendLicenseUser",
+                        "TalendLicensePassword",
+                        "TalendLicenseUrl",
+                        "TalendResourceBucket",
+                        "TalendResourceBucketRepoPath",
+                        "TalendResourceBucketAccessKey",
+                        "TalendResourceBucketSecret",
+                        "TacDbHost",
+                        "GitHost",
+                        "GitPort",
+                        "GitRepo",
+                        "GitAdminUserid",
+                        "GitAdminPassword"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "AWS Quick Start Configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "pDBPassword": {
+                    "default": "RDS Password.  Username : testuserdb"
+                },
+                "pRSPassword": {
+                    "default": "RedShift Password.  Username : testuserrs"
+                },
+                "pNotifyEmail": {
+                    "default": "Notification Email Address, can't be blank"
+                },
+                "pEC2KeyPairBastion": {
+                    "default": "Existing SSH Key for the Bastion Instance"
+                },
+                "pEC2KeyPair": {
+                    "default": "Existing SSH Key for Other Instances"
+                },
+                "pSupportsConfig": {
+                    "default": "Support Config"
+                },
+                "pAvailabilityZoneA": {
+                    "default": "First Availability Zone"
+                },
+                "pAvailabilityZoneB": {
+                    "default": "Second Availability zone"
+                },
+                "pVPCTenancy": {
+                    "default": "Instance tenancy"
+                },
+                "QSS3BucketName": {
+                    "default": "Quick Start S3 Bucket Name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 Key Prefix"
+                }
+            }
+        },
+        "Stack": {
+            "Value": 0
+        },
+        "VersionDate": {
+            "Value": 20160518
+        },
+        "Identifier": {
+            "Value": "main"
+        },
+        "Input": {
+            "Description": "Input of all required parameters in nested stacks"
+        },
+        "Output": {
+            "Description": "N/A"
+        },
+        "AWS::CloudFormation::Designer": {
+            "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [
+                    "c62f66e7-e765-4658-994e-95f614e1af73",
+                    "4f86e9c3-9edf-417f-925e-ed14e4638b73",
+                    "f5cf9643-4088-491c-b972-e06385d9a4b1"
+                ]
+            },
+            "72a9253c-9c36-4384-9a54-c7002fdee67a": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ],
+                "isrelatedto": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ]
+            },
+            "b9662fd7-a4f6-46bb-84d1-df29ffa0a480": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "145ba606-7785-4e7d-812a-f621efa4de08": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025",
+                    "c62f66e7-e765-4658-994e-95f614e1af73"
+                ],
+                "isrelatedto": [
+                    "b9662fd7-a4f6-46bb-84d1-df29ffa0a480",
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ]
+            },
+            "1383cd9c-b41e-4012-8968-6d161a171485": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 300,
+                    "y": 90
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "cbd1cedb-17ec-40cb-85e1-ae0aa21240a6": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 300,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "1383cd9c-b41e-4012-8968-6d161a171485",
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025",
+                    "72a9253c-9c36-4384-9a54-c7002fdee67a",
+                    "b9662fd7-a4f6-46bb-84d1-df29ffa0a480"
+                ]
+            },
+            "c62f66e7-e765-4658-994e-95f614e1af73": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": -1800,
+                    "y": 2700
+                },
+                "z": 0,
+                "parent": "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025",
+                "embeds": [],
+                "isassociatedwith": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ],
+                "dependson": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ],
+                "isrelatedto": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ]
+            },
+            "bcc04371-9270-4653-811f-9a4c4b43db94": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 60,
+                    "y": 300
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ],
+                "isrelatedto": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ]
+            },
+            "4f86e9c3-9edf-417f-925e-ed14e4638b73": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "z": 2,
+                "parent": "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025",
+                "embeds": [],
+                "isrelatedto": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ]
+            },
+            "874a14fb-2c4e-4d39-bbc8-025d30e5543a": {
+                "source": {
+                    "id": "4f86e9c3-9edf-417f-925e-ed14e4638b73"
+                },
+                "target": {
+                    "id": "4f86e9c3-9edf-417f-925e-ed14e4638b73"
+                },
+                "z": 2
+            },
+            "e0332960-35cc-4c99-9ee0-ba41a4827405": {
+                "source": {
+                    "id": "4f86e9c3-9edf-417f-925e-ed14e4638b73"
+                },
+                "target": {
+                    "id": "4f86e9c3-9edf-417f-925e-ed14e4638b73"
+                },
+                "z": 2
+            },
+            "f5cf9643-4088-491c-b972-e06385d9a4b1": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "z": 3,
+                "parent": "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025",
+                "embeds": [],
+                "isrelatedto": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ]
+            },
+            "f210f4cf-436e-4fbc-823a-3252c2fb0594": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 180,
+                    "y": 300
+                },
+                "z": 1,
+                "embeds": [],
+                "dependson": [
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025",
+                    "145ba606-7785-4e7d-812a-f621efa4de08"
+                ],
+                "isrelatedto": [
+                    "f5cf9643-4088-491c-b972-e06385d9a4b1",
+                    "4f86e9c3-9edf-417f-925e-ed14e4638b73",
+                    "fda5f07d-1e2b-4234-8fe6-d2fe9d04d025"
+                ]
+            },
+            "a07d46a0-466d-46cf-8dd9-e0fd5f6041a5": {
+                "source": {
+                    "id": "4f86e9c3-9edf-417f-925e-ed14e4638b73"
+                },
+                "target": {
+                    "id": "f5cf9643-4088-491c-b972-e06385d9a4b1"
+                },
+                "z": 3
+            },
+            "78d54925-c704-4793-8236-2bb40b8a4339": {
+                "source": {
+                    "id": "f5cf9643-4088-491c-b972-e06385d9a4b1"
+                },
+                "target": {
+                    "id": "f5cf9643-4088-491c-b972-e06385d9a4b1"
+                },
+                "z": 3
+            },
+            "f9ec4f33-1303-41a6-a5d1-8b01b772212b": {
+                "source": {
+                    "id": "f5cf9643-4088-491c-b972-e06385d9a4b1"
+                },
+                "target": {
+                    "id": "4f86e9c3-9edf-417f-925e-ed14e4638b73"
+                },
+                "z": 3
+            },
+            "ff6baa3b-9b1f-4830-8971-8a4a0802884f": {
+                "source": {
+                    "id": "f5cf9643-4088-491c-b972-e06385d9a4b1"
+                },
+                "target": {
+                    "id": "f5cf9643-4088-491c-b972-e06385d9a4b1"
+                },
+                "z": 3
+            },
+            "b8d1f1b2-6bb8-49fc-baa6-a1150de38bc4": {
+                "source": {
+                    "id": "145ba606-7785-4e7d-812a-f621efa4de08"
+                },
+                "target": {
+                    "id": "c62f66e7-e765-4658-994e-95f614e1af73"
+                },
+                "z": 11
+            },
+            "c5265ea9-718b-42ab-879e-77a3eb96391d": {
+                "source": {
+                    "id": "f210f4cf-436e-4fbc-823a-3252c2fb0594"
+                },
+                "target": {
+                    "id": "145ba606-7785-4e7d-812a-f621efa4de08"
+                },
+                "z": 4
+            }
+        }
+    },
+    "Parameters": {
+        "QSS3URL": {
+            "Description": "Encapsulate variation in s3 root url for commercial or gov-cloud",
+            "Type": "String",
+            "Default": "https://s3.amazonaws.com",
+            "AllowedValues": [ "https://s3.amazonaws.com", "https://s3-us-gov-west-1.amazonaws.com" ]
+        },
+        "QSS3BucketName": {
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$",
+            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Default": "oodle.quickstart.talend",
+            "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Type": "String"
+        },
+        "QSS3KeyPrefix": {
+            "AllowedPattern": "^[0-9a-zA-Z-/]*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).  Prefix cannot start with a slash but must end with a slash unless it is the empty string.",
+            "Default": "",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).  Prefix cannot start with a slash but must end with a slash unless it is the empty string.",
+            "Type": "String"
+        },
+        "CreateRedshift": {
+            "Description": "Create Redshift.",
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "CreateEMR": {
+            "Description": "Create EMR.",
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ]
+        },
+        "TalendLicenseUser": {
+            "Description": "The Talend License User is included in the email you received with your eval license.",
+            "Type": "String",
+            "Default": "user"
+        },
+        "TalendLicensePassword": {
+            "Description": "The Talend License Password is included in the email you received with your eval license.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "TalendLicenseUrl": {
+            "Description": "Url to license file received in email.",
+            "Type": "String",
+            "Default": "https://s3.amazonaws.com/license.quickstart.talend/license"
+        },
+        "TalendResourceBucket": {
+            "Description": "Talend S3 resources bucket.",
+            "Type": "String",
+            "Default": "repo-quickstart-talend"
+        },
+        "TalendResourceBucketRepoPath": {
+            "Description": "Path to binary repository in Talend S3 resources bucket.",
+            "Type": "String",
+            "Default": "/"
+        },
+        "TalendResourceBucketAccessKey": {
+            "Description": "Access Key for Talend S3 resources bucket.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "TalendResourceBucketSecret": {
+            "Description": "Secret for Talend S3 resources bucket.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "TacInstanceType": {
+            "Description": "TAC EC2 instance type",
+            "Type": "String",
+            "Default": "t2.medium",
+            "AllowedValues": [
+                "t1.micro",
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "m1.small",
+                "m1.medium",
+                "m1.large",
+                "m1.xlarge",
+                "m2.xlarge",
+                "m2.2xlarge",
+                "m2.4xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "c1.medium",
+                "c1.xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "g2.2xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "cr1.8xlarge",
+                "cc2.8xlarge",
+                "cg1.4xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "NexusInstanceType": {
+            "Description": "Nexus EC2 instance type",
+            "Type": "String",
+            "Default": "t2.small",
+            "AllowedValues": [
+                "t1.micro",
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "m1.small",
+                "m1.medium",
+                "m1.large",
+                "m1.xlarge",
+                "m2.xlarge",
+                "m2.2xlarge",
+                "m2.4xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "c1.medium",
+                "c1.xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "g2.2xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "cr1.8xlarge",
+                "cc2.8xlarge",
+                "cg1.4xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "LogserverInstanceType": {
+            "Description": "Logserver EC2 instance type",
+            "Type": "String",
+            "Default": "t2.small",
+            "AllowedValues": [
+                "t1.micro",
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "m1.small",
+                "m1.medium",
+                "m1.large",
+                "m1.xlarge",
+                "m2.xlarge",
+                "m2.2xlarge",
+                "m2.4xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "c1.medium",
+                "c1.xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "g2.2xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "cr1.8xlarge",
+                "cc2.8xlarge",
+                "cg1.4xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "JobserverInstanceType": {
+            "Description": "Jobserver EC2 instance type",
+            "Type": "String",
+            "Default": "t2.micro",
+            "AllowedValues": [
+                "t1.micro",
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "m1.small",
+                "m1.medium",
+                "m1.large",
+                "m1.xlarge",
+                "m2.xlarge",
+                "m2.2xlarge",
+                "m2.4xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "c1.medium",
+                "c1.xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c3.4xlarge",
+                "c3.8xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "g2.2xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "i2.xlarge",
+                "i2.2xlarge",
+                "i2.4xlarge",
+                "i2.8xlarge",
+                "d2.xlarge",
+                "d2.2xlarge",
+                "d2.4xlarge",
+                "d2.8xlarge",
+                "hi1.4xlarge",
+                "hs1.8xlarge",
+                "cr1.8xlarge",
+                "cc2.8xlarge",
+                "cg1.4xlarge"
+            ],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "TacDbHost": {
+            "Description": "TAC database hostname.",
+            "Type": "String",
+            "Default": ""
+        },
+        "CreateTacDatabase": {
+            "Description": "Create TAC Database (true) or use an existing TAC database (false)",
+            "Type": "String",
+            "AllowedValues": [ "true", "false" ],
+            "Default": "true"
+        },
+        "CreateAmcDatabase": {
+            "Description": "Create AMC Database (true) or use an existing AMC database (false)",
+            "Type": "String",
+            "AllowedValues": [ "true", "false" ],
+            "Default": "true"
+        },
+        "MasterDbUser": {
+            "Description": "The master or root user used to create TAC and AMC databases and the TAC user.  Only needed if creating the TAC or AMC databases.",
+            "Type": "String",
+            "Default": ""
+        },
+        "MasterDbPassword": {
+            "Description": "Master user database password.  Only needed if creating the TAC or AMC databases.",
+            "Type": "String",
+            "Default": "",
+            "NoEcho": "true"
+        },
+        "DbClass": {
+            "Description": "Instance class of RDS instance",
+            "Type": "String",
+            "AllowedValues": [ "db.t2.micro", "db.t2.small", "db.t2.medium", "db.t2.large", "db.m4.large", "db.m4.xlarge", "db.m4.2xlarge", "db.m4.4xlarge", "db.m4.10xlarge", "db.r3.large", "db.r3.xlarge", "db.r3.2xlarge", "db.r3.4xlarge", "db.r3.8xlarge" ],
+            "Default": "db.t2.micro"
+        },
+        "DbAllocatedStorage": {
+            "Description": "Allocated Storage (in GB) for RDS instance",
+            "Type": "Number",
+            "Default": "20"
+        },
+        "GitProtocol": {
+            "Description": "Git protocol.",
+            "Type": "String",
+            "Default": "http"
+        },
+        "GitHost": {
+            "Description": "Git host.",
+            "Type": "String",
+            "Default": "github.com"
+        },
+        "GitPort": {
+            "Description": "Git port.",
+            "Type": "Number",
+            "Default": "443",
+            "MinValue": "1",
+            "MaxValue": "65535"
+        },
+        "GitRepo": {
+            "Description": "Git repository.",
+            "Type": "String",
+            "Default": "oodlejobs"
+        },
+        "GitAdminUserid": {
+            "Description": "Git user.",
+            "Type": "String",
+            "Default": "EdwardOst"
+        },
+        "GitAdminPassword": {
+            "Description": "Git password.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
+        "GitAdminEmail": {
+            "Description": "Git admin contact email.",
+            "Type": "String",
+            "Default": ""
+        },
+        "GitTacUserid": {
+            "Description": "Git TAC userid.",
+            "Type": "String",
+            "Default": "tac"
+        },
+        "GitTacPassword": {
+            "Description": "Git TAC password.",
+            "Type": "String",
+            "NoEcho": "true",
+            "Default": "tacPassword"
+        },
+        "GitTacEmail": {
+            "Description": "TAC contact email.",
+            "Type": "String",
+            "Default": ""
+        },
+        "RemoteAccessCIDR": {
+            "Description": "The IP address range that can be used to access the TAC server using SSH.",
+            "Type": "String",
+            "MinLength": "9",
+            "MaxLength": "18",
+            "Default": "0.0.0.0/0",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+        },
+        "pDBPassword": {
+            "Description": "Mixed alphanumeric and must be between 8 and 28 characters and contain at least one capital letter",
+            "NoEcho": true,
+            "Type": "String",
+            "MinLength": 8,
+            "MaxLength": 28,
+            "AllowedPattern": "[a-zA-Z0-9!^*\\-_+]*",
+            "ConstraintDescription": "Can only contain alphanumeric characters or the following special characters !^*-_+, between 8 and 28 characters"
+        },
+        "pRSPassword": {
+            "Description": "Mixed alphanumeric and must be between 8 and 28 characters and contain at least one capital letter and one number",
+            "NoEcho": true,
+            "Type": "String",
+            "MinLength": 8,
+            "MaxLength": 28,
+            "AllowedPattern": "[a-zA-Z0-9!^*\\-_+]*",
+            "ConstraintDescription": "Can only contain alphanumeric characters or the following special characters !^*-_+, between 8 and 28 characters"
+        },
+        "pNotifyEmail": {
+            "Description": "Notification email address for security events (you will receive a confirmation email)",
+            "Type": "String",
+            "Default": "distlist@example.org"
+        },
+        "pEC2KeyPairBastion": {
+            "Description": "The SSH key pair in your account to use for the bastion host login",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "pEC2KeyPair": {
+            "Description": "The SSH key pair in your account to use for all other EC2 instance logins",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "pSupportsConfig": {
+            "Description": "Is AWS Config Rules already configured for this region? Use 'No' if you are uncertain. AWS Config Rules is available in these regions: US East (Virginia), US West (Oregon), EU West (Ireland), and EU Central (Frankfurt). See AWS Config Management Console or Deployment Guide for details.",
+            "AllowedValues": [
+                "Yes",
+                "No"
+            ],
+            "Default": "No",
+            "Type": "String"
+        },
+        "pAvailabilityZoneA": {
+            "Description": "Availability Zone 1",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "pAvailabilityZoneB": {
+            "Description": "Availability Zone 2",
+            "Type": "AWS::EC2::AvailabilityZone::Name"
+        },
+        "pVPCTenancy": {
+            "Description": "Instance tenancy behavior for this VPC",
+            "Type": "String",
+            "Default": "default",
+            "AllowedValues": [
+                "default",
+                "dedicated"
+            ]
+        }
+    },
+    "Mappings": {
+        "Talend": {
+            "git": {
+                "repo": "oodlejobs"
+            }
+        },
+        "CustomVariables": {
+            "vResourceEnvironmentTagKey": {
+                "Value": "Environment"
+            },
+            "vResourceEnvironmentTagValue": {
+                "Value": "development"
+            }
+        },
+        "RegionServiceSupport": {
+            "us-east-1": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "us-east-2": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "us-west-1": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "us-west-2": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "ca-central-1": {
+                "ConfigRules": false,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "eu-central-1": {
+                "NatGateway": true,
+                "ConfigRules": true,
+                "Glacier": true
+            },
+            "eu-west-1": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "eu-west-2": {
+                "ConfigRules": false,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "ap-northeast-1": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "ap-northeast-2": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "ap-south-1": {
+                "ConfigRules": false,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "ap-southeast-1": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": false
+            },
+            "ap-southeast-2": {
+                "ConfigRules": true,
+                "NatGateway": true,
+                "Glacier": true
+            },
+            "sa-east-1": {
+                "ConfigRules": false,
+                "NatGateway": true,
+                "Glacier": false
+            },
+            "us-gov-west-1": {
+                "ConfigRules": false,
+                "NatGateway": false,
+                "Glacier": false
+            }
+        },
+        "AWSAMIRegionMap": {
+            "AMI": {
+                "AMZNLINUXHVM": "amzn-ami-hvm-2017.03.1.20170623-x86_64-gp2"
+            },
+            "ap-northeast-1": {
+                "AMZNLINUXHVM": "ami-3bd3c45c",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "ap-northeast-2": {
+                "AMZNLINUXHVM": "ami-e21cc38c",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "ap-south-1": {
+                "AMZNLINUXHVM": "ami-47205e28",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "ap-southeast-1": {
+                "AMZNLINUXHVM": "ami-77af2014",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "ap-southeast-2": {
+                "AMZNLINUXHVM": "ami-10918173",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "ca-central-1": {
+                "AMZNLINUXHVM": "ami-a7aa15c3",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "eu-central-1": {
+                "AMZNLINUXHVM": "ami-82be18ed",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "eu-west-1": {
+                "AMZNLINUXHVM": "ami-d7b9a2b1",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "eu-west-2": {
+                "AMZNLINUXHVM": "ami-ed100689",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "sa-east-1": {
+                "AMZNLINUXHVM": "ami-87dab1eb",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m3.large"
+            },
+            "us-east-1": {
+                "AMZNLINUXHVM": "ami-a4c7edb2",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "us-east-2": {
+                "AMZNLINUXHVM": "ami-8a7859ef",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "us-gov-west-1": {
+                "AMZNLINUXHVM": "ami-ffa61d9e",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m3.large"
+            },
+            "us-west-1": {
+                "AMZNLINUXHVM": "ami-327f5352",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            },
+            "us-west-2": {
+                "AMZNLINUXHVM": "ami-6df1e514",
+                "InstanceType": "m4.large",
+                "InstanceTypeDatabase": "db.m4.large"
+            }
+        }
+    },
+    "Conditions": {
+        "LoadConfigRulesTemplate": {
+            "Fn::Equals": [ { "Ref": "pSupportsConfig" }, "Yes" ]
+        },
+        "LaunchAsDedicatedInstance": {
+            "Fn::Equals": [ { "Ref": "pVPCTenancy" }, "dedicated" ]
+        },
+        "CreateRedshiftCondition": {
+            "Fn::Equals": [
+                { "Ref": "CreateRedshift" },
+                "false"
+            ]
+        },
+        "CreateEmrCondition": {
+            "Fn::Equals": [
+                { "Ref": "CreateEMR" },
+                "false"
+            ]
+        },
+        "CreateRdsCondition": {
+            "Fn::Equals": [ "", { "Ref": "TacDbHost" } ]
+        },
+        "CreateGitCondition": {
+            "Fn::Equals": [ "", { "Ref": "GitHost" } ]
+        }
+    },
+    "Resources": {
+        "IamStack": {
+			"Type" : "AWS::CloudFormation::Stack",
+			"Properties" : {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template" },
+				"Parameters" : {
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" }
+                }
+            }
+        },
+    
+        "SecurityGroupsStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-securitygroups.template" },
+                "Parameters": {
+                    "VpcId": { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rVPCProduction" ] },
+                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" }
+                }
+            }
+        },
+        
+        "TalendDbStack": {
+            "Type": "AWS::CloudFormation::Stack",
+			"DependsOn": [ "ProductionVpcStack", "SecurityGroupsStack" ],
+            "Condition": "CreateRdsCondition",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-rds.template" },
+                "Parameters": {
+                    "Subnets": { "Fn::Join": [ ",",
+                        [ { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rDBPrivateSubnetA"] },
+                        { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rDBPrivateSubnetB"] } ]
+                    ] },
+                    "SecurityGroups": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.DatabaseSecurityGroup" ] },
+                    "DbClass": { "Ref": "DbClass" },
+                    "DbAllocatedStorage": { "Ref": "DbAllocatedStorage" },
+                    "MasterDbUser": { "Ref": "MasterDbUser" },
+                    "MasterDbPassword": { "Ref": "MasterDbPassword" }
+                }
+            }
+        },
+
+        "GitStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [ "ProductionVpcStack" ],
+            "Condition": "CreateGitCondition",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/gitlab.template" },
+                "TimeoutInMinutes": 30,
+                "Parameters": {
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
+                    "InstanceType": "c4.large",
+                    "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
+                    "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
+                    "GitSecurityGroup": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.GitSecurityGroup" ] },
+                    "PrivateSubnet": "private",
+                    "KeyPairName": { "Ref": "pEC2KeyPair" },
+                    "VolumeSize": "100",
+                    "VolumeType": "gp2",
+                    "SubnetId": { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rDMZSubnetA" ] },
+                    "GitAdminUserid": { "Ref": "GitAdminUserid" },
+                    "GitAdminPassword": { "Ref": "GitAdminPassword" },
+                    "GitAdminEmail": { "Ref": "GitAdminEmail" },
+                    "GitTacUserid": { "Ref": "GitTacUserid" },
+                    "GitTacPassword": { "Ref": "GitTacPassword" },
+                    "GitTacEmail": { "Ref": "GitTacEmail" },
+                    "GitRepo": { "Fn::FindInMap": [ "Talend", "git", "repo" ] },
+                    "GitSourceUrl": "https://raw.githubusercontent.com/EdwardOst/bash-util/master/util.sh"
+                }
+            }
+        },
+
+        "TalendServersStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [
+                "ProductionVpcStack",
+                "SecurityGroupsStack",
+                "IamStack"
+            ],
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
+                "TimeoutInMinutes": 30,
+                "Parameters": {
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
+
+                    "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
+                    "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
+
+                    "PublicSubnetId": { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rDMZSubnetA" ] },
+                    "PrivateSubnetId": { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rAppPrivateSubnetA" ]},
+
+                    "PrivateNexus": "private",
+                    "PrivateLogserver": "private",
+                    "PrivateTac": "private",
+                    "PrivateJobserver": "private",
+
+                    "NexusInstanceType": { "Ref": "NexusInstanceType" },
+                    "LogserverInstanceType": { "Ref": "LogserverInstanceType" },
+                    "TacInstanceType": { "Ref": "TacInstanceType" },
+                    "JobserverInstanceType": { "Ref": "JobserverInstanceType" },
+
+                    "TacSecurityGroup": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.TacSecurityGroup" ] },
+					"NexusSecurityGroup": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.NexusSecurityGroup" ] },
+					"LogserverSecurityGroup": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.LogserverSecurityGroup" ] },
+                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.JobserverSecurityGroup" ] },
+
+                    "KeyName": { "Ref": "pEC2KeyPair" },
+                    
+                    "TalendLicenseUser": { "Ref": "TalendLicenseUser" },
+                    "TalendLicensePassword": { "Ref": "TalendLicensePassword" },
+                    "TalendLicenseUrl": { "Ref": "TalendLicenseUrl" },
+
+                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
+                    "TalendResourceBucketRepoPath": { "Ref": "TalendResourceBucketRepoPath" },
+                    "TalendResourceBucketAccessKey": { "Ref": "TalendResourceBucketAccessKey" },
+                    "TalendResourceBucketSecret": { "Ref": "TalendResourceBucketSecret" },
+
+                    "TacDbHost": {
+                        "Fn::If": [
+                            "CreateRdsCondition",
+                            { "Fn::GetAtt": [ "TalendDbStack", "Outputs.EndpointAddress" ] },
+                            { "Ref": "TacDbHost" } 
+                        ]
+                    },
+                    "MasterDbUser": { "Ref": "MasterDbUser" },
+                    "MasterDbPassword": { "Ref": "MasterDbPassword" },
+                    "CreateTacDatabase": { "Ref": "CreateTacDatabase" },
+                    "CreateAmcDatabase": { "Ref": "CreateAmcDatabase" },
+
+                    "GitHost": {
+                        "Fn::If": [
+                            "CreateGitCondition",
+                            { "Fn::GetAtt": [ "GitStack", "Outputs.privateDnsName" ] },
+                            { "Ref": "GitHost" } 
+                        ]
+                    },
+                    "GitProtocol": { "Ref": "GitProtocol" },
+                    "GitPort": { "Ref": "GitPort" },
+                    "GitRepo": { "Ref": "GitRepo" },
+                    "GitAdminUserid": { "Ref": "GitAdminUserid" },
+                    "GitAdminPassword": { "Ref": "GitAdminPassword" }
+
+                    }
+            }
+        },
+
+        "DataSource": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [
+                "ProductionVpcStack",
+                "EMREndPoint"
+            ],
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/DataSource.template" },
+                "TimeoutInMinutes": 30,
+                "Parameters": {
+                    "CreateEMR": { "Ref": "CreateEMR" },
+                    "CreateRedshift": { "Ref": "CreateRedshift" },
+                    "pSecurityAlarmTopic": {
+                        "Fn::GetAtt": [
+                            "LoggingStack",
+                            "Outputs.rSecurityAlarmTopic"
+                        ]
+                    },
+                    "pEC2KeyPair": { "Ref": "pEC2KeyPair" },
+                    "pProductionCIDR": "10.100.0.0/16",
+                    "pProductionVPC": {
+                        "Fn::GetAtt": [
+                            "ProductionVpcStack",
+                            "Outputs.rVPCProduction"
+                        ]
+                    },
+                    "pDMZSubnetA": {
+                        "Fn::GetAtt": [
+                            "ProductionVpcStack",
+                            "Outputs.rDMZSubnetA"
+                        ]
+                    },
+                    "pDMZSubnetB": {
+                        "Fn::GetAtt": [
+                            "ProductionVpcStack",
+                            "Outputs.rDMZSubnetB"
+                        ]
+                    },
+                    "pAppPrivateSubnetA": {
+                        "Fn::GetAtt": [
+                            "ProductionVpcStack",
+                            "Outputs.rAppPrivateSubnetA"
+                        ]
+                    },
+                    "pAppPrivateSubnetB": {
+                        "Fn::GetAtt": [
+                            "ProductionVpcStack",
+                            "Outputs.rAppPrivateSubnetB"
+                        ]
+                    },
+                    "pWebInstanceType": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            { "Ref": "AWS::Region" },
+                            "InstanceType"
+                        ]
+                    },
+                    "pAppInstanceType": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            { "Ref": "AWS::Region" },
+                            "InstanceType"
+                        ]
+                    },
+                    "pDBPrivateSubnetA": {
+                        "Fn::GetAtt": [
+                            "ProductionVpcStack",
+                            "Outputs.rDBPrivateSubnetA"
+                        ]
+                    },
+                    "pDBPrivateSubnetB": {
+                        "Fn::GetAtt": [
+                            "ProductionVpcStack",
+                            "Outputs.rDBPrivateSubnetB"
+                        ]
+                    },
+                    "pManagementCIDR": "10.10.0.0/16",
+                    "pRegionAZ1Name": { "Ref": "pAvailabilityZoneA" },
+                    "pRegionAZ2Name": { "Ref": "pAvailabilityZoneB" },
+                    "pWebServerAMI": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            { "Ref": "AWS::Region" },
+                            "AMZNLINUXHVM"
+                        ]
+                    },
+                    "pAppAmi": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            { "Ref": "AWS::Region" },
+                            "AMZNLINUXHVM"
+                        ]
+                    },
+                    "pDBUser": "testuserdb",
+                    "pDBName": "testDB",
+                    "pDBPassword": { "Ref": "pDBPassword" },
+                    "pDBClass": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            { "Ref": "AWS::Region" },
+                            "InstanceTypeDatabase"
+                        ]
+                    },
+                    "pDBAllocatedStorage": 10,
+                    "pEnvironment": {
+                        "Fn::FindInMap": [
+                            "CustomVariables",
+                            "vResourceEnvironmentTagValue",
+                            "Value"
+                        ]
+                    },
+                    "pRSPassword": { "Ref": "pRSPassword" },
+                    "pBastionSSHCIDR": "0.0.0.0/0",
+                    "pSupportsGlacier": {
+                        "Fn::FindInMap": [
+                            "RegionServiceSupport",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "Glacier"
+                        ]
+                    }
+                }
+            }
+        },
+        "PciIamStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}pci/submodules/quickstart-compliance-common/templates/iam.template" },
+                "TimeoutInMinutes": 20
+            }
+        },
+        "LoggingStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}pci/submodules/quickstart-compliance-common/templates/logging.template" },
+                "TimeoutInMinutes": 20,
+                "Parameters": {
+                    "pNotifyEmail": {
+                        "Ref": "pNotifyEmail"
+                    },
+                    "pSupportsGlacier": {
+                        "Fn::FindInMap": [
+                            "RegionServiceSupport",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "Glacier"
+                        ]
+                    }
+                }
+            }
+        },
+        "ProductionVpcStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}pci/submodules/quickstart-compliance-common/templates/vpc-production.template" },
+                "TimeoutInMinutes": 20,
+                "Parameters": {
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": "pci",
+                    "pRegionAZ1Name": { "Ref": "pAvailabilityZoneA" },
+                    "pRegionAZ2Name": { "Ref": "pAvailabilityZoneB" },
+                    "pProductionVPCName": "Production VPC",
+                    "pBastionSSHCIDR": "0.0.0.0/0",
+                    "pDMZSubnetACIDR": "10.100.10.0/24",
+                    "pDMZSubnetBCIDR": "10.100.20.0/24",
+                    "pManagementCIDR": "10.10.0.0/16",
+                    "pAppPrivateSubnetACIDR": "10.100.96.0/21",
+                    "pAppPrivateSubnetBCIDR": "10.100.119.0/21",
+                    "pDBPrivateSubnetACIDR": "10.100.194.0/21",
+                    "pDBPrivateSubnetBCIDR": "10.100.212.0/21",
+                    "pVPCTenancy": { "Ref": "pVPCTenancy" },
+                    "pEnvironment": {
+                        "Fn::FindInMap": [
+                            "CustomVariables",
+                            "vResourceEnvironmentTagValue",
+                            "Value"
+                        ]
+                    },
+                    "pEC2KeyPair": {
+                        "Ref": "pEC2KeyPair"
+                    },
+                    "pSupportsNatGateway": {
+                        "Fn::FindInMap": [
+                            "RegionServiceSupport",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "NatGateway"
+                        ]
+                    },
+                    "pNatAmi": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "AMZNLINUXHVM"
+                        ]
+                    },
+                    "pNatInstanceType": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "InstanceType"
+                        ]
+                    }
+                }
+            }
+        },
+        "ManagementVpcStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": "ProductionVpcStack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}pci/submodules/quickstart-compliance-common/templates/vpc-management.template" },
+                "TimeoutInMinutes": 20,
+                "Parameters": {
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": "pci",
+                    "pProductionVPC": { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rVPCProduction" ] },
+                    "pRouteTableProdPrivate": { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rRouteTableProdPrivate" ] },
+                    "pRouteTableProdPublic": { "Fn::GetAtt": [ "ProductionVpcStack", "Outputs.rRouteTableProdPublic" ] },
+                    "pProductionCIDR": "10.100.0.0/16",
+                    "pBastionSSHCIDR": "0.0.0.0/0",
+                    "pManagementCIDR": "10.10.0.0/16",
+                    "pManagementDMZSubnetACIDR": "10.10.1.0/24",
+                    "pManagementDMZSubnetBCIDR": "10.10.2.0/24",
+                    "pManagementPrivateSubnetACIDR": "10.10.20.0/24",
+                    "pManagementPrivateSubnetBCIDR": "10.10.30.0/24",
+                    "pManagementVPCName": "Management VPC",
+                    "pEC2KeyPairBastion": { "Ref": "pEC2KeyPairBastion" },
+                    "pEC2KeyPair": { "Ref": "pEC2KeyPair" },
+                    "pVPCTenancy": { "Ref": "pVPCTenancy" },
+                    "pBastionAmi": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "AMZNLINUXHVM"
+                        ]
+                    },
+                    "pRegionAZ1Name": { "Ref": "pAvailabilityZoneA" },
+                    "pRegionAZ2Name": { "Ref": "pAvailabilityZoneB" },
+                    "pEnvironment": {
+                        "Fn::FindInMap": [
+                            "CustomVariables",
+                            "vResourceEnvironmentTagValue",
+                            "Value"
+                        ]
+                    },
+                    "pBastionInstanceType": {
+                        "Fn::If": [
+                            "LaunchAsDedicatedInstance",
+                            "m4.large",
+                            "t2.small"
+                        ]
+                    },
+                    "pSupportsNatGateway": {
+                        "Fn::FindInMap": [
+                            "RegionServiceSupport",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "NatGateway"
+                        ]
+                    },
+                    "pNatAmi": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "AMZNLINUXHVM"
+                        ]
+                    },
+                    "pNatInstanceType": {
+                        "Fn::FindInMap": [
+                            "AWSAMIRegionMap",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            "InstanceType"
+                        ]
+                    }
+                }
+            }
+        },
+        "ConfigRulesStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Condition": "LoadConfigRulesTemplate",
+            "DependsOn": [
+                "PciIamStack",
+                "ProductionVpcStack",
+                "ManagementVpcStack",
+                "LoggingStack"
+            ],
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}pci/submodules/quickstart-compliance-common/templates/config-rules.template" },
+                "TimeoutInMinutes": 20,
+                "Parameters": {
+                    "pRequiredTagKey": {
+                        "Fn::FindInMap": [
+                            "CustomVariables",
+                            "vResourceEnvironmentTagKey",
+                            "Value"
+                        ]
+                    }
+                }
+            }
+        },
+        "EMREndPoint": {
+            "Type": "AWS::EC2::VPCEndpoint",
+            "DependsOn": [
+                "ProductionVpcStack"
+            ],
+            "Properties": {
+                "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Sid": "AmazonLinuxAMIRepositoryAccess",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Action": "s3:GetObject",
+                            "Resource": [
+                                "arn:aws:s3:::packages.*.amazonaws.com/*",
+                                "arn:aws:s3:::repo.*.amazonaws.com/*"
+                            ]
+                        },
+                        {
+                            "Sid": "AccessToEMRLogBucketsForSupport",
+                            "Effect": "Allow",
+                            "Principal": "*",
+                            "Action": [
+                                "s3:Put*",
+                                "s3:Get*",
+                                "s3:Create*",
+                                "s3:Abort*",
+                                "s3:List*"
+                            ],
+                            "Resource": [
+                                "arn:aws:s3*"
+                            ]
+                        }
+                    ]
+                },
+                "RouteTableIds": [
+                    {
+                        "Fn::GetAtt": [
+                            "ProductionVpcStack",
+                            "Outputs.rRouteTableProdPrivate"
+                        ]
+                    }
+                ],
+                "ServiceName": {
+                    "Fn::Join": [
+                        "",
+                        [
+                            "com.amazonaws.",
+                            {
+                                "Ref": "AWS::Region"
+                            },
+                            ".s3"
+                        ]
+                    ]
+                },
+                "VpcId": {
+                    "Fn::GetAtt": [
+                        "ProductionVpcStack",
+                        "Outputs.rVPCProduction"
+                    ]
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "TemplateType": {
+            "Value": "OODLE Master Stack"
+        },
+        "TemplateVersion": {
+            "Value": 2
+        },
+        "BastionIP": {
+            "Description": "Use this IP via SSH to connect to Bastion Instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "ManagementVpcStack",
+                    "Outputs.rBastionInstanceIP"
+                ]
+            }
+        }
+    }
+}

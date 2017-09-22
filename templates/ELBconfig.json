@@ -1,0 +1,462 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "pDMZSubnetA": {
+            "Description": "DMZ Subnet A",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "pDMZSubnetB": {
+            "Description": "DMZ Subnet B",
+            "Type": "AWS::EC2::Subnet::Id"
+        },
+        "pProductionVPC": {
+            "Description": "Production VPC",
+            "Type": "AWS::EC2::VPC::Id"
+        },
+        "pGitServerid": {
+            "Description": "id of the git server",
+            "Type": "AWS::EC2::Instance::Id"
+        },
+        "pTACServerid": {
+            "Description": "id of the TAC server",
+            "Type": "AWS::EC2::Instance::Id"
+        },
+        "pNexusServerid": {
+            "Description": "id of the Nexus server",
+            "Type": "AWS::EC2::Instance::Id"
+        },
+        "pLogServerid": {
+            "Description": "id of the Log server",
+            "Type": "AWS::EC2::Instance::Id"
+        }
+    },
+    "Metadata": {
+        "AWS::CloudFormation::Designer": {
+            "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 210,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "525d3e55-1adf-4d5a-a575-0c0cf9208bd5"
+                ]
+            },
+            "47f27ba8-df73-4924-8838-7c78be3e8c6d": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 90,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9"
+                ],
+                "isrelatedto": [
+                    "2bc2d159-2c2c-4989-aa36-9d83d86ead39"
+                ]
+            },
+            "8568e18b-f021-434e-8b1c-a8e50f8df242": {
+                "source": {
+                    "id": "47f27ba8-df73-4924-8838-7c78be3e8c6d"
+                },
+                "target": {
+                    "id": "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9"
+                },
+                "z": 1
+            },
+            "2bc2d159-2c2c-4989-aa36-9d83d86ead39": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 30,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "525d3e55-1adf-4d5a-a575-0c0cf9208bd5": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 270,
+                    "y": 130
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "55885fa6-5097-4f29-852d-3147dffa7b0d": {
+                "source": {
+                    "id": "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9"
+                },
+                "target": {
+                    "id": "525d3e55-1adf-4d5a-a575-0c0cf9208bd5"
+                },
+                "z": 11
+            },
+            "73decac3-5a63-4ce9-b263-edeb23145bab": {
+                "source": {
+                    "id": "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9",
+                    "selector": "g:nth-child(1) g:nth-child(4) g:nth-child(2) circle:nth-child(1)     ",
+                    "port": "AWS::RefLink-AWS::EC2::SecurityGroup-SecurityGroups"
+                },
+                "target": {
+                    "id": "525d3e55-1adf-4d5a-a575-0c0cf9208bd5"
+                },
+                "z": 12
+            },
+            "dd1eb9b9-970d-4629-866e-9e84389a3136": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 30,
+                    "y": 290
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "22e8b31f-8ea0-4810-94bd-2f747553e803": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 390,
+                    "y": 290
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "8c671ded-96d6-4f58-bb57-d0d17d544e16": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 390,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": []
+            },
+            "da268064-cd38-4112-ac68-ff42df678a1f": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 90,
+                    "y": 290
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9"
+                ],
+                "isrelatedto": [
+                    "dd1eb9b9-970d-4629-866e-9e84389a3136"
+                ]
+            },
+            "a8e1f125-ac26-45ac-bbc8-2a00257697ff": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 310,
+                    "y": 290
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9"
+                ],
+                "isrelatedto": [
+                    "22e8b31f-8ea0-4810-94bd-2f747553e803"
+                ]
+            },
+            "9bb03f8e-17cb-48ae-9532-d8242873d464": {
+                "size": {
+                    "width": 60,
+                    "height": 60
+                },
+                "position": {
+                    "x": 320,
+                    "y": 210
+                },
+                "z": 1,
+                "embeds": [],
+                "isassociatedwith": [
+                    "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9"
+                ],
+                "isrelatedto": [
+                    "8c671ded-96d6-4f58-bb57-d0d17d544e16"
+                ]
+            }
+        }
+    },
+    "Resources": {
+        "rTalendServerELB": {
+            "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+            "Properties": {
+                "Subnets": [
+                    {
+                        "Ref": "pDMZSubnetA"
+                    },
+                    {
+                        "Ref": "pDMZSubnetB"
+                    }
+                ],
+                "SecurityGroups": [
+                    {
+                        "Ref": "rELBSecurityGroup"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "dca4fc8d-9ef6-4d98-be0f-e4037cb826e9"
+                }
+            }
+        },
+        "rGitListener": {
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "Properties": {
+                "LoadBalancerArn": {
+                    "Ref": "rTalendServerELB"
+                },
+                "Port": 80,
+                "Protocol": "HTTP",
+                "DefaultActions": [
+                    {
+                        "Type": "forward",
+                        "TargetGroupArn": {
+                            "Ref": "rGitTG"
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "47f27ba8-df73-4924-8838-7c78be3e8c6d"
+                }
+            }
+        },
+        "rGitTG": {
+            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "Properties": {
+                "Port": 80,
+                "Protocol": "HTTP",
+                "VpcId": {
+                    "Ref": "pProductionVPC"
+                },
+                "Targets": [
+                    {
+                        "Id": {
+                            "Ref": "pGitServerid"
+                        },
+                        "Port": 80
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "2bc2d159-2c2c-4989-aa36-9d83d86ead39"
+                }
+            }
+        },
+        "rTACListener": {
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "Properties": {
+                "LoadBalancerArn": {
+                    "Ref": "rTalendServerELB"
+                },
+                "Port": 8080,
+                "Protocol": "HTTP",
+                "DefaultActions": [
+                    {
+                        "Type": "forward",
+                        "TargetGroupArn": {
+                            "Ref": "rTACTG"
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "9bb03f8e-17cb-48ae-9532-d8242873d464"
+                }
+            }
+        },
+        "rTACTG": {
+            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "Properties": {
+                "Port": 8080,
+                "Protocol": "HTTP",
+                "VpcId": {
+                    "Ref": "pProductionVPC"
+                },
+                "Targets": [
+                    {
+                        "Id": {
+                            "Ref": "pTACServerid"
+                        },
+                        "Port": 8080
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "8c671ded-96d6-4f58-bb57-d0d17d544e16"
+                }
+            }
+        },
+        "rNexusListener": {
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "Properties": {
+                "LoadBalancerArn": {
+                    "Ref": "rTalendServerELB"
+                },
+                "Port": 8081,
+                "Protocol": "HTTP",
+                "DefaultActions": [
+                    {
+                        "Type": "forward",
+                        "TargetGroupArn": {
+                            "Ref": "rNexusTG"
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "a8e1f125-ac26-45ac-bbc8-2a00257697ff"
+                }
+            }
+        },
+        "rNexusTG": {
+            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "Properties": {
+                "Port": 8081,
+                "Protocol": "HTTP",
+                "VpcId": {
+                    "Ref": "pProductionVPC"
+                },
+                "Targets": [
+                    {
+                        "Id": {
+                            "Ref": "pNexusServerid"
+                        },
+                        "Port": 8081
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "22e8b31f-8ea0-4810-94bd-2f747553e803"
+                }
+            }
+        },
+        "rLogListener": {
+            "Type": "AWS::ElasticLoadBalancingV2::Listener",
+            "Properties": {
+                "LoadBalancerArn": {
+                    "Ref": "rTalendServerELB"
+                },
+                "Port": 5601,
+                "Protocol": "HTTP",
+                "DefaultActions": [
+                    {
+                        "Type": "forward",
+                        "TargetGroupArn": {
+                            "Ref": "rLogTG"
+                        }
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "da268064-cd38-4112-ac68-ff42df678a1f"
+                }
+            }
+        },
+        "rLogTG": {
+            "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+            "Properties": {
+                "Port": 5601,
+                "Protocol": "HTTP",
+                "VpcId": {
+                    "Ref": "pProductionVPC"
+                },
+                "Targets": [
+                    {
+                        "Id": {
+                            "Ref": "pLogServerid"
+                        },
+                        "Port": 5601
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "dd1eb9b9-970d-4629-866e-9e84389a3136"
+                }
+            }
+        },
+        "rELBSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "ELB Security Group",
+                "VpcId": {
+                    "Ref": "pProductionVPC"
+                },
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "0",
+                        "ToPort": "65535",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "SecurityGroupEgress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "0",
+                        "ToPort": "65535",
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ]
+            },
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "525d3e55-1adf-4d5a-a575-0c0cf9208bd5"
+                }
+            }
+        }
+    },
+	"Outputs": {
+	"rTalendELBDNS": {
+			
+            "Value": {
+                "Fn::GetAtt": ["rTalendServerELB","DNSName"]
+            }
+			
+			
+        }
+	}
+}

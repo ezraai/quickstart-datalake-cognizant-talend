@@ -1,0 +1,6 @@
+[submodule "submodules/talend"]
+	path = submodules/talend
+	url = https://github.com/Talend/baseline.quickstart.talend.git
+[submodule "submodules/datasource"]
+	path = submodules/datasource
+	url = https://github.com/Talend/datasource.quickstart.talend.git

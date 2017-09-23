@@ -1067,7 +1067,7 @@
             "DependsOn": "VpcStack",
             "Condition": "CreateBastionCondition",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/eost-bastion/templates/linux-bastion.template" },
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
                 "Parameters": {
                     "QSS3BucketName": "quickstart-reference",
                     "QSS3KeyPrefix": "linux/bastion/latest/",

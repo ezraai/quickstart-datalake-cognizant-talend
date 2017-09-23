@@ -1067,8 +1067,12 @@
             "DependsOn": "VpcStack",
             "Condition": "CreateBastionCondition",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/eost-bastion/templates/linux-bastion.template" },
                 "Parameters": {
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/eost-bastion/" },
+                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
+                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                     "BastionAMIOS": "Amazon-Linux-HVM",
                     "BastionInstanceType": { "Ref": "BastionInstanceType" },
                     "BastionBanner": "not used",
@@ -1078,11 +1082,7 @@
                     "KeyPairName": { "Ref": "KeyPairName" },
                     "NumBastionHosts": { "Ref": "NumBastionHosts" },
                     "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },
-                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/bastion/" },
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
-                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] }
+                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] }
                 }
             }
         },

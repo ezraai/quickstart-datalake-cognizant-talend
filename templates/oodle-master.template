@@ -1075,7 +1075,7 @@
                     "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                     "BastionAMIOS": "Amazon-Linux-HVM",
                     "BastionInstanceType": { "Ref": "BastionInstanceType" },
-                    "BastionBanner": "not used",
+                    "BastionBanner": "https://s3.amazonaws.com/quickstart-reference/linux/bastion/latest/scripts/banner_message.txt",
                     "EnableBanner": "false",
                     "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
                     "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" },

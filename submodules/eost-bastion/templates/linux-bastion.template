@@ -204,28 +204,6 @@
             "Type": "AWS::EC2::VPC::Id"
         }
     },
-    "Rules": {
-        "SubnetsInVPC": {
-            "Assertions": [
-                {
-                    "Assert": {
-                        "Fn::EachMemberIn": [
-                            {
-                                "Fn::ValueOfAll": [
-                                    "AWS::EC2::Subnet::Id",
-                                    "VpcId"
-                                ]
-                            },
-                            {
-                                "Fn::RefAll": "AWS::EC2::VPC::Id"
-                            }
-                        ]
-                    },
-                    "AssertDescription": "All subnets must exist in the VPC"
-                }
-            ]
-        }
-    },
     "Mappings": {
         "AWSAMIRegionMap": {
             "AMI": {

@@ -1069,8 +1069,8 @@
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/eost-bastion/templates/linux-bastion.template" },
                 "Parameters": {
-                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/eost-bastion/" },
+                    "QSS3BucketName": "quickstart-reference",
+                    "QSS3KeyPrefix": "linux/bastion/latest/",
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
                     "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                     "BastionAMIOS": "Amazon-Linux-HVM",

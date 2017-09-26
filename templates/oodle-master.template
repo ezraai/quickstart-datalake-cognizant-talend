@@ -77,7 +77,6 @@
                     },
                     "Parameters": [
                         "RedshiftHost",
-                        "RedshiftPort",
                         "RedshiftUsername",
                         "RedshiftPassword",
                         "RedshiftDbName"
@@ -89,7 +88,6 @@
                     },
                     "Parameters": [
                         "TacDbHost",
-                        "TacDbPort",
                         "MasterDbUser",
                         "MasterDbPassword",
                         "TacDbSchema",
@@ -107,7 +105,6 @@
                         "default": "Talend Nexus configuration"
                     },
                     "Parameters": [
-                        "NexusPort",
                         "NexusAdminUserid",
                         "NexusAdminPassword"
                     ]
@@ -203,9 +200,6 @@
                 "TacDbHost": {
                     "default": "TAC Database Host"
                 },
-                "TacDbPort": {
-                    "default": "TAC Database TCP Port"
-                },
                 "TacDbSchema": {
                     "default": "TAC Database Schema"
                 },
@@ -220,9 +214,6 @@
                 },
                 "DbAllocatedStorage": {
                     "default": "Database Allocated Storage"
-                },
-                "NexusPort": {
-                    "default": "Nexus Port"
                 },
                 "NexusAdminUserid": {
                     "default": "Nexus Admin Userid"
@@ -247,9 +238,6 @@
                 },
                 "RedshiftHost": {
                     "default": "Redshift Host"
-                },
-                "RedshiftPort": {
-                    "default": "Redshift Port"
                 },
                 "RedshiftDbName": {
                     "default": "Redshift Database Name"
@@ -652,13 +640,6 @@
 			"Default": "true",
             "AllowedValues": [ "true", "false" ]
         },
-        "NexusPort": {
-            "Description": "Nexus port.",
-            "Type": "Number",
-            "Default": "8081",
-            "MinValue": "1",
-            "MaxValue": "65535"
-        },
         "NexusAdminUserid": {
             "Description": "Nexus administrator userid.",
             "Type": "String",
@@ -680,12 +661,10 @@
             "Default": "mysql",
             "AllowedValues": [ "mysql" ]
         },
-        "TacDbPort": {
-            "Description": "TAC DB Port.  Specify port or set to 0 to use default port based on database type.",
-            "Type": "Number",
-            "MinValue": "0",
-            "MaxValue": "65535",
-            "Default": "3306"
+        "TacPassword": {
+            "Description": "TAC application password for tadmin account.",
+            "Type": "String",
+            "NoEcho": "true"
         },
         "MasterDbUser": {
             "Description": "The master or root user used to create TAC and AMC databases and the TAC user.  Only needed if creating the TAC or AMC databases.",
@@ -755,11 +734,6 @@
             "Description": "RedShift Database name",
             "Type": "String",
             "Default": ""
-        },
-		"RedshiftPort": {
-            "Description": "RedShift Port",
-            "Type": "String",
-			"Default": "5439"
         },
         "JobserverAutoscaleMaxSize": {
             "Description": "Talend Jobserver autoscale maximum size",
@@ -1086,7 +1060,7 @@
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
                 "Parameters": {
                     "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                    "RedshiftPort": { "Ref": "RedshiftPort" },
+                    "RedshiftPort": "5439",
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
                     "BastionSecurityGroup": { 
                         "Fn::If": [ 
@@ -1148,8 +1122,8 @@
                     ] },
                     "SecurityGroups": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.DatabaseSecurityGroup" ] },
                     "Engine": { "Ref": "TacDbEngine" },
-                    "Port": { "Ref": "TacDbPort" },
                     "DbClass": { "Ref": "DbClass" },
+                    "Port": "3306",
                     "DbAllocatedStorage": { "Ref": "DbAllocatedStorage" },
                     "MasterDbUser": { "Ref": "MasterDbUser" },
                     "MasterDbPassword": { "Ref": "MasterDbPassword" }
@@ -1248,7 +1222,7 @@
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword" },
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
-                    "RedshiftPort": { "Ref": "RedshiftPort" },
+                    "RedshiftPort": "5439",
                     "SupportsGlacier": {
                         "Fn::FindInMap": [
                             "RegionServiceSupport",
@@ -1309,7 +1283,7 @@
 
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
 
-                    "NexusPort": { "Ref": "NexusPort" },
+                    "NexusPort": "8081",
                     "NexusAdminUserid": { "Ref": "NexusAdminUserid" },
                     "NexusAdminPassword": { "Ref": "NexusAdminPassword" },
                     
@@ -1320,6 +1294,7 @@
                             { "Ref": "TacDbHost" } 
                         ]
                     },
+                    "TacPassword": { "Ref": "TacPassword" },
                     "MasterDbUser": { "Ref": "MasterDbUser" },
                     "MasterDbPassword": { "Ref": "MasterDbPassword" },
                     "TacDbSchema": { "Ref": "TacDbSchema" },
@@ -1409,7 +1384,7 @@
                             { "Ref": "RedshiftHost" } 
                         ]
                     },
-                    "RedshiftPort": { "Ref": "RedshiftPort" },
+                    "RedshiftPort": "5439",
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword"},
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
@@ -1421,13 +1396,7 @@
                             { "Ref": "TacDbHost" } 
                         ]
                     },
-                    "TacDbPort": {
-                        "Fn::If": [
-                            "CreateRdsCondition",
-                            { "Fn::GetAtt": [ "TalendDbStack", "Outputs.EndpointPort" ] },
-                            { "Ref": "TacDbPort" } 
-                        ]
-                    },
+                    "TacDbPort": "3306",
                     "MasterDbUser": { "Ref": "MasterDbUser" },
                     "MasterDbPassword": { "Ref": "MasterDbPassword" },
                     "TacDbSchema": { "Ref": "TacDbSchema" },
@@ -1445,7 +1414,7 @@
                     "GitTacUserid": { "Ref": "GitTacUserid" },
                     "GitTacPassword": { "Ref": "GitTacPassword" },
 
-                    "NexusPort": { "Ref": "NexusPort" },
+                    "NexusPort": "8081",
                     "NexusAdminUserid": { "Ref": "NexusAdminUserid" },
                     "NexusAdminPassword": { "Ref": "NexusAdminPassword" }
                 }

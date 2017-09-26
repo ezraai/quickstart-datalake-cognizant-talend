@@ -680,7 +680,6 @@
         "NexusAdminPassword": {
             "Description": "Nexus password.",
             "Type": "String",
-            "Default": "Talend123",
             "NoEcho": "true"
         },
         "TacDbHost": {
@@ -709,7 +708,6 @@
         "MasterDbPassword": {
             "Description": "Master user database password.  Only needed if creating the TAC or AMC databases.",
             "Type": "String",
-            "Default": "tadm1nPassw0rd",
             "NoEcho": "true"
         },
         "TacDbSchema": {
@@ -725,7 +723,6 @@
         "TacDbPassword": {
             "Description": "TAC database password.",
             "Type": "String",
-            "Default": "tacPassw0rd",
             "NoEcho": "true"
         },
         "DbClass": {
@@ -756,8 +753,7 @@
             "Type": "String",
 			"MinLength": 8,
             "MaxLength": 28,
-            "AllowedPattern": "[a-zA-Z0-9!^*\\-_+]*",
-            "Default": "tadm1nPassw0rd"
+            "AllowedPattern": "[a-zA-Z0-9!^*\\-_+]*"
         },
 		"RedshiftDbName": {
             "Description": "RedShift Database name",
@@ -820,8 +816,7 @@
         "GitAdminPassword": {
             "Description": "Git password.",
             "Type": "String",
-            "NoEcho": "true",
-            "Default": "tadm1nPassw0rd"
+            "NoEcho": "true"
         },
         "GitAdminEmail": {
             "Description": "Git admin contact email.",
@@ -836,8 +831,7 @@
         "GitTacPassword": {
             "Description": "Git TAC password.",
             "Type": "String",
-            "NoEcho": "true",
-            "Default": "tacPassw0rd"
+            "NoEcho": "true"
         },
         "GitTacEmail": {
             "Description": "TAC contact email.",
@@ -1061,35 +1055,11 @@
                 }
             }
         },
-        
-        "BastionStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": "VpcStack",
-            "Condition": "CreateBastionCondition",
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
-                "Parameters": {
-                    "QSS3BucketName": "quickstart-reference",
-                    "QSS3KeyPrefix": "linux/bastion/latest/",
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
-                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                    "BastionAMIOS": "Amazon-Linux-HVM",
-                    "BastionInstanceType": { "Ref": "BastionInstanceType" },
-                    "BastionBanner": "https://s3.amazonaws.com/quickstart-reference/linux/bastion/latest/scripts/banner_message.txt",
-                    "EnableBanner": "false",
-                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
-                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" },
-                    "KeyPairName": { "Ref": "KeyPairName" },
-                    "NumBastionHosts": { "Ref": "NumBastionHosts" },
-                    "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] }
-                }
-            }
-        },
 
         "BastionSecurityGroupStack": {
-            "DependsOn": "VpcStack",
             "Type": "AWS::CloudFormation::Stack",
+            "Condition": "CreateBastionCondition",
+            "DependsOn": "VpcStack",
             "Properties": {
                 "TemplateURL": {
                     "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion-securitygroups.template"
@@ -1146,6 +1116,32 @@
                     "JobserverSecurityGroup": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.JobserverSecurityGroup"] },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "CreateEmr": { "Ref": "CreateEmr" }
+                }
+            }
+        },
+
+        "BastionStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Condition": "CreateBastionCondition",
+            "DependsOn": "VpcStack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
+                "Parameters": {
+                    "QSS3BucketName": "quickstart-reference",
+                    "QSS3KeyPrefix": "linux/bastion/latest/",
+                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
+                    "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
+                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] }
+                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
+                    "KeyPairName": { "Ref": "KeyPairName" },
+                    "BastionSecurityGroup":  { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },
+                    "NumBastionHosts": { "Ref": "NumBastionHosts" },
+                    "BastionAMIOS": "Amazon-Linux-HVM",
+                    "BastionInstanceType": { "Ref": "BastionInstanceType" },
+                    "BastionBanner": "https://s3.amazonaws.com/quickstart-reference/linux/bastion/latest/scripts/banner_message.txt",
+                    "EnableBanner": "false",
+                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
+                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" }
                 }
             }
         },

@@ -1106,6 +1106,42 @@
             }
         },
 
+        "DataSourceSecurityGroupsStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [ "VpcStack" ],
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
+                "Parameters": {
+                    "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
+                    "RedshiftPort": { "Ref": "RedshiftPort" },
+                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
+                    "BastionSecurityGroup": { 
+                        "Fn::If": [ 
+                            "CreateBastionCondition", 
+                            { "Fn::GetAtt": [ "BastionStack", "Outputs.BastionSecurityGroupID"] },
+                            { "Ref" : "AWS::NoValue" } 
+                        ]
+                    },
+                    "StudioSecurityGroup": { 
+                        "Fn::If": [ 
+                            "CreateStudioCondition", 
+                            { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.StudioSecurityGroup"] },
+                            { "Ref" : "AWS::NoValue" } 
+                        ]
+                    },
+                    "JobserverSecurityGroup": { 
+                        "Fn::If": [ 
+                            "CreateJobserverCondition", 
+                            { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.JobserverSecurityGroup"] },
+                            { "Ref" : "AWS::NoValue" } 
+                        ]
+                    },
+                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
+                    "CreateEmr": { "Ref": "CreateEmr" }
+                }
+            }
+        },
+
         "TalendDbStack": {
             "Type": "AWS::CloudFormation::Stack",
 			"DependsOn": [ "VpcStack", "SecurityGroupsStack" ],
@@ -1186,7 +1222,7 @@
             "Type": "AWS::CloudFormation::Stack",
             "DependsOn": [ "VpcStack", "VpcEndpoint" ],
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/DataSource.template" },
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
                     "CreateEmr": { "Ref": "CreateEmr" },

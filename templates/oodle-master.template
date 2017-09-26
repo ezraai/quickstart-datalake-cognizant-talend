@@ -1131,7 +1131,7 @@
                     "QSS3KeyPrefix": "linux/bastion/latest/",
                     "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                     "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] }
+                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
                     "KeyPairName": { "Ref": "KeyPairName" },
                     "BastionSecurityGroup":  { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },

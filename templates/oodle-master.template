@@ -13,7 +13,6 @@
                         "QSS3BucketName",
                         "QSS3KeyPrefix",
                         "TalendResourceBucket",
-                        "TalendResourceBucketRepoPath",
                         "TalendLicenseUrl"
                     ]
                 },
@@ -69,8 +68,7 @@
                     },
                     "Parameters": [
                         "JobserverAutoscaleDesiredCapacity",
-                        "JobserverAutoscaleMaxSize",
-                        "JobserverAutoscaleMinSize"
+                        "JobserverAutoscaleMaxSize"
                     ]
                 },
                 {
@@ -144,9 +142,6 @@
                 },
                 "TalendResourceBucket": {
                     "default": "Talend Resource Bucket"
-                },
-                "TalendResourceBucketRepoPath": {
-                    "default": "Talend Resource Bucket Repository Path"
                 },
                 "TalendLicenseUrl": {
                     "default": "Talend License URL"
@@ -250,9 +245,6 @@
                 "JobserverAutoscaleMaxSize": {
                     "default": "Jobserver Autoscale Maximum Capacity"
                 },
-                "JobserverAutoscaleMinSize": {
-                    "default": "Jobserver Autoscale Minimum Capacity"
-                },
                 "RedshiftHost": {
                     "default": "Redshift Host"
                 },
@@ -331,11 +323,6 @@
             "Description": "Talend S3 resources bucket.",
             "Type": "String",
             "Default": "repo-quickstart-talend"
-        },  
-        "TalendResourceBucketRepoPath": {
-            "Description": "Path to binary repository in Talend S3 resources bucket.",
-            "Type": "String",
-            "Default": "/"
         },
         "TacInstanceType": {
             "Description": "TAC EC2 instance type",
@@ -756,7 +743,6 @@
             "Type": "String",
             "Default": "tadmin"
         },
-		
         "RedshiftPassword": {
             "Description": "RedShift Password:  Can only contain alphanumeric characters or the following special characters !^*-_+, between 8 and 28 characters.  Must contain at least one lowercase letter, one uppercase letter and one number.",
             "NoEcho": true,
@@ -774,13 +760,6 @@
             "Description": "RedShift Port",
             "Type": "String",
 			"Default": "5439"
-        },
-        "JobserverAutoscaleMinSize": {
-            "Description": "Talend Jobserver autoscale minimum size",
-            "Type": "Number",
-            "MinValue": "1",
-            "MaxValue": "10",
-            "Default": "1"
         },
         "JobserverAutoscaleMaxSize": {
             "Description": "Talend Jobserver autoscale maximum size",
@@ -1195,8 +1174,7 @@
                     "PrivateSubnet": "public",
                     "SecurityGroupIds": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.StudioSecurityGroup" ] },
 					"TalendLicenseUrl":  { "Ref": "TalendLicenseUrl" },
-                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
-                    "TalendResourceBucketRepoPath": { "Ref": "TalendResourceBucketRepoPath" }
+                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
 				},
 				"TimeoutInMinutes" : "10"
 			}
@@ -1310,7 +1288,7 @@
                     "PrivateTac": "public",
                     "PrivateJobserver": "private",
 
-                    "JobserverAutoscaleMinSize": { "Ref": "JobserverAutoscaleMinSize" },
+                    "JobserverAutoscaleMinSize": "1",
                     "JobserverAutoscaleMaxSize": { "Ref": "JobserverAutoscaleMaxSize" },
                     "JobserverAutoscaleDesiredCapacity": {  "Ref": "JobserverAutoscaleDesiredCapacity" },
 
@@ -1330,7 +1308,6 @@
                     "TalendLicenseUrl": { "Ref": "TalendLicenseUrl" },
 
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
-                    "TalendResourceBucketRepoPath": { "Ref": "TalendResourceBucketRepoPath" },
 
                     "NexusPort": { "Ref": "NexusPort" },
                     "NexusAdminUserid": { "Ref": "NexusAdminUserid" },

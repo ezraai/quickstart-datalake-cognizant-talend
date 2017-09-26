@@ -1129,13 +1129,7 @@
                             { "Ref" : "AWS::NoValue" } 
                         ]
                     },
-                    "JobserverSecurityGroup": { 
-                        "Fn::If": [ 
-                            "CreateJobserverCondition", 
-                            { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.JobserverSecurityGroup"] },
-                            { "Ref" : "AWS::NoValue" } 
-                        ]
-                    },
+                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.JobserverSecurityGroup"] },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "CreateEmr": { "Ref": "CreateEmr" }
                 }

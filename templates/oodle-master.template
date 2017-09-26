@@ -725,6 +725,16 @@
             "Type": "String",
             "NoEcho": "true"
         },
+        "AmcDbUser": {
+            "Description": "AMC database user.",
+            "Type": "String",
+            "Default": "amc"
+        },
+        "AmcDbPassword": {
+            "Description": "AMC database password.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
         "DbClass": {
             "Description": "Instance class of RDS instance",
             "Type": "String",
@@ -1065,7 +1075,7 @@
                     "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion-securitygroups.template"
                 },
                 "Parameters": {
-                    "VPCID": { "Ref": "VpcStack" },
+                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" }
                 }
             }
@@ -1338,6 +1348,8 @@
                     "TacDbSchema": { "Ref": "TacDbSchema" },
                     "TacDbUser": { "Ref": "TacDbUser" },
                     "TacDbPassword": { "Ref": "TacDbPassword" },
+                    "AmcDbUser": { "Ref": "AmcDbUser" },
+                    "AmcDbPassword": { "Ref": "AmcDbPassword" },
                     "CreateTacDatabase": { "Ref": "CreateTacDatabase" },
                     "CreateAmcDatabase": { "Ref": "CreateAmcDatabase" },
 

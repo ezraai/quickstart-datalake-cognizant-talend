@@ -1099,7 +1099,13 @@
                     "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
                     "KeyPairName": { "Ref": "KeyPairName" },
-                    "BastionSecurityGroup":  { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },
+                    "BastionSecurityGroup": { 
+                        "Fn::If": [ 
+                            "CreateBastionCondition", 
+                            { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },
+                            { "Ref" : "AWS::NoValue" } 
+                        ]
+                    },
                     "NumBastionHosts": { "Ref": "NumBastionHosts" },
                     "BastionAMIOS": "Amazon-Linux-HVM",
                     "BastionInstanceType": { "Ref": "BastionInstanceType" },

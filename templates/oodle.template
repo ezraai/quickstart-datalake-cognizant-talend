@@ -1074,8 +1074,8 @@
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
                 "Parameters": {
-                    "QSS3BucketName": "quickstart-reference",
-                    "QSS3KeyPrefix": "linux/bastion/latest/",
+                    "QSS3BucketName": { "Fn::Sub": "${QSS3BucketName}" },
+                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/bastion/" },
                     "VPCID": { "Ref": "VpcId" },
                     "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
                     "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },

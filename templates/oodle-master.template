@@ -13,7 +13,7 @@
                         "QSS3BucketName",
                         "QSS3KeyPrefix",
                         "TalendResourceBucket",
-                        "TalendLicenseUrl"
+                        "TalendLicenseBucket"
                     ]
                 },
                 {
@@ -140,8 +140,8 @@
                 "TalendResourceBucket": {
                     "default": "Talend Resource Bucket"
                 },
-                "TalendLicenseUrl": {
-                    "default": "Talend License URL"
+                "TalendLicenseBucket": {
+                    "default": "Talend License Bucket"
                 },
                 "CreateAmcDatabase": {
                     "default": "Create AMC Database"
@@ -302,11 +302,12 @@
             "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).  Prefix cannot start with a slash but must end with a slash unless it is the empty string.",
             "Type": "String"
         },
-        "TalendLicenseUrl": {
-            "Description": "Url to license file received in email.",
+        "TalendLicenseBucket": {
+            "Description": "Bucket holding Talend license",
             "Type": "String",
-            "Default": "https://s3.amazonaws.com/license.quickstart.talend/license"
-        },
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$",
+            "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-) or period (.)."
+        }
         "TalendResourceBucket": {
             "Description": "Talend S3 resources bucket.",
             "Type": "String",
@@ -995,7 +996,8 @@
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template" },
 				"Parameters" : {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" }
+                    "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" },
+					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" }
                 }
             }
         },
@@ -1140,6 +1142,7 @@
 				"Parameters" : {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
+					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
 					"InstanceType": { "Ref": "StudioInstanceType" },
@@ -1147,7 +1150,6 @@
                     "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
                     "PrivateSubnet": "public",
                     "SecurityGroupIds": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.StudioSecurityGroup" ] },
-					"TalendLicenseUrl":  { "Ref": "TalendLicenseUrl" },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
 				},
 				"TimeoutInMinutes" : "10"
@@ -1244,6 +1246,9 @@
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
 
+					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
+                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
+
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
 
@@ -1278,10 +1283,6 @@
                     "DistantRunSecurityGroup": { "Fn::GetAtt": [ "SecurityGroupsStack", "Outputs.DistantRunSecurityGroup" ] },
 
                     "KeyName": { "Ref": "KeyPairName" },
-
-                    "TalendLicenseUrl": { "Ref": "TalendLicenseUrl" },
-
-                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
 
                     "NexusPort": "8081",
                     "NexusAdminUserid": { "Ref": "NexusAdminUserid" },

@@ -1,0 +1,98 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    
+    "Parameters": {
+        "PBABucket": {
+            "Description": "Private S3 Bucket",
+            "Type": "String"
+        }
+    },
+    "Resources": {
+        "PBAPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+                "Bucket": {
+                    "Ref": "PBABucket"
+                },
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Sid": "OodleLicenseBucketPolicy",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": { "Fn::Sub": "arn:aws:iam::${AWS::AccountId}:role/${PBARole}" }
+                            },
+                            "Action": [ 
+                                "s3:GetObject"
+                            ],
+                            "Resource": {
+                                "Fn::Sub": "arn:aws:s3:::${PBABucket}/*"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "PBARole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                            ]
+                        }
+                    ]
+                },
+                "Path": "/"
+            }
+        },
+        "PBAIAMPolicy": {
+            "Type": "AWS::IAM::Policy",
+            "Properties": {
+                "PolicyName": "PBAIAMPolicy",
+                "Roles": [
+                    { "Ref": "PBARole" }
+                ],
+                "PolicyDocument": {
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "s3:ListBucket"
+                            ],
+                            "Resource": [
+                                { "Fn::Sub": "arn:aws:s3:::${PBABucket}" }
+                            ]
+                        },
+                        {
+                            "Action": [
+                                "s3:GetObject"
+                            ],
+                            "Effect": "Allow",
+                            "Resource": [
+                                { "Fn::Sub": "arn:aws:s3:::${PBABucket}/*" }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "PBAIPR": {
+            "Type": "AWS::IAM::InstanceProfile",
+            "Properties": {
+                "Roles": [
+                    { "Ref": "PBARole" }
+                ]
+            }
+        }
+    }
+}

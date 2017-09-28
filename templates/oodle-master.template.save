@@ -1203,22 +1203,28 @@
                     "EmrSubnetA": { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
                     "CreateEmr": { "Ref": "CreateEmr" },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
-                    "TalendEmrSecurityGroup": {
+                    "EMRMasterSG": {
                         "Fn::If": [
                             "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.TalendEmrSecurityGroupID" ] },
+                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EMRMasterSGID" ] },
                             {"Ref" : "AWS::NoValue"} 
                         ]
                     },
-                    "RemoteAccessEmrSecurityGroup": {
+                    "EMRServiceSG": {
                         "Fn::If": [
                             "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
+                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EMRServiceSGID" ] },
+                            {"Ref" : "AWS::NoValue"} 
+                        ]
+                    },
+                    "EMRSlaveSG": { 
+                        "Fn::If": [
+                            "CreateEmrCondition",
+                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EMRSlaveSGID" ] },
                             {"Ref" : "AWS::NoValue"} 
                         ]
                     },
                     "KeyPair": { "Ref": "KeyPairName" },
-                    "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
                     "RedshiftSubnetA":  { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
                     "RedshiftSubnetB":  { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet2AID"] },
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },

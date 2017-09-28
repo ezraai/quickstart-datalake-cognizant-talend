@@ -1199,10 +1199,9 @@
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
-					"EMRVPC": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
+                    "KeyPair": { "Ref": "KeyPairName" },
                     "EmrSubnetA": { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
                     "CreateEmr": { "Ref": "CreateEmr" },
-                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "TalendEmrSecurityGroup": {
                         "Fn::If": [
                             "CreateEmrCondition",
@@ -1217,7 +1216,7 @@
                             {"Ref" : "AWS::NoValue"} 
                         ]
                     },
-                    "KeyPair": { "Ref": "KeyPairName" },
+                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
                     "RedshiftSubnetA":  { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
                     "RedshiftSubnetB":  { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet2AID"] },

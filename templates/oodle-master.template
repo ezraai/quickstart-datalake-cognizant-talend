@@ -1057,7 +1057,7 @@
 
         "DataSourceSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "SecurityGroupsStack" ],
+            "DependsOn": [ "VpcStack", "SecurityGroupsStack", "BastionStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
                 "Parameters": {
@@ -1119,7 +1119,7 @@
 
         "TalendDbStack": {
             "Type": "AWS::CloudFormation::Stack",
-			"DependsOn": [ "VpcStack", "SecurityGroupsStack" ],
+			"DependsOn": [ "VpcStack", "SecurityGroupsStack", "BastionStack" ],
             "Condition": "CreateRdsCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-rds.template" },
@@ -1141,7 +1141,7 @@
 
 		"StudioStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "SecurityGroupsStack" ],
+            "DependsOn": [ "VpcStack", "SecurityGroupsStack", "BastionStack" ],
             "Condition" : "CreateStudioCondition",
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
@@ -1164,7 +1164,7 @@
 
         "GitStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "SecurityGroupsStack" ],
+            "DependsOn": [ "VpcStack", "SecurityGroupsStack", "BastionStack" ],
             "Condition": "CreateGitCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/gitlab.template" },
@@ -1194,7 +1194,7 @@
 
         "DataSourceStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "VpcEndpoint" ],
+            "DependsOn": [ "VpcStack", "VpcEndpoint", "BastionStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
                 "TimeoutInMinutes": 30,
@@ -1237,7 +1237,7 @@
 
         "TalendServersStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-			"DependsOn": [ "VpcStack", "SecurityGroupsStack", "IamStack" ],
+			"DependsOn": [ "VpcStack", "SecurityGroupsStack", "IamStack", "BastionStack" ],
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
 				"TimeoutInMinutes" : "10",

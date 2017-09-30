@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template deploys Talend Servers, Datasources (RDS, EMR, Redshift) and Bastion servers to a VPC.  The Talend servers are deployed to the public subnet with the exception of the Jobservers which are deployed to the private subnet. The RDS, EMR, and Redshift servers are all dpeloyed to the private subnet.  Private subnets must be available in at least two availability zones.  **WARNING** This template creates AWS resources. You will be billed for the AWS resources used if you create a stack from this template. QS(0027)",
+    "Description": "This template uses the Talend Server templates with the AWS VPC quickstart.  The AWS VPC creates a multi-AZ, multi-subnet VPC infrastructure with managed NAT gateways in the public subnet for each Availability Zone. The Talend servers are deployed to the public subnet with the exception of the Jobservers which are deployed to the private subnet. **WARNING** This template creates AWS resources. You will be billed for the AWS resources used if you create a stack from this template. QS(0027)",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -30,9 +30,23 @@
                 },
                 {
                     "Label": {
+                        "default": "Availability Zone configuration"
+                    },
+                    "Parameters": [
+                        "AvailabilityZones",
+                        "NumberOfAZs"
+                    ]
+                },
+                {
+                    "Label": {
                         "default": "Network configuration"
                     },
                     "Parameters": [
+                        "VPCCIDR",
+                        "PublicSubnet1CIDR",
+                        "PublicSubnet2CIDR",
+                        "PrivateSubnet1CIDR",
+                        "PrivateSubnet2CIDR",
                         "RemoteAccessCIDR"
                     ]
                 },
@@ -143,6 +157,27 @@
                 },
                 "CreateTacDatabase": {
                     "default": "Create TAC Database"
+                },
+                "AvailabilityZones": {
+                    "default": "Availability Zones"
+                },
+                "NumberOfAZs": {
+                    "default": "Number Of Availability Zones"
+                },
+                "VPCCIDR": {
+                    "default": "VPC CIDR"
+                },
+                "PublicSubnet1CIDR": {
+                    "default": "Public Subnet1 CIDR"
+                },
+                "PublicSubnet2CIDR": {
+                    "default": "Public Subnet2 CIDR"
+                },
+                "PrivateSubnet1CIDR": {
+                    "default": "Private Subnet1 CIDR"
+                },
+                "PrivateSubnet2CIDR": {
+                    "default": "Private Subnet2 CIDR"
                 },
                 "RemoteAccessCIDR": {
                     "default": "Remote Access CIDR"
@@ -267,10 +302,6 @@
             "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).  Prefix cannot start with a slash but must end with a slash unless it is the empty string.",
             "Type": "String"
         },
-        "KeyPairName": {
-            "Description": "Public/private key pairs allow you to securely connect to your instance after it launches",
-            "Type": "AWS::EC2::KeyPair::KeyName"
-        },
         "TalendLicenseBucket": {
             "Description": "Bucket holding Talend license",
             "Type": "String",
@@ -281,32 +312,6 @@
             "Description": "Talend S3 resources bucket.",
             "Type": "String",
             "Default": "repo-quickstart-talend"
-        },
-        "VpcId": {
-            "Description": "VPC to which all resources belong.",
-            "Type": "AWS::EC2::VPC::Id"
-        },
-        "PublicSubnetId1": {
-        	"Description": "Public Subnet 1",
-        	"Type": "AWS::EC2::Subnet::Id"
-        },
-        "PublicSubnetId2": {
-        	"Description": "Public Subnet 2",
-        	"Type": "AWS::EC2::Subnet::Id"
-        },
-        "PrivateSubnetId1": {
-        	"Description": "Private Subnet 1",
-        	"Type": "AWS::EC2::Subnet::Id"
-        },
-        "PrivateSubnetId2": {
-        	"Description": "Private Subnet 2",
-        	"Type": "AWS::EC2::Subnet::Id"
-        },
-        "RemoteAccessCIDR": {
-            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
-            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
-            "Description": "Allowed CIDR block for external SSH access to the bastions",
-            "Type": "String"
         },
         "TacInstanceType": {
             "Description": "TAC EC2 instance type",
@@ -820,6 +825,55 @@
             "Default": "1",
             "Description": "Enter the number of bastion hosts to create",
             "Type": "String"
+        },
+        "AvailabilityZones": {
+            "Description": "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved and only 2 AZs are used for this deployment.",
+            "Type": "List<AWS::EC2::AvailabilityZone::Name>"
+        },
+        "KeyPairName": {
+            "Description": "Public/private key pairs allow you to securely connect to your instance after it launches",
+            "Type": "AWS::EC2::KeyPair::KeyName"
+        },
+        "PrivateSubnet1CIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.0.0/19",
+            "Description": "CIDR block for private subnet 1 located in Availability Zone 1.",
+            "Type": "String"
+        },
+        "PrivateSubnet2CIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.32.0/19",
+            "Description": "CIDR block for private subnet 2 located in Availability Zone 2.",
+            "Type": "String"
+        },
+        "PublicSubnet1CIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.128.0/20",
+            "Description": "CIDR Block for the public DMZ subnet 1 located in Availability Zone 1",
+            "Type": "String"
+        },
+        "PublicSubnet2CIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.144.0/20",
+            "Description": "CIDR Block for the public DMZ subnet 2 located in Availability Zone 2",
+            "Type": "String"
+        },
+        "RemoteAccessCIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
+            "Description": "Allowed CIDR block for external SSH access to the bastions",
+            "Type": "String"
+        },
+        "VPCCIDR": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.0.0/16",
+            "Description": "CIDR Block for the VPC",
+            "Type": "String"
         }
     },
     "Mappings": {
@@ -948,15 +1002,35 @@
             }
         },
     
+        "VpcStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/submodules/quickstart-aws-vpc/templates/aws-vpc.template" },
+                "Parameters": {
+                    "AvailabilityZones": {
+                        "Fn::Join": [ ",", { "Ref": "AvailabilityZones" } ]
+                    },
+                    "KeyPairName": { "Ref": "KeyPairName" },
+                    "NumberOfAZs": "2",
+                    "PrivateSubnet1ACIDR": { "Ref": "PrivateSubnet1CIDR" },
+                    "PrivateSubnet2ACIDR": { "Ref": "PrivateSubnet2CIDR" },
+                    "PublicSubnet1CIDR": { "Ref": "PublicSubnet1CIDR" },
+                    "PublicSubnet2CIDR": { "Ref": "PublicSubnet2CIDR" },
+                    "VPCCIDR": { "Ref": "VPCCIDR" }
+                }
+            }
+        },
+
         "BastionSecurityGroupStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateBastionCondition",
+            "DependsOn": [ "VpcStack" ],
             "Properties": {
                 "TemplateURL": {
                     "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion-securitygroups.template"
                 },
                 "Parameters": {
-                    "VPCID": { "Ref": "VpcId" },
+                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" }
                 }
             }
@@ -964,10 +1038,11 @@
 
         "TalendSecurityGroupStack": {
             "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [ "VpcStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-securitygroups.template" },
                 "Parameters": {
-                    "VpcId": { "Ref": "VpcId" },
+                    "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" }
                 }
             }
@@ -1001,11 +1076,11 @@
 
         "DataSourceSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack" ],
+            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
                 "Parameters": {
-                    "VpcId": { "Ref": "VpcId" },
+                    "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                     "RedshiftPort": "5439",
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
                     "BastionSecurityGroup": { 
@@ -1032,14 +1107,15 @@
         "BastionStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateBastionCondition",
+            "DependsOn": "VpcStack",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
                 "Parameters": {
                     "QSS3BucketName": "quickstart-reference",
                     "QSS3KeyPrefix": "linux/bastion/latest/",
-                    "VPCID": { "Ref": "VpcId" },
-                    "PublicSubnet1ID": { "Ref": "PublicSubnetId1" },
-                    "PublicSubnet2ID": { "Ref": "PublicSubnetId2" },
+                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
+                    "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
+                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
                     "KeyPairName": { "Ref": "KeyPairName" },
                     "BastionSecurityGroup": { 
@@ -1062,14 +1138,14 @@
 
         "TalendDbStack": {
             "Type": "AWS::CloudFormation::Stack",
-			"DependsOn": [ "TalendSecurityGroupStack" ],
+			"DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
             "Condition": "CreateRdsCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-rds.template" },
                 "Parameters": {
                     "Subnets": { "Fn::Join": [ ",",
-                        [ { "Ref": "PrivateSubnetId1" },
-                        { "Ref": "PrivateSubnetId2" } ]
+                        [ { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
+                        { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet2AID"] } ]
                     ] },
                     "SecurityGroups": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DatabaseSecurityGroup" ] },
                     "Engine": { "Ref": "TacDbEngine" },
@@ -1084,7 +1160,7 @@
 
 		"StudioStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack" ],
+            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
             "Condition" : "CreateStudioCondition",
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
@@ -1096,7 +1172,7 @@
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
 					"InstanceType": { "Ref": "StudioInstanceType" },
 					"KeyName": { "Ref": "KeyPairName" },
-                    "SubnetId": { "Ref": "PublicSubnetId1" },
+                    "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
                     "PrivateSubnet": "public",
                     "SecurityGroupIds": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID" ] },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
@@ -1107,7 +1183,7 @@
 
         "GitStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack" ],
+            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
             "Condition": "CreateGitCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/gitlab.template" },
@@ -1122,7 +1198,7 @@
                     "KeyPairName": { "Ref": "KeyPairName" },
                     "VolumeSize": "100",
                     "VolumeType": "gp2",
-                    "SubnetId": { "Ref": "PublicSubnetId1" },
+                    "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
                     "GitAdminUserid": { "Ref": "GitAdminUserid" },
                     "GitAdminPassword": { "Ref": "GitAdminPassword" },
                     "GitAdminEmail": { "Ref": "GitAdminEmail" },
@@ -1137,13 +1213,13 @@
 
         "DataSourceStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcEndpoint" ],
+            "DependsOn": [ "VpcStack", "VpcEndpoint" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
                     "KeyPair": { "Ref": "KeyPairName" },
-                    "EmrSubnetA": { "Ref": "PrivateSubnetId1" },
+                    "EmrSubnetA": { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
                     "CreateEmr": { "Ref": "CreateEmr" },
                     "TalendEmrSecurityGroup": {
                         "Fn::If": [
@@ -1161,8 +1237,8 @@
                     },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
-                    "RedshiftSubnetA":  { "Ref": "PrivateSubnetId1" },
-                    "RedshiftSubnetB":  { "Ref": "PrivateSubnetId2" },
+                    "RedshiftSubnetA":  { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
+                    "RedshiftSubnetB":  { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet2AID"] },
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword" },
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
@@ -1180,7 +1256,7 @@
 
         "TalendServersStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-			"DependsOn": [ "TalendSecurityGroupStack", "IamStack" ],
+			"DependsOn": [ "VpcStack", "TalendSecurityGroupStack", "IamStack" ],
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
 				"TimeoutInMinutes" : "10",
@@ -1194,8 +1270,8 @@
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
 
-                    "PublicSubnetId": { "Ref": "PublicSubnetId1" },
-                    "PrivateSubnetId": { "Ref": "PrivateSubnetId1" },
+                    "PublicSubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
+                    "PrivateSubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
 
                     "CreateNexusStack": "true",
                     "CreateLogserverStack": "true",
@@ -1267,7 +1343,7 @@
         "VpcEndpoint": {
             "Type": "AWS::EC2::VPCEndpoint",
             "Properties": {
-                "VpcId": { "Ref": "VpcId" },
+                "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
                 "ServiceName": { "Fn::Sub": "com.amazonaws.${AWS::Region}.s3" },
                 "PolicyDocument": {
                     "Version": "2012-10-17",
@@ -1373,6 +1449,13 @@
 					"Fn::Sub": "${AWS::StackName}:IamStack"
 				} 
 			}
+        },
+        "VpcStack": {
+            "Value": { "Ref": "VpcStack" },
+            "Description": "Nested VPC stack",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:VpcStack" } 
+				} 
         },
         "TalendSecurityGroupStack": {
             "Value": { "Ref": "TalendSecurityGroupStack" },

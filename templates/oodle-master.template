@@ -989,19 +989,6 @@
         }
     },
     "Resources": {
-        "IamStack": {
-			"Type" : "AWS::CloudFormation::Stack",
-			"Properties" : {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template" },
-				"Parameters" : {
-                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" },
-					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
-                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
-                }
-            }
-        },
-    
         "VpcStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
@@ -1021,298 +1008,39 @@
             }
         },
 
-        "BastionSecurityGroupStack": {
+        "OodleStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "Condition": "CreateBastionCondition",
-            "DependsOn": [ "VpcStack" ],
             "Properties": {
-                "TemplateURL": {
-                    "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion-securitygroups.template"
-                },
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle.template" },
                 "Parameters": {
-                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" }
-                }
-            }
-        },
-
-        "TalendSecurityGroupStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack" ],
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-securitygroups.template" },
-                "Parameters": {
-                    "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" }
-                }
-            }
-        },
-
-        "OodleSecurityGroupsStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack", "BastionSecurityGroupStack" ],
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle-securitygroups.template" },
-                "Parameters": {
-                    "BastionSecurityGroupID": { 
-                        "Fn::If": [ 
-                            "CreateBastionCondition", 
-                            { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },
-                            "" 
-                        ]
-                    },
-                    "DatabaseSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DatabaseSecurityGroupID"] },
-                    "StudioSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID"] },
-                    "TacSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.TacSecurityGroupID"] },
-                    "JobserverSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID"] },
-                    "DistantRunSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DistantRunSecurityGroupID"] },
-                    "NexusSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.NexusSecurityGroupID"] },
-                    "LogserverSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.LogserverSecurityGroupID"] },
-                    "CommandlineSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.CommandlineSecurityGroupID"] },
-                    "GitSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.GitSecurityGroupID"] }
-                }
-            }
-        },
-
-        "DataSourceSecurityGroupsStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
-                "Parameters": {
-                    "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                    "RedshiftPort": "5439",
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
-                    "BastionSecurityGroup": { 
-                        "Fn::If": [ 
-                            "CreateBastionCondition", 
-                            { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },
-                            { "Ref" : "AWS::NoValue" } 
-                        ]
-                    },
-                    "StudioSecurityGroup": { 
-                        "Fn::If": [ 
-                            "CreateStudioCondition", 
-                            { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID"] },
-                            { "Ref" : "AWS::NoValue" } 
-                        ]
-                    },
-                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID"] },
-                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
-                    "CreateEmr": { "Ref": "CreateEmr" }
-                }
-            }
-        },
-
-        "BastionStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "Condition": "CreateBastionCondition",
-            "DependsOn": "VpcStack",
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
-                "Parameters": {
-                    "QSS3BucketName": "quickstart-reference",
-                    "QSS3KeyPrefix": "linux/bastion/latest/",
-                    "VPCID": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                    "PublicSubnet1ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "PublicSubnet2ID": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
+                    "QSS3URL": { "Ref": "QSS3URL"},
+                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
+                    "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" },
                     "KeyPairName": { "Ref": "KeyPairName" },
-                    "BastionSecurityGroup": { 
-                        "Fn::If": [ 
-                            "CreateBastionCondition", 
-                            { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },
-                            { "Ref" : "AWS::NoValue" } 
-                        ]
-                    },
-                    "NumBastionHosts": { "Ref": "NumBastionHosts" },
-                    "BastionAMIOS": "Amazon-Linux-HVM",
-                    "BastionInstanceType": { "Ref": "BastionInstanceType" },
-                    "BastionBanner": "https://s3.amazonaws.com/quickstart-reference/linux/bastion/latest/scripts/banner_message.txt",
-                    "EnableBanner": "false",
-                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
-                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" }
-                }
-            }
-        },
-
-        "TalendDbStack": {
-            "Type": "AWS::CloudFormation::Stack",
-			"DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
-            "Condition": "CreateRdsCondition",
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-rds.template" },
-                "Parameters": {
-                    "Subnets": { "Fn::Join": [ ",",
-                        [ { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
-                        { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet2AID"] } ]
-                    ] },
-                    "SecurityGroups": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DatabaseSecurityGroup" ] },
-                    "Engine": { "Ref": "TacDbEngine" },
-                    "DbClass": { "Ref": "DbClass" },
-                    "Port": "3306",
-                    "DbAllocatedStorage": { "Ref": "DbAllocatedStorage" },
-                    "MasterDbUser": { "Ref": "MasterDbUser" },
-                    "MasterDbPassword": { "Ref": "MasterDbPassword" }
-                }
-            }
-        },
-
-		"StudioStack": {
-			"Type" : "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
-            "Condition" : "CreateStudioCondition",
-			"Properties" : {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
-				"Parameters" : {
-                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
-					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
-                    "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
-                    "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
-					"InstanceType": { "Ref": "StudioInstanceType" },
-					"KeyName": { "Ref": "KeyPairName" },
-                    "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "PrivateSubnet": "public",
-                    "SecurityGroupIds": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID" ] },
-                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
-				},
-				"TimeoutInMinutes" : "10"
-			}
-        },
-
-        "GitStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
-            "Condition": "CreateGitCondition",
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/gitlab.template" },
-                "TimeoutInMinutes": 30,
-                "Parameters": {
-                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
-                    "InstanceType": "c4.large",
-                    "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
-                    "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
-                    "GitSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.GitSecurityGroup" ] },
-                    "KeyPairName": { "Ref": "KeyPairName" },
-                    "VolumeSize": "100",
-                    "VolumeType": "gp2",
-                    "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "GitAdminUserid": { "Ref": "GitAdminUserid" },
-                    "GitAdminPassword": { "Ref": "GitAdminPassword" },
-                    "GitAdminEmail": { "Ref": "GitAdminEmail" },
-                    "GitTacUserid": { "Ref": "GitTacUserid" },
-                    "GitTacPassword": { "Ref": "GitTacPassword" },
-                    "GitTacEmail": { "Ref": "GitTacEmail" },
-                    "GitRepo": { "Ref": "GitRepo" },
-                    "GitSourceUrl": "https://raw.githubusercontent.com/EdwardOst/bash-util/master/util.sh"
-                }
-            }
-        },
-
-        "DataSourceStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "VpcEndpoint" ],
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
-                "TimeoutInMinutes": 30,
-                "Parameters": {
-                    "KeyPair": { "Ref": "KeyPairName" },
-                    "EmrSubnetA": { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
-                    "CreateEmr": { "Ref": "CreateEmr" },
-                    "TalendEmrSecurityGroup": {
-                        "Fn::If": [
-                            "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.TalendEmrSecurityGroupID" ] },
-                            {"Ref" : "AWS::NoValue"} 
-                        ]
-                    },
-                    "RemoteAccessEmrSecurityGroup": {
-                        "Fn::If": [
-                            "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
-                            {"Ref" : "AWS::NoValue"} 
-                        ]
-                    },
-                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
-                    "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
-                    "RedshiftSubnetA":  { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
-                    "RedshiftSubnetB":  { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet2AID"] },
-                    "RedshiftUsername": { "Ref": "RedshiftUsername" },
-                    "RedshiftPassword": { "Ref": "RedshiftPassword" },
-                    "RedshiftDbName": { "Ref": "RedshiftDbName" },
-                    "RedshiftPort": "5439",
-                    "SupportsGlacier": {
-                        "Fn::FindInMap": [
-                            "RegionServiceSupport",
-                            { "Ref": "AWS::Region" },
-                            "Glacier"
-                        ]
-                    }
-                }
-            }
-        },
-
-        "TalendServersStack": {
-			"Type" : "AWS::CloudFormation::Stack",
-			"DependsOn": [ "VpcStack", "TalendSecurityGroupStack", "IamStack" ],
-			"Properties" : {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
-				"TimeoutInMinutes" : "10",
-				"Parameters" : {
-                    "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
-
-					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
+                    "TalendLicenseBucket": { "Ref": "TalendLicenseBucket" },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
-
-                    "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
-                    "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
-
-                    "PublicSubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
-                    "PrivateSubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
-
-                    "CreateNexusStack": "true",
-                    "CreateLogserverStack": "true",
-                    "CreateTacStack": "true",
-                    "CreateJobserverStack": "true",
-                    "CreateJobserverAutoscaleStack": { "Ref": "CreateJobserverAutoscaleStack" },
-                    "CreateDistantRunStack": { "Ref": "CreateDistantRunStack" },
-
-                    "PrivateNexus": "public",
-                    "PrivateLogserver": "public",
-                    "PrivateTac": "public",
-                    "PrivateJobserver": "private",
-
-                    "JobserverAutoscaleMinSize": "1",
-                    "JobserverAutoscaleMaxSize": { "Ref": "JobserverAutoscaleMaxSize" },
-                    "JobserverAutoscaleDesiredCapacity": {  "Ref": "JobserverAutoscaleDesiredCapacity" },
-
+                    "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
+                    "PublicSubnetId1": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
+                    "PublicSubnetId2": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet2ID"] },
+                    "PrivateSubnetId1": { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
+                    "PrivateSubnetId2": { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet2AID"] },
+                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
+                    "TacInstanceType": { "Ref": "TacInstanceType" },
                     "NexusInstanceType": { "Ref": "NexusInstanceType" },
                     "LogserverInstanceType": { "Ref": "LogserverInstanceType" },
-                    "TacInstanceType": { "Ref": "TacInstanceType" },
                     "JobserverInstanceType": { "Ref": "JobserverInstanceType" },
-
-                    "TacSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.TacSecurityGroupID" ] },
-					"NexusSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.NexusSecurityGroupID" ] },
-					"LogserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.LogserverSecurityGroupID" ] },
-                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID" ] },
-                    "DistantRunSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DistantRunSecurityGroupID" ] },
-
-                    "KeyName": { "Ref": "KeyPairName" },
-
-                    "NexusPort": "8081",
+                    "StudioInstanceType": { "Ref": "StudioInstanceType" },
+                    "BastionInstanceType": { "Ref": "BastionInstanceType" },
+                    "CreateEmr": { "Ref": "CreateEmr" },
+                    "CreateJobserverAutoscaleStack": { "Ref": "CreateJobserverAutoscaleStack" },
+                    "CreateDistantRunStack": { "Ref": "CreateDistantRunStack" },
+                    "CreateTacDatabase": { "Ref": "CreateTacDatabase" },
+                    "CreateAmcDatabase": { "Ref": "CreateAmcDatabase" },
+                    "CreateStudioStack": { "Ref": "CreateStudioStack" },
                     "NexusAdminUserid": { "Ref": "NexusAdminUserid" },
                     "NexusAdminPassword": { "Ref": "NexusAdminPassword" },
-                    
-                    "TacDbHost": {
-                        "Fn::If": [
-                            "CreateRdsCondition",
-                            { "Fn::GetAtt": [ "TalendDbStack", "Outputs.EndpointAddress" ] },
-                            { "Ref": "TacDbHost" } 
-                        ]
-                    },
+                    "TacDbHost": { "Ref": "TacDbHost" },
+                    "TacDbEngine": { "Ref": "TacDbEngine" },
                     "TacPassword": { "Ref": "TacPassword" },
                     "MasterDbUser": { "Ref": "MasterDbUser" },
                     "MasterDbPassword": { "Ref": "MasterDbPassword" },
@@ -1321,135 +1049,32 @@
                     "TacDbPassword": { "Ref": "TacDbPassword" },
                     "AmcDbUser": { "Ref": "AmcDbUser" },
                     "AmcDbPassword": { "Ref": "AmcDbPassword" },
-                    "CreateTacDatabase": { "Ref": "CreateTacDatabase" },
-                    "CreateAmcDatabase": { "Ref": "CreateAmcDatabase" },
-
-                    "GitHost": {
-                        "Fn::If": [
-                            "CreateGitCondition",
-                            { "Fn::GetAtt": [ "GitStack", "Outputs.publicDnsName" ] },
-                            { "Ref": "GitHost" } 
-                        ]
-                    },
-                    "GitProtocol": { "Ref": "GitProtocol" },
-                    "GitPort": { "Ref": "GitPort" },
-                    "GitRepo": { "Ref": "GitRepo" },
-                    "GitAdminUserid": { "Ref": "GitAdminUserid" },
-                    "GitAdminPassword": { "Ref": "GitAdminPassword" }                    
-                }
-            }
-        },
-
-        "VpcEndpoint": {
-            "Type": "AWS::EC2::VPCEndpoint",
-            "Properties": {
-                "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                "ServiceName": { "Fn::Sub": "com.amazonaws.${AWS::Region}.s3" },
-                "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Sid": "AmazonLinuxAMIRepositoryAccess",
-                            "Effect": "Allow",
-                            "Principal": "*",
-                            "Action": "s3:GetObject",
-                            "Resource": [
-                                "arn:aws:s3:::packages.*.amazonaws.com/*",
-                                "arn:aws:s3:::repo.*.amazonaws.com/*"
-                            ]
-                        },
-                        {
-                            "Sid": "AccessToEMRLogBucketsForSupport",
-                            "Effect": "Allow",
-                            "Principal": "*",
-                            "Action": [
-                                "s3:Put*",
-                                "s3:Get*",
-                                "s3:Create*",
-                                "s3:Abort*",
-                                "s3:List*"
-                            ],
-                            "Resource": [
-                                "arn:aws:s3*"
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-
-		"CredentialStore": {
-            "Type": "AWS::CloudFormation::Stack",
-            "Condition": "isSaveCredentialsEnabled",
-            "Properties": {
-                "TemplateURL": {
-                        "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/credential-store.template"
-                },
-                "TimeoutInMinutes": "10",
-                "Parameters": {
-
-                    "EmrMaster": {
-                        "Fn::If": [
-                            "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceStack", "Outputs.EmrMasterPublicDns" ] },
-                            {"Ref" : "AWS::NoValue"} 
-                        ]
-                    },
-
-                    "RedshiftHost": {
-                        "Fn::If": [
-                            "CreateRedshiftCondition",
-                            { "Fn::GetAtt": [ "DataSourceStack", "Outputs.RedshiftEndpoint" ] },
-                            { "Ref": "RedshiftHost" } 
-                        ]
-                    },
-                    "RedshiftPort": "5439",
+                    "DbClass": { "Ref": "DbClass" },
+                    "DbAllocatedStorage": { "Ref": "DbAllocatedStorage" },
+                    "RedshiftHost": { "Ref": "RedshiftHost" },
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
-                    "RedshiftPassword": { "Ref": "RedshiftPassword"},
+                    "RedshiftPassword": { "Ref": "RedshiftPassword" },
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
-
-                    "TacDbHost": {
-                        "Fn::If": [
-                            "CreateRdsCondition",
-                            { "Fn::GetAtt": [ "TalendDbStack", "Outputs.EndpointAddress" ] },
-                            { "Ref": "TacDbHost" } 
-                        ]
-                    },
-                    "TacDbPort": "3306",
-                    "MasterDbUser": { "Ref": "MasterDbUser" },
-                    "MasterDbPassword": { "Ref": "MasterDbPassword" },
-                    "TacDbSchema": { "Ref": "TacDbSchema" },
-                    "TacUsername": { "Ref": "TacDbUser" },
-                    "TacPassword": { "Ref": "TacDbPassword" },
-
+                    "JobserverAutoscaleMaxSize": { "Ref": "JobserverAutoscaleMaxSize" },
+                    "JobserverAutoscaleDesiredCapacity": { "Ref": "JobserverAutoscaleDesiredCapacity" },
                     "GitProtocol": { "Ref": "GitProtocol" },
-                    "GitHost": { "Ref": "GitHost" } ,
+                    "GitHost": { "Ref": "GitHost" },
                     "GitPort": { "Ref": "GitPort" },
                     "GitRepo": { "Ref": "GitRepo" },
-                    "GitAdminEmail": { "Ref": "GitAdminEmail" },
                     "GitAdminUserid": { "Ref": "GitAdminUserid" },
                     "GitAdminPassword": { "Ref": "GitAdminPassword" },
-                    "GitTacEmail": { "Ref": "GitTacEmail" },
+                    "GitAdminEmail": { "Ref": "GitAdminEmail" },
                     "GitTacUserid": { "Ref": "GitTacUserid" },
                     "GitTacPassword": { "Ref": "GitTacPassword" },
-
-                    "NexusPort": "8081",
-                    "NexusAdminUserid": { "Ref": "NexusAdminUserid" },
-                    "NexusAdminPassword": { "Ref": "NexusAdminPassword" }
+                    "GitTacEmail": { "Ref": "GitTacEmail" },
+                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
+                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" },
+                    "NumBastionHosts": { "Ref": "NumBastionHosts"  }
                 }
-			}
+            }
         }
     },
     "Outputs": {
-        "IamStack": {
-            "Value": { "Ref": "IamStack" },
-            "Description": "Nested IAM stack",
-			"Export": {
-				"Name": {
-					"Fn::Sub": "${AWS::StackName}:IamStack"
-				} 
-			}
-        },
         "VpcStack": {
             "Value": { "Ref": "VpcStack" },
             "Description": "Nested VPC stack",
@@ -1457,54 +1082,11 @@
 				"Name": { "Fn::Sub": "${AWS::StackName}:VpcStack" } 
 				} 
         },
-        "TalendSecurityGroupStack": {
-            "Value": { "Ref": "TalendSecurityGroupStack" },
-            "Description": "Nested Talend Security Group stack",
+        "OodleStack": {
+            "Value": { "Ref": "OodleStack" },
+            "Description": "Nested Oodle stack",
 			"Export": {
-				"Name": { "Fn::Sub": "${AWS::StackName}:SecurityGroupsStack" } 
-				} 
-        },
-        "TalendDbStack": {
-            "Condition": "CreateRdsCondition",
-            "Value": { "Ref": "TalendDbStack" },
-            "Description": "Nested Talend DB stack",
-			"Export": {
-				"Name": { "Fn::Sub": "${AWS::StackName}:TalendDbStack" } 
-				} 
-        },
-        "GitStack": {
-            "Condition": "CreateGitCondition",
-            "Value": { "Ref": "GitStack" },
-            "Description": "Nested Git stack",
-			"Export": {
-				"Name": { "Fn::Sub": "${AWS::StackName}:GitStack" } 
-				} 
-        },
-        "StudioStack": {
-            "Condition": "CreateStudioCondition",
-            "Value": { "Ref": "StudioStack" },
-            "Description": "Nested Studio stack",
-			"Export": {
-				"Name": {
-					"Fn::Sub": "${AWS::StackName}:StudioStack"
-				} 
-			}
-        },
-        "BastionStack": {
-            "Condition": "CreateBastionCondition",
-            "Value": { "Ref": "BastionStack" },
-            "Description": "Nested Bastion stack",
-			"Export": {
-				"Name": {
-					"Fn::Sub": "${AWS::StackName}:BastionStack"
-				} 
-			}
-        },
-        "TalendServersStack": {
-            "Value": { "Ref": "TalendServersStack" },
-            "Description": "Nested Talend Servers stack",
-			"Export": {
-				"Name": { "Fn::Sub": "${AWS::StackName}:TalendServersStack" } 
+				"Name": { "Fn::Sub": "${AWS::StackName}:OodleStack" } 
 				} 
         }
     }

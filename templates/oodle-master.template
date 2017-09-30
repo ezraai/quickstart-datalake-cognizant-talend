@@ -1054,8 +1054,7 @@
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle-securitygroups.template" },
                 "Parameters": {
-                    "VpcId": { "Fn::GetAtt": [ "VpcStack", "Outputs.VPCID" ] },
-                    "BastionSecurityGroup": { 
+                    "BastionSecurityGroupID": { 
                         "Fn::If": [ 
                             "CreateBastionCondition", 
                             { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },
@@ -1379,12 +1378,12 @@
             }
         },
 
-		"CredentialsLambda": {
+		"CredentialStore": {
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "isSaveCredentialsEnabled",
             "Properties": {
                 "TemplateURL": {
-                        "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/LambdaCredentials.template"
+                        "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/credential-store.template"
                 },
                 "TimeoutInMinutes": "10",
                 "Parameters": {

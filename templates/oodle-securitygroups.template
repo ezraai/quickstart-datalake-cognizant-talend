@@ -105,7 +105,7 @@
         "BastionStudioCondition": {
             "Fn::And": [
                 { "Condition": "BastionCondition" },
-                { "Condition": "BastionStudioCondition" }
+                { "Condition": "StudioCondition" }
             ]
         },
         "BastionTacCondition": {

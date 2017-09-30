@@ -13,27 +13,28 @@ Product Backlog - Release 2
 * Add ELB to PCI master.
 * Snapshot stack configuration
 * Developers guide for utility scripts and factory
+* CI test case documents
+* Capture launch parameters in aws cli cfn script in credentials bucket
+* Load git with App Team’s Talend project
 
 Release 1.0 - Target 9/22
 
 
 ** Iteration 0.5.0 - Self-contained Resources, Capture App Credentials, No AWS Secrets **
 
-* Parameters files and other AWS CI support artifacts
-* Improve exposure of DataSource configuration parameters, e.g. EMR instance type, number of nodes, etc
+* DataSource configuration parameterizatoin
 * Add Studio server instance to Talend baseline.
-* Load git with App Team’s Talend project.
-* Update and re-test factory scripts.
-* Capture launch parameters in aws cli cfn script in credentials bucket.
-* Add parameter labels and grouping for entry point templates.
-* Refactor and simplify the credential lambda function.
+* Update and re-test factory scripts
+* Add parameter labels and grouping for entry point templates
+* Refactor and simplify the credential lambda function
 * Use IAM role with s3fs
 * Move s3fs github dependency to talend repo
 * Add credentials for git, nexus, and tac to credentials bucket
-* Add policies for bucket access to IAM roles.
-* All bugs reports by AWS review fixed
-* Most feedback reported by AWS review incorporated, the rest added to backlog
-* CI test cases documents
+* Add policies for bucket access to IAM roles
+* EMR Shutdown issues documented
+* Bastion issue replicated with original bastion stack
+* Gitlab project url fixed
+* Parameters files and other AWS CI support artifacts.
 
 Iteration 0.4.0 - Servers and Credentials
 

@@ -1175,7 +1175,7 @@
 					"KeyName": { "Ref": "KeyPairName" },
                     "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
                     "PrivateSubnet": "public",
-                    "SecurityGroupIds": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroup" ] },
+                    "SecurityGroupIds": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID" ] },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
 				},
 				"TimeoutInMinutes" : "10"
@@ -1297,7 +1297,7 @@
 
                     "TacSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.TacSecurityGroupID" ] },
 					"NexusSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.NexusSecurityGroupID" ] },
-					"LogserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.LogserverSecurityGroup" ] },
+					"LogserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.LogserverSecurityGroupID" ] },
                     "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID" ] },
                     "DistantRunSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DistantRunSecurityGroupID" ] },
 

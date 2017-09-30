@@ -1094,11 +1094,11 @@
                     "StudioSecurityGroup": { 
                         "Fn::If": [ 
                             "CreateStudioCondition", 
-                            { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroup"] },
+                            { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID"] },
                             { "Ref" : "AWS::NoValue" } 
                         ]
                     },
-                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroup"] },
+                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID"] },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "CreateEmr": { "Ref": "CreateEmr" }
                 }
@@ -1295,11 +1295,11 @@
                     "TacInstanceType": { "Ref": "TacInstanceType" },
                     "JobserverInstanceType": { "Ref": "JobserverInstanceType" },
 
-                    "TacSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.TacSecurityGroup" ] },
-					"NexusSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.NexusSecurityGroup" ] },
+                    "TacSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.TacSecurityGroupID" ] },
+					"NexusSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.NexusSecurityGroupID" ] },
 					"LogserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.LogserverSecurityGroup" ] },
-                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroup" ] },
-                    "DistantRunSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DistantRunSecurityGroup" ] },
+                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID" ] },
+                    "DistantRunSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DistantRunSecurityGroupID" ] },
 
                     "KeyName": { "Ref": "KeyPairName" },
 

@@ -3,39 +3,37 @@
 
 Product Backlog - Release 2
 
-* Validate PCI template end-to-end
 * Support Talend 6.4.1
 * Use AWS Code Commit
 * Add CI Server
 * Move Nexus and CI server to separate subnet
 * Add support for multiple environments, environments share access to Nexus which is placed in a separate subnet.
 * Add option to generate passwords
+* Validate PCI template end-to-end
+* Add ELB to PCI master.
 * Snapshot stack configuration
 * Developers guide for utility scripts and factory
 
 Release 1.0 - Target 9/22
 
-* All bugs reports by AWS review fixed
-* Most feedback reported by AWS review incorporated, the rest added to backlog
-* CI test cases documents
 
-** Release 0.6.0 - Infrastructure Access **
+** Iteration 0.5.0 - Self-contained Resources, Capture App Credentials, No AWS Secrets **
 
 * Parameters files and other AWS CI support artifacts
 * Improve exposure of DataSource configuration parameters, e.g. EMR instance type, number of nodes, etc
-* Add ELB to PCI master.
 * Add Studio server instance to Talend baseline.
 * Load git with App Team’s Talend project.
 * Update and re-test factory scripts.
 * Capture launch parameters in aws cli cfn script in credentials bucket.
 * Add parameter labels and grouping for entry point templates.
 * Refactor and simplify the credential lambda function.
-
-Iteration 0.5.0 - Self-contained Resources, Capture App Credentials, No AWS Secrets
-
 * Use IAM role with s3fs
 * Move s3fs github dependency to talend repo
 * Add credentials for git, nexus, and tac to credentials bucket
+* Add policies for bucket access to IAM roles.
+* All bugs reports by AWS review fixed
+* Most feedback reported by AWS review incorporated, the rest added to backlog
+* CI test cases documents
 
 Iteration 0.4.0 - Servers and Credentials
 

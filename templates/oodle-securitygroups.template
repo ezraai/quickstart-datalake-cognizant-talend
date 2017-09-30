@@ -2,10 +2,6 @@
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Create Oodle Security Groups",
     "Parameters": {
-        "VpcId": {
-            "Description": "VPC to which security groups belong",
-            "Type": "AWS::EC2::VPC::Id"
-        },
 		"BastionSecurityGroupID": {
             "Description": "Bastion Server Security Group.",
             "Type": "String"
@@ -50,6 +46,11 @@
     "Mappings": {
     },
     "Conditions": {
+        "BastionCondition": {
+            "Fn::Not": [
+                { "Fn::Equals": [ "", { "Ref": "BastionSecurityGroupID" } ] }
+            ]
+        },
         "DatabaseCondition": {
             "Fn::Not": [
                 { "Fn::Equals": [ "", { "Ref": "DatabaseSecurityGroupID" } ] }
@@ -94,12 +95,66 @@
             "Fn::Not": [
                 { "Fn::Equals": [ "", { "Ref": "GitSecurityGroupID" } ] }
             ]
+        },
+        "BastionDatabaseCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "DatabaseCondition" }
+            ]
+        },
+        "BastionStudioCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "BastionStudioCondition" }
+            ]
+        },
+        "BastionTacCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "TacCondition" }
+            ]
+        },
+        "BastionJobserverCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "JobserverCondition" }
+            ]
+        },
+        "BastionDistantRunCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "DistantRunCondition" }
+            ]
+        },
+        "BastionNexusCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "NexusCondition" }
+            ]
+        },
+        "BastionLogserverCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "LogserverCondition" }
+            ]
+        },
+        "BastionCommandlineCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "CommandlineCondition" }
+            ]
+        },
+        "BastionGitCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "GitCondition" }
+            ]
         }
     },
     "Resources": {
         "DatabaseIngressBastion": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "DatabaseCondition",
+            "Condition": "BastionDatabaseCondition",
             "Properties": {
                 "GroupId": { "Ref": "DatabaseSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -110,7 +165,7 @@
         },
         "StudioIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "StudioCondition",
+            "Condition": "BastionStudioCondition",
             "Properties": {
                 "GroupId": { "Ref": "StudioSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -121,7 +176,7 @@
         },
         "TacIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "TacCondition",
+            "Condition": "BastionTacCondition",
             "Properties": {
                 "GroupId": { "Ref": "TacSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -132,7 +187,7 @@
         },
         "TacIngressBastion": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "TacCondition",
+            "Condition": "BastionTacCondition",
             "Properties": {
                 "GroupId": { "Ref": "TacSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -143,7 +198,7 @@
         },
         "JobserverIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "JobserverCondition",
+            "Condition": "BastionJobserverCondition",
             "Properties": {
                 "GroupId": { "Ref": "JobserverSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -154,7 +209,7 @@
         },
         "DistantRunIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "DistantRunCondition",
+            "Condition": "BastionDistantRunCondition",
             "Properties": {
                 "GroupId": { "Ref": "DistantRunSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -165,7 +220,7 @@
         },
         "NexusIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "NexusCondition",
+            "Condition": "BastionNexusCondition",
             "Properties": {
                 "GroupId": { "Ref": "NexusSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -176,7 +231,7 @@
         },
         "NexusIngressBastion": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "NexusCondition",
+            "Condition": "BastionNexusCondition",
             "Properties": {
                 "GroupId": { "Ref": "NexusSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -187,7 +242,7 @@
         },
         "LogserverIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "LogserverCondition",
+            "Condition": "BastionLogserverCondition",
             "Properties": {
                 "GroupId": { "Ref": "LogserverSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -198,7 +253,7 @@
         },
         "LogserverIngressBastionElastic": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "LogserverCondition",
+            "Condition": "BastionLogserverCondition",
             "Properties": {
                 "GroupId": { "Ref": "LogserverSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -209,7 +264,7 @@
         },
         "LogserverIngressBastionKibana": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "LogserverCondition",
+            "Condition": "BastionLogserverCondition",
             "Properties": {
                 "GroupId": { "Ref": "LogserverSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -220,7 +275,7 @@
         },
         "CommandlineIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "CommandlineCondition",
+            "Condition": "BastionCommandlineCondition",
             "Properties": {
                 "GroupId": { "Ref": "CommandlineSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -231,7 +286,7 @@
         },
         "CommandlineIngressBastionCmdShell": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "CommandlineCondition",
+            "Condition": "BastionCommandlineCondition",
             "Properties": {
                 "GroupId": { "Ref": "CommandlineSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -242,7 +297,7 @@
         },
         "GitIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "GitCondition",
+            "Condition": "BastionGitCondition",
             "Properties": {
                 "GroupId": { "Ref": "GitSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -253,7 +308,7 @@
         },
         "GitIngressBastionHttp": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "GitCondition",
+            "Condition": "BastionGitCondition",
             "Properties": {
                 "GroupId": { "Ref": "GitSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },
@@ -264,7 +319,7 @@
         },
         "GitIngressBastionHttps": {
             "Type": "AWS::EC2::SecurityGroupIngress",
-            "Condition": "GitCondition",
+            "Condition": "BastionGitCondition",
             "Properties": {
                 "GroupId": { "Ref": "GitSecurityGroupID" },
                 "SourceSecurityGroupId": { "Ref": "BastionSecurityGroupID" },

@@ -1036,7 +1036,7 @@
             }
         },
 
-        "TalendSecurityGroupsStack": {
+        "TalendSecurityGroupStack": {
             "Type": "AWS::CloudFormation::Stack",
             "DependsOn": [ "VpcStack" ],
             "Properties": {
@@ -1050,7 +1050,7 @@
 
         "OodleSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupsStack", "BastionSecurityGroupStack" ],
+            "DependsOn": [ "TalendSecurityGroupStack", "BastionSecurityGroupStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle-securitygroups.template" },
                 "Parameters": {
@@ -1077,7 +1077,7 @@
 
         "DataSourceSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "TalendSecurityGroupsStack" ],
+            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
                 "Parameters": {
@@ -1094,11 +1094,11 @@
                     "StudioSecurityGroup": { 
                         "Fn::If": [ 
                             "CreateStudioCondition", 
-                            { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.StudioSecurityGroup"] },
+                            { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroup"] },
                             { "Ref" : "AWS::NoValue" } 
                         ]
                     },
-                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.JobserverSecurityGroup"] },
+                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroup"] },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "CreateEmr": { "Ref": "CreateEmr" }
                 }
@@ -1139,7 +1139,7 @@
 
         "TalendDbStack": {
             "Type": "AWS::CloudFormation::Stack",
-			"DependsOn": [ "VpcStack", "TalendSecurityGroupsStack" ],
+			"DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
             "Condition": "CreateRdsCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-rds.template" },
@@ -1148,7 +1148,7 @@
                         [ { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet1AID"] },
                         { "Fn::GetAtt": [ "VpcStack", "Outputs.PrivateSubnet2AID"] } ]
                     ] },
-                    "SecurityGroups": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.DatabaseSecurityGroup" ] },
+                    "SecurityGroups": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DatabaseSecurityGroup" ] },
                     "Engine": { "Ref": "TacDbEngine" },
                     "DbClass": { "Ref": "DbClass" },
                     "Port": "3306",
@@ -1161,7 +1161,7 @@
 
 		"StudioStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "TalendSecurityGroupsStack" ],
+            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
             "Condition" : "CreateStudioCondition",
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
@@ -1175,7 +1175,7 @@
 					"KeyName": { "Ref": "KeyPairName" },
                     "SubnetId": { "Fn::GetAtt": [ "VpcStack", "Outputs.PublicSubnet1ID"] },
                     "PrivateSubnet": "public",
-                    "SecurityGroupIds": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.StudioSecurityGroup" ] },
+                    "SecurityGroupIds": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroup" ] },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
 				},
 				"TimeoutInMinutes" : "10"
@@ -1184,7 +1184,7 @@
 
         "GitStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcStack", "TalendSecurityGroupsStack" ],
+            "DependsOn": [ "VpcStack", "TalendSecurityGroupStack" ],
             "Condition": "CreateGitCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/gitlab.template" },
@@ -1195,7 +1195,7 @@
                     "InstanceType": "c4.large",
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
-                    "GitSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.GitSecurityGroup" ] },
+                    "GitSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.GitSecurityGroup" ] },
                     "KeyPairName": { "Ref": "KeyPairName" },
                     "VolumeSize": "100",
                     "VolumeType": "gp2",
@@ -1257,7 +1257,7 @@
 
         "TalendServersStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-			"DependsOn": [ "VpcStack", "TalendSecurityGroupsStack", "IamStack" ],
+			"DependsOn": [ "VpcStack", "TalendSecurityGroupStack", "IamStack" ],
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
 				"TimeoutInMinutes" : "10",
@@ -1295,11 +1295,11 @@
                     "TacInstanceType": { "Ref": "TacInstanceType" },
                     "JobserverInstanceType": { "Ref": "JobserverInstanceType" },
 
-                    "TacSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.TacSecurityGroup" ] },
-					"NexusSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.NexusSecurityGroup" ] },
-					"LogserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.LogserverSecurityGroup" ] },
-                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.JobserverSecurityGroup" ] },
-                    "DistantRunSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.DistantRunSecurityGroup" ] },
+                    "TacSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.TacSecurityGroup" ] },
+					"NexusSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.NexusSecurityGroup" ] },
+					"LogserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.LogserverSecurityGroup" ] },
+                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroup" ] },
+                    "DistantRunSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DistantRunSecurityGroup" ] },
 
                     "KeyName": { "Ref": "KeyPairName" },
 
@@ -1458,8 +1458,8 @@
 				"Name": { "Fn::Sub": "${AWS::StackName}:VpcStack" } 
 				} 
         },
-        "TalendSecurityGroupsStack": {
-            "Value": { "Ref": "TalendSecurityGroupsStack" },
+        "TalendSecurityGroupStack": {
+            "Value": { "Ref": "TalendSecurityGroupStack" },
             "Description": "Nested Talend Security Group stack",
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:SecurityGroupsStack" } 

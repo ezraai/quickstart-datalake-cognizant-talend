@@ -1103,7 +1103,7 @@
                         [ { "Ref": "PrivateSubnetId1" },
                         { "Ref": "PrivateSubnetId2" } ]
                     ] },
-                    "SecurityGroups": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.DatabaseSecurityGroup" ] },
+                    "SecurityGroups": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.DatabaseSecurityGroupID" ] },
                     "Engine": { "Ref": "TacDbEngine" },
                     "DbClass": { "Ref": "DbClass" },
                     "Port": "3306",

@@ -904,6 +904,11 @@
             "flags": {
                 "SaveCredentialsEnabled": "true"
             }
+        },
+        "Datasource": {
+            "Redshift": {
+                "port": "5439"
+            }
         }
     },
     "Conditions": {
@@ -984,7 +989,7 @@
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
                 "Parameters": {
                     "VpcId": { "Ref": "VpcId" },
-                    "RedshiftPort": "5439",
+                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "RedShift", "port" ] },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "CreateEmr": { "Ref": "CreateEmr" }
@@ -1171,7 +1176,7 @@
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword" },
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
-                    "RedshiftPort": "5439",
+                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "RedShift", "port" ] },
                     "SupportsGlacier": {
                         "Fn::FindInMap": [
                             "RegionServiceSupport",
@@ -1332,7 +1337,7 @@
                             { "Ref": "RedshiftHost" } 
                         ]
                     },
-                    "RedshiftPort": "5439",
+                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "RedShift", "port" ] },
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword"},
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },

@@ -956,7 +956,6 @@
     
         "BastionSecurityGroupStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "Condition": "CreateBastionCondition",
             "Properties": {
                 "TemplateURL": {
                     "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion-securitygroups.template"
@@ -981,7 +980,6 @@
 
         "DataSourceSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
                 "Parameters": {
@@ -996,7 +994,7 @@
 
         "OodleSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack", "BastionSecurityGroupStack" ],
+            "DependsOn": [ "BastionSecurityGroupStack", "TalendSecurityGroupStack", "DataSourceSecurityGroupsStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle-securitygroups.template" },
                 "Parameters": {
@@ -1044,7 +1042,7 @@
         "BastionStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateBastionCondition",
-            "DependsOn": "BastionSecurityGroupStack",
+            "DependsOn": [ "BastionSecurityGroupStack", "OodleSecurityGroupsStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
                 "Parameters": {
@@ -1069,7 +1067,7 @@
 
         "TalendDbStack": {
             "Type": "AWS::CloudFormation::Stack",
-			"DependsOn": [ "TalendSecurityGroupStack" ],
+			"DependsOn": [ "OodleSecurityGroupsStack" ],
             "Condition": "CreateRdsCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-rds.template" },
@@ -1091,7 +1089,7 @@
 
 		"StudioStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack" ],
+            "DependsOn": [ "OodleSecurityGroupsStack" ],
             "Condition" : "CreateStudioCondition",
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
@@ -1114,7 +1112,7 @@
 
         "GitStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack" ],
+            "DependsOn": [ "OodleSecurityGroupsStack" ],
             "Condition": "CreateGitCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/gitlab.template" },
@@ -1144,7 +1142,7 @@
 
         "DataSourceStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcEndpoint", "DataSourceSecurityGroupsStack" ],
+            "DependsOn": [ "VpcEndpoint", "OodleSecurityGroupsStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
                 "TimeoutInMinutes": 30,
@@ -1187,7 +1185,7 @@
 
         "TalendServersStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-			"DependsOn": [ "TalendSecurityGroupStack", "IamStack" ],
+			"DependsOn": [ "OodleSecurityGroupsStack", "IamStack" ],
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
 				"TimeoutInMinutes" : "10",

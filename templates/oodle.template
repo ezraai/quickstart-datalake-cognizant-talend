@@ -1020,7 +1020,7 @@
                     "RedshiftPort": { 
                         "Fn::If": [ 
                             "CreateRedshiftCondition", 
-                            { "Fn::GetAtt": [ "DataSourceStack", "Outputs.RedshiftPort"] },
+                            { "Fn::FindInMap": [ "Datasource", "Redshift", "port"] },
                             "" 
                         ]
                     },

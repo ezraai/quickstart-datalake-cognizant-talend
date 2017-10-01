@@ -714,12 +714,12 @@
             "Default": ""
         },
 		"RedshiftUsername": {
-            "Description": "RedShift Username",
+            "Description": "Redshift Username",
             "Type": "String",
             "Default": "tadmin"
         },
         "RedshiftPassword": {
-            "Description": "RedShift Password:  Can only contain alphanumeric characters or the following special characters !^*-_+, between 8 and 28 characters.  Must contain at least one lowercase letter, one uppercase letter and one number.",
+            "Description": "Redshift Password:  Can only contain alphanumeric characters or the following special characters !^*-_+, between 8 and 28 characters.  Must contain at least one lowercase letter, one uppercase letter and one number.",
             "NoEcho": true,
             "Type": "String",
 			"MinLength": 8,
@@ -727,7 +727,7 @@
             "AllowedPattern": "[a-zA-Z0-9!^*\\-_+]*"
         },
 		"RedshiftDbName": {
-            "Description": "RedShift Database name",
+            "Description": "Redshift Database name",
             "Type": "String",
             "Default": ""
         },
@@ -989,7 +989,7 @@
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
                 "Parameters": {
                     "VpcId": { "Ref": "VpcId" },
-                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "RedShift", "port" ] },
+                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "Redshift", "port" ] },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "CreateEmr": { "Ref": "CreateEmr" }
@@ -1176,7 +1176,7 @@
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword" },
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
-                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "RedShift", "port" ] },
+                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "Redshift", "port" ] },
                     "SupportsGlacier": {
                         "Fn::FindInMap": [
                             "RegionServiceSupport",
@@ -1337,7 +1337,7 @@
                             { "Ref": "RedshiftHost" } 
                         ]
                     },
-                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "RedShift", "port" ] },
+                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "Redshift", "port" ] },
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword"},
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },

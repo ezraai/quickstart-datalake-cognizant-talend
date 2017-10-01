@@ -1160,7 +1160,7 @@
                     "TalendEmrSecurityGroup": {
                         "Fn::If": [
                             "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.TalendEmrSecurityGroupID" ] },
+                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
                             {"Ref" : "AWS::NoValue"} 
                         ]
                     },

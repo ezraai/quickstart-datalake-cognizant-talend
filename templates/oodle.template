@@ -1155,20 +1155,8 @@
                     "KeyPair": { "Ref": "KeyPairName" },
                     "EmrSubnetA": { "Ref": "PrivateSubnetId1" },
                     "CreateEmr": { "Ref": "CreateEmr" },
-                    "EmrSecurityGroup": {
-                        "Fn::If": [
-                            "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
-                            "" 
-                        ]
-                    },
-                    "RemoteAccessEmrSecurityGroup": {
-                        "Fn::If": [
-                            "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
-                            "" 
-                        ]
-                    },
+                    "EmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
+                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
                     "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
                     "RedshiftSubnetA":  { "Ref": "PrivateSubnetId1" },

@@ -821,7 +821,7 @@
             ]
         },
         "NumBastionHosts": {
-            "AllowedValues": [ "1", "2", "3", "4" ],
+            "AllowedValues": [ "0", "1", "2" ],
             "Default": "1",
             "Description": "Enter the number of bastion hosts to create",
             "Type": "String"

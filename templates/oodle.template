@@ -1069,7 +1069,7 @@
         "BastionStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateBastionCondition",
-            "DependsOn": [ "IamStack", "OodleSecurityGroupsStack" ],
+            "DependsOn": [ "OodleSecurityGroupsStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
                 "Parameters": {
@@ -1325,7 +1325,6 @@
 		"CredentialStore": {
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "isSaveCredentialsEnabled",
-            "DependsOn": [ "BastionStack", "TalendServersStack", "DataSourceStack", "OodleSecurityGroupsStack" ],
             "Properties": {
                 "TemplateURL": {
                         "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/credential-store.template"

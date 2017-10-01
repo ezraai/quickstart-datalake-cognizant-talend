@@ -1155,18 +1155,18 @@
                     "KeyPair": { "Ref": "KeyPairName" },
                     "EmrSubnetA": { "Ref": "PrivateSubnetId1" },
                     "CreateEmr": { "Ref": "CreateEmr" },
-                    "TalendEmrSecurityGroup": {
+                    "EmrSecurityGroup": {
                         "Fn::If": [
                             "CreateEmrCondition",
                             { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
-                            {"Ref" : "AWS::NoValue"} 
+                            "" 
                         ]
                     },
                     "RemoteAccessEmrSecurityGroup": {
                         "Fn::If": [
                             "CreateEmrCondition",
                             { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
-                            {"Ref" : "AWS::NoValue"} 
+                            "" 
                         ]
                     },
                     "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
@@ -1190,7 +1190,7 @@
 
         "TalendServersStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-			"DependsOn": [ "OodleSecurityGroupsStack", "IamStack" ],
+			"DependsOn": [ "IamStack", "OodleSecurityGroupsStack" ],
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
 				"TimeoutInMinutes" : "10",

@@ -1325,6 +1325,7 @@
 		"CredentialStore": {
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "isSaveCredentialsEnabled",
+            "DependsOn": [ "BastionStack", "TalendServersStack", "DataSourceStack", "GitStack", "StudioStack", "OodleSecurityGroupsStack" ],
             "Properties": {
                 "TemplateURL": {
                         "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/credential-store.template"

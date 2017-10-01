@@ -1144,7 +1144,7 @@
 
         "DataSourceStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcEndpoint" ],
+            "DependsOn": [ "VpcEndpoint", "DataSourceSecurityGroupsStack" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
                 "TimeoutInMinutes": 30,

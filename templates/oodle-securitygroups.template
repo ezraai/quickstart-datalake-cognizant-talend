@@ -10,6 +10,18 @@
             "Description": "Database Security Group.",
             "Type": "String"
         },
+        "RedshiftSecurityGroupID": {
+            "Description": "Redshift Security Group.",
+            "Type": "String"
+        },
+        "RedshiftPort": {
+            "Description": "RedShift Port",
+            "Type": "String"
+        },
+        "EmrSecurityGroupID": {
+            "Description": "Database Security Group.",
+            "Type": "String"
+        },
         "StudioSecurityGroupID": {
             "Description": "Talend Studio Security Group.",
             "Type": "String"
@@ -49,6 +61,16 @@
         "BastionCondition": {
             "Fn::Not": [
                 { "Fn::Equals": [ "", { "Ref": "BastionSecurityGroupID" } ] }
+            ]
+        },
+        "RedshiftCondition": {
+            "Fn::Not": [
+                { "Fn::Equals": [ "", { "Ref": "RedshiftSecurityGroupID" } ] }
+            ]
+        },
+        "EmrCondition": {
+            "Fn::Not": [
+                { "Fn::Equals": [ "", { "Ref": "EmrSecurityGroupID" } ] }
             ]
         },
         "DatabaseCondition": {
@@ -148,6 +170,42 @@
             "Fn::And": [
                 { "Condition": "BastionCondition" },
                 { "Condition": "GitCondition" }
+            ]
+        },
+        "StudioEmrCondition": {
+            "Fn::And": [
+                { "Condition": "StudioCondition" },
+                { "Condition": "EmrCondition" }
+            ]
+        },
+        "JobserverEmrCondition": {
+            "Fn::And": [
+                { "Condition": "JobserverCondition" },
+                { "Condition": "EmrCondition" }
+            ]
+        },
+        "BastionEmrCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "EmrCondition" }
+            ]
+        },
+        "StudioRedshiftCondition": {
+            "Fn::And": [
+                { "Condition": "StudioCondition" },
+                { "Condition": "RedshiftCondition" }
+            ]
+        },
+        "JobserverRedshiftCondition": {
+            "Fn::And": [
+                { "Condition": "JobserverCondition" },
+                { "Condition": "RedshiftCondition" }
+            ]
+        },
+        "BastionRedshiftCondition": {
+            "Fn::And": [
+                { "Condition": "BastionCondition" },
+                { "Condition": "RedshiftCondition" }
             ]
         }
     },
@@ -326,6 +384,96 @@
                 "IpProtocol": "tcp",
                 "FromPort": "80",
                 "ToPort": "80"
+            }
+        },
+        "RedshiftIngressBastion": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "BastionRedshiftCondition",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "RedshiftSecurityGroupID"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": { "Ref": "RedshiftPort" },
+                "ToPort": { "Ref": "RedshiftPort" },
+                "SourceSecurityGroupId": {
+                    "Ref": "BastionSecurityGroupID"
+                }
+            }
+        },
+        "RedshiftIngressStudio": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "StudioRedshiftCondition",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "RedshiftSecurityGroupID"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": { "Ref": "RedshiftPort" },
+                "ToPort": { "Ref": "RedshiftPort" },
+                "SourceSecurityGroupId": {
+                    "Ref": "StudioSecurityGroupID"
+                }
+            }
+        },
+        "RedshiftIngressJobserver": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "JobserverRedshiftCondition",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "RedshiftSecurityGroupID"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": { "Ref": "RedshiftPort" },
+                "ToPort": { "Ref": "RedshiftPort" },
+                "SourceSecurityGroupId": {
+                    "Ref": "JobserverSecurityGroupID"
+                }
+            }
+        },
+        "EmrIngressStudio": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "StudioEmrCondition",
+            "Properties": {
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "StudioSecurityGroupID"
+                },
+                "GroupId": {
+                    "Ref": "EmrSecurityGroupID"
+                }
+            }
+        },
+        "EmrIngressJobserver": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "JobserverEmrCondition",
+            "Properties": {
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "JobserverSecurityGroupID"
+                },
+                "GroupId": {
+                    "Ref": "EmrSecurityGroupID"
+                }
+            }
+        },
+        "EmrIngressBastion": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "BastionEmrCondition",
+            "Properties": {
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "BastionSecurityGroupID"
+                },
+                "GroupId": {
+                    "Ref": "EmrSecurityGroupID"
+                }
             }
         }
     },

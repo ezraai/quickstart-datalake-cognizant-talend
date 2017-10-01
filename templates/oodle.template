@@ -925,6 +925,12 @@
                 "true"
             ]
         },
+        "CreateDistantRunCondition": {
+            "Fn::Equals": [
+                { "Ref": "CreateDistantRunStack" },
+                "true"
+            ]
+        },
         "CreateBastionCondition": {
             "Fn::Not": [
                 { "Fn::Equals": [ { "Ref": "NumBastionHosts" }, "0" ] }
@@ -973,6 +979,21 @@
             }
         },
 
+        "DataSourceSecurityGroupsStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "DependsOn": [ "TalendSecurityGroupStack" ],
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
+                "Parameters": {
+                    "VpcId": { "Ref": "VpcId" },
+                    "RedshiftPort": "5439",
+                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
+                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
+                    "CreateEmr": { "Ref": "CreateEmr" }
+                }
+            }
+        },
+
         "OodleSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
             "DependsOn": [ "TalendSecurityGroupStack", "BastionSecurityGroupStack" ],
@@ -986,45 +1007,36 @@
                             "" 
                         ]
                     },
+                    "RedshiftSecurityGroupID": { 
+                        "Fn::If": [ 
+                            "CreateRedshiftCondition", 
+                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
+                            "" 
+                        ]
+                    },
+                    "RedshiftPort": { 
+                        "Fn::If": [ 
+                            "CreateRedshiftCondition", 
+                            { "Fn::GetAtt": [ "DataSourceStack", "Outputs.RedshiftPort"] },
+                            "" 
+                        ]
+                    },
+                    "EmrSecurityGroupID": { 
+                        "Fn::If": [ 
+                            "CreateEmrCondition", 
+                            { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID"] },
+                            "" 
+                        ]
+                    },
                     "DatabaseSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DatabaseSecurityGroupID"] },
-                    "StudioSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID"] },
-                    "TacSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.TacSecurityGroupID"] },
-                    "JobserverSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID"] },
-                    "DistantRunSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DistantRunSecurityGroupID"] },
-                    "NexusSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.NexusSecurityGroupID"] },
-                    "LogserverSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.LogserverSecurityGroupID"] },
-                    "CommandlineSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.CommandlineSecurityGroupID"] },
-                    "GitSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.GitSecurityGroupID"] }
-                }
-            }
-        },
-
-        "DataSourceSecurityGroupsStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "TalendSecurityGroupStack" ],
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
-                "Parameters": {
-                    "VpcId": { "Ref": "VpcId" },
-                    "RedshiftPort": "5439",
-                    "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" },
-                    "BastionSecurityGroup": { 
-                        "Fn::If": [ 
-                            "CreateBastionCondition", 
-                            { "Fn::GetAtt": [ "BastionSecurityGroupStack", "Outputs.BastionSecurityGroupID"] },
-                            { "Ref" : "AWS::NoValue" } 
-                        ]
-                    },
-                    "StudioSecurityGroup": { 
-                        "Fn::If": [ 
-                            "CreateStudioCondition", 
-                            { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID"] },
-                            { "Ref" : "AWS::NoValue" } 
-                        ]
-                    },
-                    "JobserverSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID"] },
-                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
-                    "CreateEmr": { "Ref": "CreateEmr" }
+                    "StudioSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.StudioSecurityGroupID" ] },
+                    "DistantRunSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.DistantRunSecurityGroupID" ] },
+                    "TacSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.TacSecurityGroupID" ] },
+                    "JobserverSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.JobserverSecurityGroupID" ] },
+                    "NexusSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.NexusSecurityGroupID" ] },
+                    "LogserverSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.LogserverSecurityGroupID" ] },
+                    "CommandlineSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.CommandlineSecurityGroupID" ] },
+                    "GitSecurityGroupID": { "Fn::GetAtt": [ "TalendSecurityGroupStack", "Outputs.GitSecurityGroupID" ] }
                 }
             }
         },

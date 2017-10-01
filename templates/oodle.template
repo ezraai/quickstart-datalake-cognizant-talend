@@ -1150,7 +1150,7 @@
                     "InstanceType": "c4.large",
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
-                    "GitSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.GitSecurityGroup" ] },
+                    "GitSecurityGroup": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.GitSecurityGroupID" ] },
                     "KeyPairName": { "Ref": "KeyPairName" },
                     "VolumeSize": "100",
                     "VolumeType": "gp2",

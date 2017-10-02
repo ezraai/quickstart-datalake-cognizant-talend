@@ -1164,7 +1164,6 @@
 
         "DataSourceStack": {
             "Type": "AWS::CloudFormation::Stack",
-            "DependsOn": [ "VpcEndpoint" ],
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
                 "TimeoutInMinutes": 30,
@@ -1274,44 +1273,6 @@
                     "GitRepo": { "Ref": "GitRepo" },
                     "GitAdminUserid": { "Ref": "GitAdminUserid" },
                     "GitAdminPassword": { "Ref": "GitAdminPassword" }                    
-                }
-            }
-        },
-
-        "VpcEndpoint": {
-            "Type": "AWS::EC2::VPCEndpoint",
-            "Properties": {
-                "VpcId": { "Ref": "VpcId" },
-                "ServiceName": { "Fn::Sub": "com.amazonaws.${AWS::Region}.s3" },
-                "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Sid": "AmazonLinuxAMIRepositoryAccess",
-                            "Effect": "Allow",
-                            "Principal": "*",
-                            "Action": "s3:GetObject",
-                            "Resource": [
-                                "arn:aws:s3:::packages.*.amazonaws.com/*",
-                                "arn:aws:s3:::repo.*.amazonaws.com/*"
-                            ]
-                        },
-                        {
-                            "Sid": "AccessToEMRLogBucketsForSupport",
-                            "Effect": "Allow",
-                            "Principal": "*",
-                            "Action": [
-                                "s3:Put*",
-                                "s3:Get*",
-                                "s3:Create*",
-                                "s3:Abort*",
-                                "s3:List*"
-                            ],
-                            "Resource": [
-                                "arn:aws:s3*"
-                            ]
-                        }
-                    ]
                 }
             }
         },

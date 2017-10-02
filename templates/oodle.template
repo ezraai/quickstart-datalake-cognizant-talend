@@ -1213,7 +1213,6 @@
                     "CreateNexusStack": "true",
                     "CreateLogserverStack": "true",
                     "CreateTacStack": "true",
-                    "CreateJobserverStack": "true",
                     "CreateJobserverAutoscaleStack": { "Ref": "CreateJobserverAutoscaleStack" },
                     "CreateDistantRunStack": { "Ref": "CreateDistantRunStack" },
 

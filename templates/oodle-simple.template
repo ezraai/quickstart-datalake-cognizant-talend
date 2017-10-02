@@ -10,26 +10,12 @@
                         "default": "Quick Start"
                     },
                     "Parameters": [
-                        "QSS3URL",
                         "QSS3BucketName",
                         "QSS3KeyPrefix",
-                        "TalendResourceBucket",
                         "TalendLicenseBucket"
                     ]
                 },
-                {
-                    "Label": {
-                        "default": "Options"
-                    },
-                    "Parameters": [
-                        "CreateAmcDatabase",
-                        "CreateDistantRunStack",
-                        "CreateEmr",
-                        "CreateJobserverAutoscaleStack",
-                        "CreateTacDatabase",
-						"CreateStudioStack"
-                    ]
-                },
+
                 {
                     "Label": {
                         "default": "Availability Zone configuration"
@@ -116,36 +102,16 @@
                 }
             ],
             "ParameterLabels": {
-                "QSS3URL": {
-                    "default": "Quick Start S3 URL"
-                },
                 "QSS3BucketName": {
                     "default": "Quick Start S3 Bucket"
                 },
                 "QSS3KeyPrefix": {
                     "default": "Quick Start S3 Key Prefix"
                 },
-                "TalendResourceBucket": {
-                    "default": "Talend Resource Bucket"
-                },
                 "TalendLicenseBucket": {
                     "default": "Talend License Bucket"
                 },
-                "CreateAmcDatabase": {
-                    "default": "Create AMC Database"
-                },
-                "CreateDistantRunStack": {
-                    "default": "Create Distant Run Stack"
-                },
-                "CreateEmr": {
-                    "default": "Create EMR"
-                },
-                "CreateJobserverAutoscaleStack": {
-                    "default": "Create Jobserver Autoscale Stack"
-                },
-                "CreateTacDatabase": {
-                    "default": "Create TAC Database"
-                },
+
                 "AvailabilityZones": {
                     "default": "Availability Zones"
                 },
@@ -240,12 +206,6 @@
         }
     },
     "Parameters": {
-        "QSS3URL": {
-            "Description": "Encapsulate variation in s3 root url for commercial or gov-cloud",
-            "Type": "String",
-            "Default": "https://s3.amazonaws.com",
-            "AllowedValues": [ "https://s3.amazonaws.com", "https://s3-us-gov-west-1.amazonaws.com" ]
-        },
         "QSS3BucketName": {
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$",
             "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-) or period (.).",
@@ -265,11 +225,6 @@
             "Type": "String",
 			"AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$"
         },
-        "TalendResourceBucket": {
-            "Description": "Talend S3 resources bucket.",
-            "Type": "String",
-            "Default": "repo-quickstart-talend"
-        },  
         "TacInstanceType": {
             "Description": "TAC EC2 instance type",
             "Type": "String",
@@ -559,45 +514,6 @@
                 "m4.4xlarge"
             ]
         },
-        "CreateEmr": {
-            "Description": "Create EMR.",
-            "Type": "String",
-            "Default": "true",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
-        },
-        "CreateJobserverAutoscaleStack": {
-            "Description": "Create JobserverAutoscale stack.",
-            "Type": "String",
-			"Default": "true",
-            "AllowedValues": [ "true", "false" ]
-        },
-        "CreateDistantRunStack": {
-            "Description": "Create Jobserver stack in public subnet for use by Studio Distant Run capability.",
-            "Type": "String",
-			"Default": "true",
-            "AllowedValues": [ "true", "false" ]
-        },
-        "CreateTacDatabase": {
-            "Description": "Create a new TAC Database (true) or use an existing TAC database (false)",
-            "Type": "String",
-            "AllowedValues": [ "true", "false" ],
-            "Default": "true"
-        },
-        "CreateAmcDatabase": {
-            "Description": "Create AMC Database (true) or use an existing AMC database (false)",
-            "Type": "String",
-            "AllowedValues": [ "true", "false" ],
-            "Default": "true"
-        },
-        "CreateStudioStack": {
-            "Description": "Create Studio stack.",
-            "Type": "String",
-			"Default": "true",
-            "AllowedValues": [ "true", "false" ]
-        },
 
         "NexusAdminUserid": {
             "Description": "Nexus administrator userid.",
@@ -752,20 +668,20 @@
                 "Type": "AWS::CloudFormation::Stack",
                 "Properties": {
                     "TemplateURL": {
-                            "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle-master.template"
+                            "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle-master.template"
                     },
                     "TimeoutInMinutes": "60",
                     "Parameters": {
-                        "QSS3URL":  {"Ref": "QSS3URL"},
+                        "QSS3URL":  "https://s3.amazonaws.com",
                         "QSS3BucketName": {"Ref": "QSS3BucketName"},
                         "QSS3KeyPrefix": {"Ref": "QSS3KeyPrefix"},
-                        "TalendResourceBucket": {"Ref": "TalendResourceBucket"},
+                        "TalendResourceBucket": "repo-quickstart-talend",
                         "TalendLicenseBucket": {"Ref" : "TalendLicenseBucket"},
-                        "CreateAmcDatabase": {"Ref" : "CreateAmcDatabase"},
-                        "CreateDistantRunStack": {"Ref" : "CreateDistantRunStack"},
-                        "CreateEmr": {"Ref" : "CreateEmr"},
-                        "CreateJobserverAutoscaleStack": {"Ref" : "CreateJobserverAutoscaleStack"},
-                        "CreateTacDatabase": {"Ref" : "CreateTacDatabase"},
+                        "CreateAmcDatabase": "true",
+                        "CreateDistantRunStack": "false",
+                        "CreateEmr": "true",
+                        "CreateJobserverAutoscaleStack": "true",
+                        "CreateTacDatabase": "true",
 						"AvailabilityZones": {
 												"Fn::Join": [ ",", { "Ref": "AvailabilityZones" } ]
 											},

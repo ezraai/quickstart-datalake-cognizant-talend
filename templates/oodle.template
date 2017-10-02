@@ -527,7 +527,7 @@
         "StudioInstanceType": {
             "Description": "Studio EC2 instance type",
             "Type": "String",
-            "Default": "t2.micro",
+            "Default": "m3.xlarge",
             "AllowedValues": [
                 "t1.micro",
                 "t2.micro",

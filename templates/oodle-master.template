@@ -138,7 +138,7 @@
                     "default": "Quick Start S3 Key Prefix"
                 },
                 "TalendResourceBucket": {
-                    "default": "Talend Resource Bucket"
+                    "default": "Talend Resource Bucket for Talend binaries."
                 },
                 "TalendLicenseBucket": {
                     "default": "Talend License Bucket"
@@ -765,7 +765,7 @@
             "Type": "Number",
             "MinValue": "1",
             "MaxValue": "65535",
-            "Default": "443"
+            "Default": "80"
         },
         "GitRepo": {
             "Description": "Git repository.",

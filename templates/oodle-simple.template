@@ -14,8 +14,7 @@
                         "QSS3BucketName",
                         "QSS3KeyPrefix",
                         "TalendResourceBucket",
-                        "TalendResourceBucketRepoPath",
-                        "TalendLicenseUrl"
+                        "TalendLicenseBucket"
                     ]
                 },
                 {
@@ -84,8 +83,11 @@
                         "MasterDbPassword",
                         "TacDbUser",
                         "TacDbPassword",
+						"TacPassword",
                         "DbClass",
-                        "DbAllocatedStorage"
+                        "DbAllocatedStorage",
+						"AmcDbUser",
+						"AmcDbPassword"
                     ]
                 },
                 {
@@ -126,11 +128,8 @@
                 "TalendResourceBucket": {
                     "default": "Talend Resource Bucket"
                 },
-                "TalendResourceBucketRepoPath": {
-                    "default": "Talend Resource Bucket Repository Path"
-                },
-                "TalendLicenseUrl": {
-                    "default": "Talend License URL"
+                "TalendLicenseBucket": {
+                    "default": "Talend License Bucket"
                 },
                 "CreateAmcDatabase": {
                     "default": "Create AMC Database"
@@ -261,21 +260,16 @@
             "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).  Prefix cannot start with a slash but must end with a slash unless it is the empty string.",
             "Type": "String"
         },
-        "TalendLicenseUrl": {
-            "Description": "Url to license file received in email.",
+        "TalendLicenseBucket": {
+            "Description": "Bucket for license file received in email.",
             "Type": "String",
-            "Default": "https://s3.amazonaws.com/license.quickstart.talend/license"
+			"AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$"
         },
         "TalendResourceBucket": {
             "Description": "Talend S3 resources bucket.",
             "Type": "String",
             "Default": "repo-quickstart-talend"
         },  
-        "TalendResourceBucketRepoPath": {
-            "Description": "Path to binary repository in Talend S3 resources bucket.",
-            "Type": "String",
-            "Default": "/"
-        },
         "TacInstanceType": {
             "Description": "TAC EC2 instance type",
             "Type": "String",
@@ -495,7 +489,7 @@
         "StudioInstanceType": {
             "Description": "Studio EC2 instance type",
             "Type": "String",
-            "Default": "t2.micro",
+            "Default": "m3.large",
             "AllowedValues": [
                 "t1.micro",
                 "t2.micro",
@@ -620,6 +614,16 @@
             "Type": "String",
             "Default": ""
         },
+		 "AmcDbUser": {
+            "Description": "AMC database user.",
+            "Type": "String",
+            "Default": "amc"
+        },
+        "AmcDbPassword": {
+            "Description": "AMC database password.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
 
         "MasterDbUser": {
             "Description": "The master or root user used to create TAC and AMC databases and the TAC user.  Only needed if creating the TAC or AMC databases.",
@@ -714,6 +718,11 @@
             "Type": "String",
             "NoEcho": "true"
         },
+		"TacPassword": {
+            "Description": "TAC application password for tadmin account.",
+            "Type": "String",
+            "NoEcho": "true"
+        },
         "GitTacEmail": {
             "Description": "TAC contact email.",
             "Type": "String",
@@ -751,15 +760,15 @@
                         "QSS3BucketName": {"Ref": "QSS3BucketName"},
                         "QSS3KeyPrefix": {"Ref": "QSS3KeyPrefix"},
                         "TalendResourceBucket": {"Ref": "TalendResourceBucket"},
-                        "TalendResourceBucketRepoPath": {"Ref" : "TalendResourceBucketRepoPath"},
-                        "TalendLicenseUrl": {"Ref" : "TalendLicenseUrl"},
+                        "TalendLicenseBucket": {"Ref" : "TalendLicenseBucket"},
                         "CreateAmcDatabase": {"Ref" : "CreateAmcDatabase"},
                         "CreateDistantRunStack": {"Ref" : "CreateDistantRunStack"},
                         "CreateEmr": {"Ref" : "CreateEmr"},
                         "CreateJobserverAutoscaleStack": {"Ref" : "CreateJobserverAutoscaleStack"},
                         "CreateTacDatabase": {"Ref" : "CreateTacDatabase"},
-                        "AvailabilityZones": {"Ref": "AvailabilityZones"},
-                        "NumberOfAZs": "2",
+						"AvailabilityZones": {
+												"Fn::Join": [ ",", { "Ref": "AvailabilityZones" } ]
+											},
                         "VPCCIDR": "10.0.0.0/16",
                         "PublicSubnet1CIDR": "10.0.128.0/20",
                         "PublicSubnet2CIDR": "10.0.144.0/20",
@@ -772,25 +781,25 @@
                         "JobserverInstanceType": {"Ref" : "JobserverInstanceType"},
                         "StudioInstanceType": {"Ref" : "StudioInstanceType"},
                         "NexusInstanceType": {"Ref" : "NexusInstanceType"},
-                        "JobserverAutoscaleDesiredCapacity": "1",
+						"BastionInstanceType" : {"Ref" : "BastionInstanceType"},
+                        "JobserverAutoscaleDesiredCapacity": "2",
                         "JobserverAutoscaleMaxSize": "5",
-                        "JobserverAutoscaleMinSize": "1",
                         "RedshiftHost": {"Ref" : "RedshiftHost"},
-                        "RedshiftPort": "5439",
                         "RedshiftUsername": { "Ref": "RedshiftUsername" },
                         "RedshiftPassword": { "Ref": "RedshiftPassword"},
                         "RedshiftDbName": { "Ref": "RedshiftDbName" },
                         "TacDbHost" : {"Ref": "TacDbHost"},
-                        "TacDbPort": "3306",
                         "MasterDbUser": {"Ref" : "MasterDbUser"},
                         "MasterDbPassword": {"Ref": "MasterDbPassword"},
                         "TacDbSchema": "tac_quickstart",
                         "TacDbEngine": "mysql",
                         "TacDbUser": {"Ref" : "TacDbUser"},
                         "TacDbPassword": {"Ref" : "TacDbPassword"},
+						"TacPassword" : {"Ref" : "TacPassword"},
                         "DbClass": {"Ref" : "DbClass"},
                         "DbAllocatedStorage": {"Ref" : "DbAllocatedStorage"},
-                        "NexusPort": "8081",
+						"AmcDbUser": { "Ref": "AmcDbUser" },
+						"AmcDbPassword": { "Ref": "AmcDbPassword" },
                         "NexusAdminUserid": {"Ref" : "NexusAdminUserid"},
                         "NexusAdminPassword": {"Ref" : "NexusAdminPassword"},
                         "GitProtocol": "http",
@@ -805,7 +814,7 @@
                         "GitTacEmail": {"Ref" : "GitTacEmail"},
                         "EnableTCPForwarding": "false",
                         "EnableX11Forwarding": "false",
-                        "NumBastionHosts": "0",
+                        "NumBastionHosts": "0"
                     }
                 }
             }

@@ -68,7 +68,9 @@
                     },
                     "Parameters": [
                         "JobserverAutoscaleDesiredCapacity",
-                        "JobserverAutoscaleMaxSize"
+                        "JobserverAutoscaleMaxSize",
+                        "DistantRunAutoscaleDesiredCapacity",
+                        "DistantRunAutoscaleMaxSize"
                     ]
                 },
                 {
@@ -235,6 +237,12 @@
                 },
                 "JobserverAutoscaleMaxSize": {
                     "default": "Jobserver Autoscale Maximum Capacity"
+                },
+                "DistantRunAutoscaleDesiredCapacity": {
+                    "default": "DistantRun Autoscale Desired Capacity"
+                },
+                "DistantRunAutoscaleMaxSize": {
+                    "default": "DistantRun Autoscale Maximum Capacity"
                 },
                 "RedshiftHost": {
                     "default": "Redshift Host"

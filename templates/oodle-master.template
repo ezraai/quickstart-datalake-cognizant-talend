@@ -750,6 +750,20 @@
             "MaxValue": "10",
             "Default": "2"
         },
+        "DistantRunAutoscaleMaxSize": {
+            "Description": "Talend DistantRun autoscale maximum size",
+            "Type": "Number",
+            "MinValue": "1",
+            "MaxValue": "10",
+            "Default": "5"
+        },
+        "DistantRunAutoscaleDesiredCapacity": {
+            "Description": "Talend DistantRun autoscale maximum size",
+            "Type": "Number",
+            "MinValue": "1",
+            "MaxValue": "10",
+            "Default": "2"
+        },
         "GitProtocol": {
             "Description": "Git protocol.",
             "Type": "String",
@@ -1055,8 +1069,12 @@
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword" },
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
+                    "JobserverAutoscaleMinSize": "1",
                     "JobserverAutoscaleMaxSize": { "Ref": "JobserverAutoscaleMaxSize" },
                     "JobserverAutoscaleDesiredCapacity": { "Ref": "JobserverAutoscaleDesiredCapacity" },
+                    "DistantRunAutoscaleMinSize": "1",
+                    "DistantRunAutoscaleMaxSize": { "Ref": "DistantRunAutoscaleMaxSize" },
+                    "DistantRunAutoscaleDesiredCapacity": { "Ref": "DistantRunAutoscaleDesiredCapacity" },
                     "GitProtocol": { "Ref": "GitProtocol" },
                     "GitHost": { "Ref": "GitHost" },
                     "GitPort": { "Ref": "GitPort" },

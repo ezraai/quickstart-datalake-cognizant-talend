@@ -678,7 +678,7 @@
                         "TalendResourceBucket": "repo-quickstart-talend",
                         "TalendLicenseBucket": {"Ref" : "TalendLicenseBucket"},
                         "CreateAmcDatabase": "true",
-                        "CreateDistantRunStack": "false",
+                        "CreateDistantRunStack": "true",
                         "CreateEmr": "true",
                         "CreateJobserverAutoscaleStack": "true",
                         "CreateTacDatabase": "true",
@@ -700,6 +700,8 @@
 						"BastionInstanceType" : {"Ref" : "BastionInstanceType"},
                         "JobserverAutoscaleDesiredCapacity": "2",
                         "JobserverAutoscaleMaxSize": "5",
+                        "DistantRunAutoscaleDesiredCapacity": "2",
+                        "DistantRunAutoscaleMaxSize": "5",
                         "RedshiftHost": {"Ref" : "RedshiftHost"},
                         "RedshiftUsername": { "Ref": "RedshiftUsername" },
                         "RedshiftPassword": { "Ref": "RedshiftPassword"},
@@ -728,8 +730,6 @@
                         "GitTacUserid": {"Ref" : "GitTacUserid"},
                         "GitTacPassword": {"Ref": "GitTacPassword"},
                         "GitTacEmail": {"Ref" : "GitTacEmail"},
-                        "EnableTCPForwarding": "false",
-                        "EnableX11Forwarding": "false",
                         "NumBastionHosts": "0"
                     }
                 }

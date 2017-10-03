@@ -745,6 +745,20 @@
             "MaxValue": "10",
             "Default": "2"
         },
+        "DistantRunAutoscaleMaxSize": {
+            "Description": "Talend DistantRun autoscale maximum size",
+            "Type": "Number",
+            "MinValue": "1",
+            "MaxValue": "10",
+            "Default": "5"
+        },
+        "DistantRunAutoscaleDesiredCapacity": {
+            "Description": "Talend DistantRun autoscale maximum size",
+            "Type": "Number",
+            "MinValue": "1",
+            "MaxValue": "10",
+            "Default": "2"
+        },
         "GitProtocol": {
             "Description": "Git protocol.",
             "Type": "String",
@@ -1224,6 +1238,9 @@
                     "JobserverAutoscaleMinSize": "1",
                     "JobserverAutoscaleMaxSize": { "Ref": "JobserverAutoscaleMaxSize" },
                     "JobserverAutoscaleDesiredCapacity": {  "Ref": "JobserverAutoscaleDesiredCapacity" },
+                    "DistantRunAutoscaleMinSize": "1",
+                    "DistantRunAutoscaleMaxSize": { "Ref": "DistantRunAutoscaleMaxSize" },
+                    "DistantRunAutoscaleDesiredCapacity": {  "Ref": "DistantRunAutoscaleDesiredCapacity" },
 
                     "NexusInstanceType": { "Ref": "NexusInstanceType" },
                     "LogserverInstanceType": { "Ref": "LogserverInstanceType" },

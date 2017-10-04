@@ -710,7 +710,6 @@
                         "MasterDbUser": {"Ref" : "MasterDbUser"},
                         "MasterDbPassword": {"Ref": "MasterDbPassword"},
                         "TacDbSchema": "tac_quickstart",
-                        "TacDbEngine": "mysql",
                         "TacDbUser": {"Ref" : "TacDbUser"},
                         "TacDbPassword": {"Ref" : "TacDbPassword"},
 						"TacPassword" : {"Ref" : "TacPassword"},

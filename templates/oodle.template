@@ -867,83 +867,6 @@
         }
     },
     "Mappings": {
-        "RegionServiceSupport": {
-            "us-east-1": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "us-east-2": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "us-west-1": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "us-west-2": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "ca-central-1": {
-                "ConfigRules": false,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "eu-central-1": {
-                "NatGateway": true,
-                "ConfigRules": true,
-                "Glacier": true
-            },
-            "eu-west-1": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "eu-west-2": {
-                "ConfigRules": false,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "ap-northeast-1": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "ap-northeast-2": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "ap-south-1": {
-                "ConfigRules": false,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "ap-southeast-1": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": false
-            },
-            "ap-southeast-2": {
-                "ConfigRules": true,
-                "NatGateway": true,
-                "Glacier": true
-            },
-            "sa-east-1": {
-                "ConfigRules": false,
-                "NatGateway": true,
-                "Glacier": false
-            },
-            "us-gov-west-1": {
-                "ConfigRules": false,
-                "NatGateway": false,
-                "Glacier": false
-            }
-        },
         "Talend": {
             "flags": {
                 "SaveCredentialsEnabled": "true"
@@ -1202,14 +1125,7 @@
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword" },
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
-                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "Redshift", "port" ] },
-                    "SupportsGlacier": {
-                        "Fn::FindInMap": [
-                            "RegionServiceSupport",
-                            { "Ref": "AWS::Region" },
-                            "Glacier"
-                        ]
-                    }
+                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "Redshift", "port" ] }
                 }
             }
         },
@@ -1310,6 +1226,9 @@
                 },
                 "TimeoutInMinutes": "10",
                 "Parameters": {
+
+                    "TalendSourceBucket": { "Fn::GetAtt": [ "DataSourceStack", "Outputs.TalendSourceBucket" ] },
+                    "TalendTargetBucket": { "Fn::GetAtt": [ "DataSourceStack", "Outputs.TalendTargetBucket" ] },
 
                     "EmrMaster": {
                         "Fn::If": [

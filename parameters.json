@@ -1,0 +1,213 @@
+"Parameters": [
+    {
+        "ParameterValue": "eost",
+        "ParameterKey": "MasterDbUser"
+    },
+    {
+        "ParameterValue": "t2.small",
+        "ParameterKey": "LogserverInstanceType"
+    },
+    {
+        "ParameterValue": "t2.medium",
+        "ParameterKey": "TacInstanceType"
+    },
+
+    {
+        "ParameterValue": "10.0.32.0/19",
+        "ParameterKey": "PrivateSubnet2CIDR"
+    },
+    {
+        "ParameterValue": "https://s3.amazonaws.com",
+        "ParameterKey": "QSS3URL"
+    },
+
+    {
+        "ParameterValue": "10.0.0.0/16",
+        "ParameterKey": "VPCCIDR"
+    },
+    {
+        "ParameterValue": "10.0.128.0/20",
+        "ParameterKey": "PublicSubnet1CIDR"
+    },
+    {
+        "ParameterValue": "true",
+        "ParameterKey": "createTacDatabase"
+    },
+    {
+        "ParameterValue": "$[alfred_genpass_12]",
+        "ParameterKey": "GitAdminPassword"
+    },
+    {
+        "ParameterValue": "0.0.0.0/0",
+        "ParameterKey": "RemoteAccessCIDR"
+    },
+    {
+        "ParameterValue": "20",
+        "ParameterKey": "DbAllocatedStorage"
+    },
+    {
+        "ParameterValue": "true",
+        "ParameterKey": "createAmcDatabase"
+    },
+    {
+        "ParameterValue": "10.0.144.0/20",
+        "ParameterKey": "PublicSubnet2CIDR"
+    },
+    {
+        "ParameterValue": "repo-quickstart-talend",
+        "ParameterKey": "TalendResourceBucket"
+    },
+
+    {
+        "ParameterValue": "Admin",
+        "ParameterKey": "GitAdminUserid"
+    },
+    {
+        "ParameterValue": "db.t2.micro",
+        "ParameterKey": "DbClass"
+    },
+    {
+        "ParameterValue": "t2.micro",
+        "ParameterKey": "JobserverInstanceType"
+    },
+    {
+        "ParameterValue": "/",
+        "ParameterKey": "TalendResourceBucketRepoPath"
+    },
+    {
+        "ParameterValue": "$[alfred_genpass_12]",
+        "ParameterKey": "GitTacPassword"
+    },
+    {
+        "ParameterValue": "$[alfred_genpass_12]",
+        "ParameterKey": "MasterDbPassword"
+    },
+    {
+        "ParameterValue": "oodlejobs",
+        "ParameterKey": "GitRepo"
+    },
+    {
+        "ParameterValue": "t2.small",
+        "ParameterKey": "NexusInstanceType"
+    },
+    {
+        "ParameterValue": "443",
+        "ParameterKey": "GitPort"
+    },
+    {
+        "ParameterValue": "$[alfred_getkeypair]",
+        "ParameterKey": "KeyPairName"
+    },
+    {
+        "ParameterValue": "edward.ost@gmail.com",
+        "ParameterKey": "GitTacEmail"
+    },
+    {
+        "ParameterValue": "$[alfred_getlicensebucket]",
+        "ParameterKey": "TalendLicenseUrl"
+    },
+    {
+        "ParameterValue": "$[alfred_getaz_2]",
+        "ParameterKey": "AvailabilityZones"
+    },
+    {
+        "ParameterValue": "some.addres@example.com",
+        "ParameterKey": "GitAdminEmail"
+    },
+    {
+        "ParameterValue": "AwsLicenseUser",
+        "ParameterKey": "TalendLicenseUser"
+    },
+    {
+        "ParameterValue": "10.0.0.0/19",
+        "ParameterKey": "PrivateSubnet1CIDR"
+    },
+    {
+        "ParameterValue": "TAC",
+        "ParameterKey": "GitTacUserid"
+    },
+    {
+        "ParameterValue": "",
+        "ParameterKey": "GitHost"
+    },
+	{
+        "ParameterValue": "http",
+        "ParameterKey": "GitProtocol"
+    },
+	{
+        "ParameterValue": "True",
+        "ParameterKey": "CreateDistantRunStack"
+    },
+    {
+        "ParameterValue": "True",
+        "ParameterKey": "CreateEMR"
+    },
+    {
+        "ParameterValue": "True",
+        "ParameterKey": "CreateJobserverAutoscaleStack"
+    },
+    {
+        "ParameterValue": "2",
+        "ParameterKey": "JobserverAutoscaleDesiredCapacity"
+    },
+    {
+        "ParameterValue": "5",
+        "ParameterKey": "JobserverAutoscaleMaxSize"
+    },	
+    {
+        "ParameterValue": "1",
+        "ParameterKey": "JobserverAutoscaleMinSize"
+    },	
+    {
+        "ParameterValue": "admin",
+        "ParameterKey": "NexusAdminUserid"
+    },	
+    {
+        "ParameterValue": "$[alfred_genpass_12]",
+        "ParameterKey": "NexusAdminPassword"
+    },	
+    {
+        "ParameterValue": "8081",
+        "ParameterKey": "NexusPort"
+    },	
+    {
+        "ParameterValue": "rsdatabase",
+        "ParameterKey": "RedshiftDbName"
+    },		
+    {
+        "ParameterValue": "$[alfred_genpass_12]",
+        "ParameterKey": "RedshiftPassword"
+    },		
+    {
+        "ParameterValue": "",
+        "ParameterKey": "RedshiftHost"
+    },	
+    {
+        "ParameterValue": "5439",
+        "ParameterKey": "RedshiftPort"
+    },		
+    {
+        "ParameterValue": "tadmin",
+        "ParameterKey": "RedshiftUsername"
+    },		
+    {
+        "ParameterValue": "mysql",
+        "ParameterKey": "TacDbEngine"
+    },		
+    {
+        "ParameterValue": "$[alfred_genpass_12]",
+        "ParameterKey": "TacDbPassword"
+    },		
+    {
+        "ParameterValue": "3306",
+        "ParameterKey": "TacDbPort"
+    },		
+    {
+        "ParameterValue": "tac_quickstart",
+        "ParameterKey": "TacDbSchema"
+    },
+    {
+        "ParameterValue": "tac",
+        "ParameterKey": "TacDbUser"
+    }
+]

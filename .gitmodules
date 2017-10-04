@@ -1,0 +1,12 @@
+[submodule "submodules/talend"]
+	path = submodules/talend
+	url = https://github.com/Talend/baseline.quickstart.talend.git
+[submodule "submodules/datasource"]
+	path = submodules/datasource
+	url = https://github.com/Talend/datasource.quickstart.talend.git
+[submodule "submodules/bastion"]
+	path = submodules/bastion
+	url = https://github.com/Talend/quickstart-linux-bastion.git
+[submodule "pci/submodules/quickstart-compliance-common"]
+	path = pci/submodules/quickstart-compliance-common
+	url = https://github.com/aws-quickstart/quickstart-compliance-common.git

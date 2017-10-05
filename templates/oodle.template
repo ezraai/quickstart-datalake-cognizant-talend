@@ -919,7 +919,7 @@
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template" },
 				"Parameters" : {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" },
+                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
 					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
                 }

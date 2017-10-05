@@ -1101,8 +1101,7 @@
                     "GitTacUserid": { "Ref": "GitTacUserid" },
                     "GitTacPassword": { "Ref": "GitTacPassword" },
                     "GitTacEmail": { "Ref": "GitTacEmail" },
-                    "GitRepo": { "Ref": "GitRepo" },
-                    "GitSourceUrl": "https://raw.githubusercontent.com/EdwardOst/bash-util/master/util.sh"
+                    "GitRepo": { "Ref": "GitRepo" }
                 }
             }
         },

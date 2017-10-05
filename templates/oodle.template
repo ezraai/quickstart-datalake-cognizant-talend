@@ -1132,6 +1132,7 @@
 
         "TalendServersStack": {
 			"Type" : "AWS::CloudFormation::Stack",
+            "DependsOn": [ "GitStack" ],
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
 				"TimeoutInMinutes" : "10",
@@ -1141,6 +1142,7 @@
 
 					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
+                    "TalendSourceBucket": { "GetAtt": [ "DataSourceStack", "Outputs.TalendSourceBucket" ] },
 
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },

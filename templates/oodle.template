@@ -1106,25 +1106,39 @@
             }
         },
 
-        "DataSourceStack": {
+        "BucketsStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-buckets.template" },
+        },
+
+        "RedshiftStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-redshift.template" },
+                "TimeoutInMinutes": 30,
+                "Parameters": {
+                    "EmrSubnetA": { "Ref": "PrivateSubnetId1" },
+                    "EmrLogBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket" ] },
+                    "CreateEmr": { "Ref": "CreateEmr" },
+                    "EmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
+                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] }
+                }
+            }
+        },
+
+        "EmrStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-emr.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
                     "KeyPair": { "Ref": "KeyPairName" },
                     "EmrSubnetA": { "Ref": "PrivateSubnetId1" },
+                    "EmrLogBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket" ] },
                     "CreateEmr": { "Ref": "CreateEmr" },
                     "EmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
-                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
-                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
-                    "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
-                    "RedshiftSubnetA":  { "Ref": "PrivateSubnetId1" },
-                    "RedshiftSubnetB":  { "Ref": "PrivateSubnetId2" },
-                    "RedshiftUsername": { "Ref": "RedshiftUsername" },
-                    "RedshiftPassword": { "Ref": "RedshiftPassword" },
-                    "RedshiftDbName": { "Ref": "RedshiftDbName" },
-                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "Redshift", "port" ] }
+                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] }
                 }
             }
         },
@@ -1141,7 +1155,7 @@
 
 					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
-                    "TalendSourceBucket": { "GetAtt": [ "DataSourceStack", "Outputs.TalendSourceBucket" ] },
+                    "TalendSourceBucket": { "GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
 
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
@@ -1228,13 +1242,13 @@
                 "TimeoutInMinutes": "10",
                 "Parameters": {
 
-                    "TalendSourceBucket": { "Fn::GetAtt": [ "DataSourceStack", "Outputs.TalendSourceBucket" ] },
-                    "TalendTargetBucket": { "Fn::GetAtt": [ "DataSourceStack", "Outputs.TalendTargetBucket" ] },
+                    "TalendSourceBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
+                    "TalendTargetBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendTargetBucket" ] },
 
                     "EmrMaster": {
                         "Fn::If": [
                             "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceStack", "Outputs.EmrMasterPublicDns" ] },
+                            { "Fn::GetAtt": [ "EmrStack", "Outputs.EmrMasterPublicDns" ] },
                             {"Ref" : "AWS::NoValue"} 
                         ]
                     },
@@ -1242,7 +1256,7 @@
                     "RedshiftHost": {
                         "Fn::If": [
                             "CreateRedshiftCondition",
-                            { "Fn::GetAtt": [ "DataSourceStack", "Outputs.RedshiftEndpoint" ] },
+                            { "Fn::GetAtt": [ "RedshiftStack", "Outputs.RedshiftEndpoint" ] },
                             { "Ref": "RedshiftHost" } 
                         ]
                     },

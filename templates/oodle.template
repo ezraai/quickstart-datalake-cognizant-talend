@@ -1110,6 +1110,10 @@
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-buckets.template" },
+                "Parameters": {
+                    "CreateEmr": { "Ref": "CreateEmr" }
+                }
+            }
         },
 
         "RedshiftStack": {

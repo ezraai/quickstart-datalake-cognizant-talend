@@ -20,7 +20,6 @@
                         "default": "Options"
                     },
                     "Parameters": [
-                        "CreateAmcDatabase",
                         "CreateDistantRunStack",
                         "CreateEmr",
                         "CreateJobserverAutoscaleStack",
@@ -139,9 +138,6 @@
                 },
                 "TalendLicenseBucket": {
                     "default": "Talend License Bucket"
-                },
-                "CreateAmcDatabase": {
-                    "default": "Create AMC Database"
                 },
                 "CreateDistantRunStack": {
                     "default": "Create Distant Run Stack"
@@ -623,12 +619,6 @@
             "AllowedValues": [ "true", "false" ],
             "Default": "true"
         },
-        "CreateAmcDatabase": {
-            "Description": "Create AMC Database (true) or use an existing AMC database (false)",
-            "Type": "String",
-            "AllowedValues": [ "true", "false" ],
-            "Default": "true"
-        },
         "CreateStudioStack": {
             "Description": "Create Studio stack.",
             "Type": "String",
@@ -724,6 +714,72 @@
             "Type": "String",
             "Default": ""
         },
+		"RedshiftNodeType": {
+            "Type": "String",
+            "Default": "dc1.large",
+            "Description": "The node type to for the redshift cluster",
+            "ConstraintDescription": "must be a valid RedShift node type.",
+            "AllowedValues": [
+                "dw1.xlarge",
+                "dw1.8xlarge",
+                "dw2.large",
+                "dw2.8xlarge",
+                "dc1.large",
+                "dc1.8xlarge",
+                "ds1.xlarge",
+                "ds1.8xlarge",
+                "ds2.xlarge",
+                "ds2.8xlarge"
+            ]
+        },
+		"RedshiftNumberOfNodes": {
+            "Description": "The number of nodes in the redshift cluster.",
+            "Type": "Number",
+            "Default": "1"
+        },
+		"EmrMasterInstanceType": {
+            "AllowedValues": [
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge"
+            ],
+            "Default": "m4.large",
+            "Description": "Instance type for the EMR master node. Default is m4.large",
+            "Type": "String"
+        },
+		"EmrCoreInstanceType": {
+            "AllowedValues": [
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge"
+            ],
+            "Default": "m4.large",
+            "Description": "Instance type for the EMR core nodes. Default is m4.large",
+            "Type": "String"
+        },
+		"EmrCoreNodes": {
+            "Description": "Number of EMR Core Nodes. Minimum 1",
+            "MaxValue": "500",
+            "MinValue": "1",
+            "Type": "Number",
+			"Default": "2"
+        },
         "JobserverAutoscaleMaxSize": {
             "Description": "Talend Jobserver autoscale maximum size",
             "Type": "Number",
@@ -803,24 +859,6 @@
             "Description": "TAC contact email.",
             "Type": "String",
             "Default": ""
-        },
-        "EnableTCPForwarding": {
-            "Type": "String",
-            "Description": "Enable/Disable TCP Forwarding",
-            "Default": "false",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
-        },
-        "EnableX11Forwarding": {
-            "Type": "String",
-            "Description": "Enable/Disable X11 Forwarding",
-            "Default": "false",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
         },
         "NumBastionHosts": {
             "AllowedValues": [ "0", "1", "2" ],
@@ -968,12 +1006,10 @@
                     "CreateJobserverAutoscaleStack": { "Ref": "CreateJobserverAutoscaleStack" },
                     "CreateDistantRunStack": { "Ref": "CreateDistantRunStack" },
                     "CreateTacDatabase": { "Ref": "CreateTacDatabase" },
-                    "CreateAmcDatabase": { "Ref": "CreateAmcDatabase" },
                     "CreateStudioStack": { "Ref": "CreateStudioStack" },
                     "NexusAdminUserid": { "Ref": "NexusAdminUserid" },
                     "NexusAdminPassword": { "Ref": "NexusAdminPassword" },
                     "TacDbHost": { "Ref": "TacDbHost" },
-                    "TacDbEngine": "mysql",
                     "TacPassword": { "Ref": "TacPassword" },
                     "MasterDbUser": { "Ref": "MasterDbUser" },
                     "MasterDbPassword": { "Ref": "MasterDbPassword" },
@@ -988,6 +1024,11 @@
                     "RedshiftUsername": { "Ref": "RedshiftUsername" },
                     "RedshiftPassword": { "Ref": "RedshiftPassword" },
                     "RedshiftDbName": { "Ref": "RedshiftDbName" },
+                    "RedshiftNodeType": { "Ref": "RedshiftNodeType" },
+                    "RedshiftNumberOfNodes": { "Ref": "RedshiftNumberOfNodes" },
+                    "EmrMasterInstanceType": { "Ref": "EmrMasterInstanceType" },
+                    "EmrCoreInstanceType": { "Ref": "EmrCoreInstanceType" },
+                    "EmrCoreNodes": { "Ref": "EmrCoreNodes" },
                     "JobserverAutoscaleMaxSize": { "Ref": "JobserverAutoscaleMaxSize" },
                     "JobserverAutoscaleDesiredCapacity": { "Ref": "JobserverAutoscaleDesiredCapacity" },
                     "DistantRunAutoscaleMaxSize": { "Ref": "DistantRunAutoscaleMaxSize" },
@@ -1002,8 +1043,6 @@
                     "GitTacUserid": { "Ref": "GitTacUserid" },
                     "GitTacPassword": { "Ref": "GitTacPassword" },
                     "GitTacEmail": { "Ref": "GitTacEmail" },
-                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
-                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" },
                     "NumBastionHosts": { "Ref": "NumBastionHosts"  }
                 }
             }

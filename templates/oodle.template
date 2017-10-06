@@ -21,7 +21,6 @@
                         "default": "Options"
                     },
                     "Parameters": [
-                        "CreateAmcDatabase",
                         "CreateDistantRunStack",
                         "CreateEmr",
                         "CreateJobserverAutoscaleStack",
@@ -81,7 +80,6 @@
                         "TacDbSchema",
                         "TacUsername",
                         "TacPassword",
-                        "TacDbEngine",
                         "TacDbUser",
                         "TacDbPassword",
                         "DbClass",
@@ -131,9 +129,6 @@
                 "TalendLicenseBucket": {
                     "default": "Talend License Bucket"
                 },
-                "CreateAmcDatabase": {
-                    "default": "Create AMC Database"
-                },
                 "CreateDistantRunStack": {
                     "default": "Create Distant Run Stack"
                 },
@@ -154,9 +149,6 @@
                 },
                 "TacInstanceType": {
                     "default": "TAC Instance Type"
-                },
-                "TacDbEngine": {
-                    "default": "TAC Database Engine"
                 },
                 "TacDbUser": {
                     "default": "TAC Database Username"
@@ -632,12 +624,6 @@
             "AllowedValues": [ "true", "false" ],
             "Default": "true"
         },
-        "CreateAmcDatabase": {
-            "Description": "Create AMC Database (true) or use an existing AMC database (false)",
-            "Type": "String",
-            "AllowedValues": [ "true", "false" ],
-            "Default": "true"
-        },
         "CreateStudioStack": {
             "Description": "Create Studio stack.",
             "Type": "String",
@@ -658,12 +644,6 @@
             "Description": "Specify an external mysql database hostname, or leave blank to create a new RDS instance.",
             "Type": "String",
             "Default": ""
-        },
-        "TacDbEngine": {
-            "Description": "TAC database type",
-            "Type": "String",
-            "Default": "mysql",
-            "AllowedValues": [ "mysql" ]
         },
         "TacPassword": {
             "Description": "TAC application password for tadmin account.",
@@ -739,12 +719,78 @@
             "Type": "String",
             "Default": ""
         },
+		"RedshiftNodeType": {
+            "Type": "String",
+            "Default": "dc1.large",
+            "Description": "The node type to for the redshift cluster",
+            "ConstraintDescription": "must be a valid RedShift node type.",
+            "AllowedValues": [
+                "dw1.xlarge",
+                "dw1.8xlarge",
+                "dw2.large",
+                "dw2.8xlarge",
+                "dc1.large",
+                "dc1.8xlarge",
+                "ds1.xlarge",
+                "ds1.8xlarge",
+                "ds2.xlarge",
+                "ds2.8xlarge"
+            ]
+        },
+		"RedshiftNumberOfNodes": {
+            "Description": "The number of nodes in the redshift cluster.",
+            "Type": "Number",
+            "Default": "1"
+        },
         "JobserverAutoscaleMaxSize": {
             "Description": "Talend Jobserver autoscale maximum size",
             "Type": "Number",
             "MinValue": "1",
             "MaxValue": "10",
             "Default": "5"
+        },
+		"EmrMasterInstanceType": {
+            "AllowedValues": [
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge"
+            ],
+            "Default": "m4.large",
+            "Description": "Instance type for the EMR master node. Default is m4.large",
+            "Type": "String"
+        },
+		"EmrCoreInstanceType": {
+            "AllowedValues": [
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge"
+            ],
+            "Default": "m4.large",
+            "Description": "Instance type for the EMR core nodes. Default is m4.large",
+            "Type": "String"
+        },
+		"EmrCoreNodes": {
+            "Description": "Number of EMR Core Nodes. Minimum 1",
+            "MaxValue": "500",
+            "MinValue": "1",
+            "Type": "Number",
+			"Default": "2"
         },
         "JobserverAutoscaleDesiredCapacity": {
             "Description": "Talend Jobserver autoscale maximum size",
@@ -818,24 +864,6 @@
             "Description": "TAC contact email.",
             "Type": "String",
             "Default": ""
-        },
-        "EnableTCPForwarding": {
-            "Type": "String",
-            "Description": "Enable/Disable TCP Forwarding",
-            "Default": "false",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
-        },
-        "EnableX11Forwarding": {
-            "Type": "String",
-            "Description": "Enable/Disable X11 Forwarding",
-            "Default": "false",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
         },
         "NumBastionHosts": {
             "AllowedValues": [ "0", "1", "2", "3", "4" ],
@@ -1029,8 +1057,8 @@
                     "BastionInstanceType": { "Ref": "BastionInstanceType" },
                     "BastionBanner": "https://s3.amazonaws.com/quickstart-reference/linux/bastion/latest/scripts/banner_message.txt",
                     "EnableBanner": "false",
-                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
-                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" }
+                    "EnableTCPForwarding": "true",
+                    "EnableX11Forwarding": "true"
                 }
             }
         },
@@ -1046,7 +1074,7 @@
                         { "Ref": "PrivateSubnetId2" } ]
                     ] },
                     "SecurityGroups": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.DatabaseSecurityGroupID" ] },
-                    "Engine": { "Ref": "TacDbEngine" },
+                    "Engine": "mysql",
                     "DbClass": { "Ref": "DbClass" },
                     "Port": "3306",
                     "DbAllocatedStorage": { "Ref": "DbAllocatedStorage" },
@@ -1123,17 +1151,15 @@
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-redshift.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
-                    "EmrSubnetA": { "Ref": "PrivateSubnetId1" },
-                    "EmrLogBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket" ] },
-                    "CreateEmr": { "Ref": "CreateEmr" },
-                    "EmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
-                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
-                    "RedshiftUsername": { "Ref": "RedshiftUsername" }, 
-                    "RedshiftPassword": { "Ref": "RedshiftPassword" },
-                    "RedshiftDbName": { "Ref": "RedshiftDbName" },
                     "RedshiftSubnetA": { "Ref": "PrivateSubnetId1" },
                     "RedshiftSubnetB": { "Ref": "PrivateSubnetId2" },
-                    "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] }
+                    "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
+                    "RedshiftUsername": { "Ref": "RedshiftUsername" },
+                    "RedshiftPassword": { "Ref": "RedshiftPassword" },
+                    "RedshiftDbName": { "Ref": "RedshiftDbName" },
+                    "RedshiftPort": "5439",
+                    "RedshiftNodeType": { "Ref": "RedshiftNodeType" },
+                    "RedshiftNumberOfNodes": { "Ref": "RedshiftNumberOfNodes" }
                 }
             }
         },
@@ -1148,7 +1174,9 @@
                     "KeyPair": { "Ref": "KeyPairName" },
                     "EmrSubnetA": { "Ref": "PrivateSubnetId1" },
                     "EmrLogBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket" ] },
-                    "CreateEmr": { "Ref": "CreateEmr" },
+                    "EmrMasterInstanceType": { "Ref": "EmrMasterInstanceType" },
+                    "EmrCoreInstanceType": { "Ref": "EmrCoreInstanceType" },
+                    "EmrCoreNodes": { "Ref": "EmrCoreNodes" },
                     "EmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
                     "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] }
                 }
@@ -1226,7 +1254,7 @@
                     "AmcDbUser": { "Ref": "AmcDbUser" },
                     "AmcDbPassword": { "Ref": "AmcDbPassword" },
                     "CreateTacDatabase": { "Ref": "CreateTacDatabase" },
-                    "CreateAmcDatabase": { "Ref": "CreateAmcDatabase" },
+                    "CreateAmcDatabase": { "Ref": "CreateTacDatabase" },
 
                     "GitHost": {
                         "Fn::If": [

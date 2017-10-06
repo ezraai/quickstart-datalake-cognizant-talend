@@ -940,7 +940,7 @@
         "IamStack": {
 			"Type" : "AWS::CloudFormation::Stack",
 			"Properties" : {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template" },
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template.new" },
 				"Parameters" : {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },

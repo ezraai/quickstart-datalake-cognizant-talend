@@ -1118,6 +1118,7 @@
 
         "RedshiftStack": {
             "Type": "AWS::CloudFormation::Stack",
+            "Condition": "CreateRedshiftCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-redshift.template" },
                 "TimeoutInMinutes": 30,
@@ -1126,13 +1127,20 @@
                     "EmrLogBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket" ] },
                     "CreateEmr": { "Ref": "CreateEmr" },
                     "EmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
-                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] }
+                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
+                    "RedshiftUsername": { "Ref": "RedshiftUsername" }, 
+                    "RedshiftPassword": { "Ref": "RedshiftPassword" },
+                    "RedshiftDbName": { "Ref": "RedshiftDbName" },
+                    "RedshiftSubnetA": { "Ref": "PrivateSubnetId1" },
+                    "RedshiftSubnetB": { "Ref": "PrivateSubnetId2" },
+                    "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] }
                 }
             }
         },
 
         "EmrStack": {
             "Type": "AWS::CloudFormation::Stack",
+            "Condition": "CreateEmrCondition",
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-emr.template" },
                 "TimeoutInMinutes": 30,

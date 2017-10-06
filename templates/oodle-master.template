@@ -22,7 +22,6 @@
                     "Parameters": [
                         "CreateDistantRunStack",
                         "CreateEmr",
-                        "CreateJobserverAutoscaleStack",
                         "CreateTacDatabase"
                     ]
                 },
@@ -144,9 +143,6 @@
                 },
                 "CreateEmr": {
                     "default": "Create EMR"
-                },
-                "CreateJobserverAutoscaleStack": {
-                    "default": "Create Jobserver Autoscale Stack"
                 },
                 "CreateTacDatabase": {
                     "default": "Create TAC Database"
@@ -601,12 +597,6 @@
                 "false"
             ]
         },
-        "CreateJobserverAutoscaleStack": {
-            "Description": "Create JobserverAutoscale stack.",
-            "Type": "String",
-			"Default": "true",
-            "AllowedValues": [ "true", "false" ]
-        },
         "CreateDistantRunStack": {
             "Description": "Create Jobserver stack in public subnet for use by Studio Distant Run capability.",
             "Type": "String",
@@ -792,7 +782,7 @@
             "Type": "Number",
             "MinValue": "1",
             "MaxValue": "10",
-            "Default": "2"
+            "Default": "1"
         },
         "DistantRunAutoscaleMaxSize": {
             "Description": "Talend DistantRun autoscale maximum size",
@@ -806,7 +796,7 @@
             "Type": "Number",
             "MinValue": "1",
             "MaxValue": "10",
-            "Default": "2"
+            "Default": "1"
         },
         "GitProtocol": {
             "Description": "Git protocol.",
@@ -946,17 +936,6 @@
             "Fn::Not": [
                 { "Fn::Equals": [ { "Ref": "NumBastionHosts" }, "0" ] }
             ]
-        },
-        "isSaveCredentialsEnabled": {
-            "Fn::Equals": [ "true", { "Fn::FindInMap": [ "Talend", "flags", "SaveCredentialsEnabled" ] } ]
-        },
-        "GovCloudCondition": {
-            "Fn::Equals": [
-                {
-                    "Ref": "AWS::Region"
-                },
-                "us-gov-west-1"
-            ]
         }
     },
     "Resources": {
@@ -1003,7 +982,6 @@
                     "StudioInstanceType": { "Ref": "StudioInstanceType" },
                     "BastionInstanceType": { "Ref": "BastionInstanceType" },
                     "CreateEmr": { "Ref": "CreateEmr" },
-                    "CreateJobserverAutoscaleStack": { "Ref": "CreateJobserverAutoscaleStack" },
                     "CreateDistantRunStack": { "Ref": "CreateDistantRunStack" },
                     "CreateTacDatabase": { "Ref": "CreateTacDatabase" },
                     "CreateStudioStack": { "Ref": "CreateStudioStack" },

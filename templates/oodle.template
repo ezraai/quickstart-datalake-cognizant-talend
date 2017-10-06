@@ -23,7 +23,6 @@
                     "Parameters": [
                         "CreateDistantRunStack",
                         "CreateEmr",
-                        "CreateJobserverAutoscaleStack",
                         "CreateTacDatabase"
                     ]
                 },
@@ -134,9 +133,6 @@
                 },
                 "CreateEmr": {
                     "default": "Create EMR"
-                },
-                "CreateJobserverAutoscaleStack": {
-                    "default": "Create Jobserver Autoscale Stack"
                 },
                 "CreateTacDatabase": {
                     "default": "Create TAC Database"
@@ -606,12 +602,6 @@
                 "false"
             ]
         },
-        "CreateJobserverAutoscaleStack": {
-            "Description": "Create JobserverAutoscale stack.",
-            "Type": "String",
-			"Default": "true",
-            "AllowedValues": [ "true", "false" ]
-        },
         "CreateDistantRunStack": {
             "Description": "Create Jobserver stack in public subnet for use by Studio Distant Run capability.",
             "Type": "String",
@@ -797,7 +787,7 @@
             "Type": "Number",
             "MinValue": "1",
             "MaxValue": "10",
-            "Default": "2"
+            "Default": "1"
         },
         "DistantRunAutoscaleMaxSize": {
             "Description": "Talend DistantRun autoscale maximum size",
@@ -811,7 +801,7 @@
             "Type": "Number",
             "MinValue": "1",
             "MaxValue": "10",
-            "Default": "2"
+            "Default": "1"
         },
         "GitProtocol": {
             "Description": "Git protocol.",
@@ -935,7 +925,7 @@
             "Fn::Not": [
                 { "Fn::Equals": [ { "Ref": "NumBastionHosts" }, "0" ] }
             ]
-        },
+        }
         "isSaveCredentialsEnabled": {
             "Fn::Equals": [ "true", { "Fn::FindInMap": [ "Talend", "flags", "SaveCredentialsEnabled" ] } ]
         }
@@ -1196,7 +1186,7 @@
 
 					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
-                    "TalendSourceBucket": { "GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
+                    "TalendSourceBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
 
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
@@ -1207,7 +1197,6 @@
                     "CreateNexusStack": "true",
                     "CreateLogserverStack": "true",
                     "CreateTacStack": "true",
-                    "CreateJobserverAutoscaleStack": { "Ref": "CreateJobserverAutoscaleStack" },
                     "CreateDistantRunStack": { "Ref": "CreateDistantRunStack" },
 
                     "PrivateNexus": "public",
@@ -1215,10 +1204,10 @@
                     "PrivateTac": "public",
                     "PrivateJobserver": "private",
 
-                    "JobserverAutoscaleMinSize": "1",
+                    "JobserverAutoscaleMinSize": "0",
                     "JobserverAutoscaleMaxSize": { "Ref": "JobserverAutoscaleMaxSize" },
                     "JobserverAutoscaleDesiredCapacity": {  "Ref": "JobserverAutoscaleDesiredCapacity" },
-                    "DistantRunAutoscaleMinSize": "1",
+                    "DistantRunAutoscaleMinSize": "0",
                     "DistantRunAutoscaleMaxSize": { "Ref": "DistantRunAutoscaleMaxSize" },
                     "DistantRunAutoscaleDesiredCapacity": {  "Ref": "DistantRunAutoscaleDesiredCapacity" },
 
@@ -1345,9 +1334,9 @@
                         "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/delete-buckets.template"
                 },
                 "Parameters": {
-                    "DelBucket1": { "Fn::GetAtt": [ "BucketsStack", "TalendSourceBucket" ] },
-                    "DelBucket2": { "Fn::GetAtt": [ "BucketsStack", "TalendTargetBucket" ] },
-                    "DelBucket3": { "Fn::GetAtt": [ "BucketsStack", "EmrLogBucket" ] }
+                    "DelBucket1": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
+                    "DelBucket2": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendTargetBucket" ] },
+                    "DelBucket3": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket" ] }
                 }
             }
         }

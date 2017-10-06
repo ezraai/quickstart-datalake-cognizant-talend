@@ -1099,6 +1099,7 @@
 					"KeyName": { "Ref": "KeyPairName" },
                     "SubnetId": { "Ref": "PublicSubnetId1" },
                     "PrivateSubnet": "public",
+                    "TacIp": { "Fn::GetAtt": [ "TalendServersStack", "Outputs.TacPrivateIp" ] },
                     "SecurityGroupIds": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.StudioSecurityGroupID" ] },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
 				},

@@ -1,0 +1,126 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "AWS CloudFormation template to delete all data from Datalake buckets (qs-1nlkhq1oe)",
+    "Parameters": {
+        "DeleteBuckets": {
+            "AllowedValues": [
+                "yes",
+                "no"
+            ],
+            "Default": "yes",
+            "Description": "Empty all buckets upon stack deletion",
+            "Type": "String"
+        },
+        "EmptyBucketsRoleARN": {
+            "Description": "EmptyBucketsRole ARN",
+            "Type": "String"
+        },
+        "DelBucket1": {
+            "Description": "Bucketname 1",
+            "Type": "String"
+        },
+        "DelBucket2": {
+            "Description": "Bucketname 2",
+            "Type": "String"
+        },
+        "DelBucket3": {
+            "Description": "Bucketname 2",
+            "Type": "String"
+        },
+        "DelBucket4": {
+            "Description": "Bucketname 2",
+            "Type": "String"
+        }		
+    },
+    "Conditions": {
+        "DeleteBucketsFlag": {
+            "Fn::Equals": [
+                {
+                    "Ref": "DeleteBuckets"
+                },
+                "yes"
+            ]
+        }
+    },
+    "Resources": {
+        "EmptyBuckets": {
+            "Condition": "DeleteBucketsFlag",
+            "Properties": {
+                "TB1": {
+                    "Ref": "DelBucket1"
+                },
+                "TB2": {
+                    "Ref": "DelBucket2"
+                },
+				"TB3": {
+                    "Ref": "DelBucket3"
+                },
+                "TB4": {
+                    "Ref": "DelBucket4"
+                },				
+                "ServiceToken": {
+                    "Fn::GetAtt": [
+                        "EmptyBucketsFunction",
+                        "Arn"
+                    ]
+                }
+            },
+            "Type": "AWS::CloudFormation::CustomResource",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "1b5bf775-504a-41c9-af31-35f74e7ab7dc"
+                }
+            }
+        },
+        "EmptyBucketsFunction": {
+            "Condition": "DeleteBucketsFlag",
+            "Properties": {
+                "Code": {
+                    "ZipFile": {
+                        "Fn::Join": [
+                            "\n",
+                            [
+                                "import json",
+                                "import cfnresponse",
+                                "import boto3",
+                                "from botocore.exceptions import ClientError",
+                                "",
+                                "s3 = boto3.resource('s3')",
+                                "",
+                                "def handler(event, context):",
+                                "    bucket_1 = s3.Bucket(event['ResourceProperties']['TB1'])",
+                                "    bucket_2 = s3.Bucket(event['ResourceProperties']['TB2'])",
+                                "    bucket_3 = s3.Bucket(event['ResourceProperties']['TB3'])",
+                                "    bucket_4 = s3.Bucket(event['ResourceProperties']['TB4'])",								
+                                "    if event['RequestType'] == 'Delete':",
+                                "        try:",
+                                "            bucket_1.objects.all().delete()",
+                                "            bucket_2.objects.all().delete()",
+                                "            bucket_3.objects.all().delete()",
+                                "            bucket_4.objects.all().delete()",								
+                                "            return cfnresponse.send(event, context, cfnresponse.SUCCESS, {})",
+                                "        except ClientError as e:",
+                                "            print(e)",
+                                "            return cfnresponse.send(event, context, cfnresponse.FAILED, {})",
+                                "    else:",
+                                "        return cfnresponse.send(event, context, cfnresponse.SUCCESS, {})"
+                            ]
+                        ]
+                    }
+                },
+                "Handler": "index.handler",
+                "Role": {
+                    "Ref": "EmptyBucketsRoleARN"
+                },
+                "Runtime": "python3.6",
+                "Timeout": 30
+            },
+            "Type": "AWS::Lambda::Function",
+            "Metadata": {
+                "AWS::CloudFormation::Designer": {
+                    "id": "8bd0290c-c9f0-4ea5-b538-287361c0987e"
+                }
+            }
+        }
+    }
+}

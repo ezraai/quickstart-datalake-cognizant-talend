@@ -937,6 +937,17 @@
         }
     },
     "Resources": {
+
+        "BucketsStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-buckets.template" },
+                "Parameters": {
+                    "CreateEmr": { "Ref": "CreateEmr" }
+                }
+            }
+        },
+
         "IamStack": {
 			"Type" : "AWS::CloudFormation::Stack",
 			"Properties" : {
@@ -945,7 +956,9 @@
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
 					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
-                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
+                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
+                    "TalendSourceBucket": { "Fn::GetAtt": [ "BucketsStack", "TalendSourceBucket" ] },
+                    "TalendTargetBucket": { "Fn::GetAtt": [ "BucketsStack", "TalendTargetBucket" ] }
                 }
             }
         },
@@ -1127,16 +1140,6 @@
                     "GitTacPassword": { "Ref": "GitTacPassword" },
                     "GitTacEmail": { "Ref": "GitTacEmail" },
                     "GitRepo": { "Ref": "GitRepo" }
-                }
-            }
-        },
-
-        "BucketsStack": {
-            "Type": "AWS::CloudFormation::Stack",
-            "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-buckets.template" },
-                "Parameters": {
-                    "CreateEmr": { "Ref": "CreateEmr" }
                 }
             }
         },

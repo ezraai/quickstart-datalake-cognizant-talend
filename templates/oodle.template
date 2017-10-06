@@ -957,8 +957,8 @@
                     "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
 					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
-                    "TalendSourceBucket": { "Fn::GetAtt": [ "BucketsStack", "TalendSourceBucket" ] },
-                    "TalendTargetBucket": { "Fn::GetAtt": [ "BucketsStack", "TalendTargetBucket" ] }
+                    "TalendSourceBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
+                    "TalendTargetBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendTargetBucket" ] }
                 }
             }
         },

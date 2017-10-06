@@ -1209,10 +1209,10 @@
                     "PrivateTac": "public",
                     "PrivateJobserver": "private",
 
-                    "JobserverAutoscaleMinSize": "0",
+                    "JobserverAutoscaleMinSize": "1",
                     "JobserverAutoscaleMaxSize": { "Ref": "JobserverAutoscaleMaxSize" },
                     "JobserverAutoscaleDesiredCapacity": {  "Ref": "JobserverAutoscaleDesiredCapacity" },
-                    "DistantRunAutoscaleMinSize": "0",
+                    "DistantRunAutoscaleMinSize": "1",
                     "DistantRunAutoscaleMaxSize": { "Ref": "DistantRunAutoscaleMaxSize" },
                     "DistantRunAutoscaleDesiredCapacity": {  "Ref": "DistantRunAutoscaleDesiredCapacity" },
 

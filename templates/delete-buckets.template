@@ -1,20 +1,8 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "AWS CloudFormation template to delete all data from Datalake buckets (qs-1nlkhq1oe)",
+
     "Parameters": {
-        "CreateBuckets": {
-            "AllowedValues": [
-                "yes",
-                "no"
-            ],
-            "Default": "yes",
-            "Description": "Empty all buckets upon stack deletion",
-            "Type": "String"
-        },
-        "EmptyBucketsRoleARN": {
-            "Description": "EmptyBucketsRole ARN",
-            "Type": "String"
-        },
         "DelBucket1": {
             "Description": "Bucketname 1",
             "Type": "String"
@@ -22,27 +10,28 @@
         "DelBucket2": {
             "Description": "Bucketname 2",
             "Type": "String"
+        },
+        "DelBucket3": {
+            "Description": "Bucketname 3",
+            "Type": "String"
         }
     },
+    
     "Conditions": {
-        "DeleteBucketsFlag": {
-            "Fn::Equals": [
-                {
-                    "Ref": "CreateBuckets"
-                },
-                "yes"
-            ]
-        }
     },
+    
     "Resources": {
+
         "EmptyBuckets": {
-            "Condition": "DeleteBucketsFlag",
             "Properties": {
                 "TB1": {
                     "Ref": "DelBucket1"
                 },
                 "TB2": {
                     "Ref": "DelBucket2"
+                },
+				"TB3": {
+                    "Ref": "DelBucket3"
                 },
                 "ServiceToken": {
                     "Fn::GetAtt": [
@@ -51,15 +40,74 @@
                     ]
                 }
             },
-            "Type": "AWS::CloudFormation::CustomResource",
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "1b5bf775-504a-41c9-af31-35f74e7ab7dc"
-                }
-            }
+            "Type": "AWS::CloudFormation::CustomResource"
         },
+
+		"EmptyBucketsRole": {
+            "Properties": {
+                "AssumeRolePolicyDocument": {
+                    "Statement": [
+                        {
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "lambda.amazonaws.com"
+                                ]
+                            }
+                        }
+                    ],
+                    "Version": "2012-10-17"
+                },
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "logs:CreateLogGroup",
+                                        "logs:CreateLogStream",
+                                        "logs:PutLogEvents"
+                                    ],
+                                    "Effect": "Allow",
+                                    "Resource": "arn:aws:logs:*:*:*"
+                                }
+                            ],
+                            "Version": "2012-10-17"
+                        },
+                        "PolicyName": "OodleLambdaLogging"
+                    },
+                    {
+                        "PolicyDocument": {
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "s3:ListBucket",
+                                        "s3:DeleteObject"
+                                    ],
+                                    "Effect": "Allow",
+                                    "Resource": [
+									
+									
+                                        {"Fn::Sub": "arn:aws:s3:::${DelBucket1}/*" },
+										{"Fn::Sub": "arn:aws:s3:::${DelBucket2}/*" },
+										{"Fn::Sub": "arn:aws:s3:::${DelBucket3}/*" }
+
+                                    ]
+                                }
+                            ],
+                            "Version": "2012-10-17"
+                        },
+                        "PolicyName": "ListDeleteDataLakeBuckets"
+                    }
+                ]
+            },
+            "Type": "AWS::IAM::Role"
+        },
+
         "EmptyBucketsFunction": {
-            "Condition": "DeleteBucketsFlag",
             "Properties": {
                 "Code": {
                     "ZipFile": {
@@ -76,10 +124,12 @@
                                 "def handler(event, context):",
                                 "    bucket_1 = s3.Bucket(event['ResourceProperties']['TB1'])",
                                 "    bucket_2 = s3.Bucket(event['ResourceProperties']['TB2'])",
+                                "    bucket_3 = s3.Bucket(event['ResourceProperties']['TB3'])",
                                 "    if event['RequestType'] == 'Delete':",
                                 "        try:",
                                 "            bucket_1.objects.all().delete()",
                                 "            bucket_2.objects.all().delete()",
+                                "            bucket_3.objects.all().delete()",
                                 "            return cfnresponse.send(event, context, cfnresponse.SUCCESS, {})",
                                 "        except ClientError as e:",
                                 "            print(e)",
@@ -92,17 +142,16 @@
                 },
                 "Handler": "index.handler",
                 "Role": {
-                    "Ref": "EmptyBucketsRoleARN"
+                    "Fn::GetAtt" : [
+                        "EmptyBucketsRole",
+                        "Arn"
+                    ]
                 },
                 "Runtime": "python3.6",
                 "Timeout": 30
             },
-            "Type": "AWS::Lambda::Function",
-            "Metadata": {
-                "AWS::CloudFormation::Designer": {
-                    "id": "8bd0290c-c9f0-4ea5-b538-287361c0987e"
-                }
-            }
-        },
+            "Type": "AWS::Lambda::Function"
+        }
+        
     }
 }

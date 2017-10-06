@@ -1335,7 +1335,22 @@
                     "NexusAdminPassword": { "Ref": "NexusAdminPassword" }
                 }
 			}
+        },
+
+		"DeleteBuckets": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                        "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/delete-buckets.template"
+                },
+                "Parameters": {
+                    "DelBucket1": { "Fn::GetAtt": [ "BucketsStack", "TalendSourceBucket" ] },
+                    "DelBucket2": { "Fn::GetAtt": [ "BucketsStack", "TalendTargetBucket" ] },
+                    "DelBucket3": { "Fn::GetAtt": [ "BucketsStack", "EmrLogBucket" ] }
+                }
+            }
         }
+
     },
     "Outputs": {
         "IamStack": {

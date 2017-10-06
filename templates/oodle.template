@@ -925,9 +925,15 @@
             "Fn::Not": [
                 { "Fn::Equals": [ { "Ref": "NumBastionHosts" }, "0" ] }
             ]
-        }
+        },
         "isSaveCredentialsEnabled": {
             "Fn::Equals": [ "true", { "Fn::FindInMap": [ "Talend", "flags", "SaveCredentialsEnabled" ] } ]
+        },
+        "enableDeleteBuckets": {
+            "Fn::Equals": [
+                "false",
+                "true"
+            ]
         }
     },
     "Resources": {
@@ -1176,7 +1182,6 @@
 
         "TalendServersStack": {
 			"Type" : "AWS::CloudFormation::Stack",
-            "DependsOn": [ "GitStack" ],
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
 				"TimeoutInMinutes" : "10",
@@ -1329,6 +1334,8 @@
 
 		"DeleteBuckets": {
             "Type": "AWS::CloudFormation::Stack",
+            "Condition": "enableDeleteBuckets",
+            "DependsOn": "BucketsStack",
             "Properties": {
                 "TemplateURL": {
                         "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/delete-buckets.template"

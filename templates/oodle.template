@@ -21,10 +21,8 @@
                         "default": "Options"
                     },
                     "Parameters": [
-                        "CreateAmcDatabase",
                         "CreateDistantRunStack",
                         "CreateEmr",
-                        "CreateJobserverAutoscaleStack",
                         "CreateTacDatabase"
                     ]
                 },
@@ -81,7 +79,6 @@
                         "TacDbSchema",
                         "TacUsername",
                         "TacPassword",
-                        "TacDbEngine",
                         "TacDbUser",
                         "TacDbPassword",
                         "DbClass",
@@ -131,17 +128,11 @@
                 "TalendLicenseBucket": {
                     "default": "Talend License Bucket"
                 },
-                "CreateAmcDatabase": {
-                    "default": "Create AMC Database"
-                },
                 "CreateDistantRunStack": {
                     "default": "Create Distant Run Stack"
                 },
                 "CreateEmr": {
                     "default": "Create EMR"
-                },
-                "CreateJobserverAutoscaleStack": {
-                    "default": "Create Jobserver Autoscale Stack"
                 },
                 "CreateTacDatabase": {
                     "default": "Create TAC Database"
@@ -154,9 +145,6 @@
                 },
                 "TacInstanceType": {
                     "default": "TAC Instance Type"
-                },
-                "TacDbEngine": {
-                    "default": "TAC Database Engine"
                 },
                 "TacDbUser": {
                     "default": "TAC Database Username"
@@ -614,12 +602,6 @@
                 "false"
             ]
         },
-        "CreateJobserverAutoscaleStack": {
-            "Description": "Create JobserverAutoscale stack.",
-            "Type": "String",
-			"Default": "true",
-            "AllowedValues": [ "true", "false" ]
-        },
         "CreateDistantRunStack": {
             "Description": "Create Jobserver stack in public subnet for use by Studio Distant Run capability.",
             "Type": "String",
@@ -628,12 +610,6 @@
         },
         "CreateTacDatabase": {
             "Description": "Create a new TAC Database (true) or use an existing TAC database (false)",
-            "Type": "String",
-            "AllowedValues": [ "true", "false" ],
-            "Default": "true"
-        },
-        "CreateAmcDatabase": {
-            "Description": "Create AMC Database (true) or use an existing AMC database (false)",
             "Type": "String",
             "AllowedValues": [ "true", "false" ],
             "Default": "true"
@@ -658,12 +634,6 @@
             "Description": "Specify an external mysql database hostname, or leave blank to create a new RDS instance.",
             "Type": "String",
             "Default": ""
-        },
-        "TacDbEngine": {
-            "Description": "TAC database type",
-            "Type": "String",
-            "Default": "mysql",
-            "AllowedValues": [ "mysql" ]
         },
         "TacPassword": {
             "Description": "TAC application password for tadmin account.",
@@ -739,6 +709,29 @@
             "Type": "String",
             "Default": ""
         },
+		"RedshiftNodeType": {
+            "Type": "String",
+            "Default": "dc1.large",
+            "Description": "The node type to for the redshift cluster",
+            "ConstraintDescription": "must be a valid RedShift node type.",
+            "AllowedValues": [
+                "dw1.xlarge",
+                "dw1.8xlarge",
+                "dw2.large",
+                "dw2.8xlarge",
+                "dc1.large",
+                "dc1.8xlarge",
+                "ds1.xlarge",
+                "ds1.8xlarge",
+                "ds2.xlarge",
+                "ds2.8xlarge"
+            ]
+        },
+		"RedshiftNumberOfNodes": {
+            "Description": "The number of nodes in the redshift cluster.",
+            "Type": "Number",
+            "Default": "1"
+        },
         "JobserverAutoscaleMaxSize": {
             "Description": "Talend Jobserver autoscale maximum size",
             "Type": "Number",
@@ -746,12 +739,55 @@
             "MaxValue": "10",
             "Default": "5"
         },
+		"EmrMasterInstanceType": {
+            "AllowedValues": [
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge"
+            ],
+            "Default": "m4.large",
+            "Description": "Instance type for the EMR master node. Default is m4.large",
+            "Type": "String"
+        },
+		"EmrCoreInstanceType": {
+            "AllowedValues": [
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "c3.large",
+                "c3.xlarge",
+                "c3.2xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge"
+            ],
+            "Default": "m4.large",
+            "Description": "Instance type for the EMR core nodes. Default is m4.large",
+            "Type": "String"
+        },
+		"EmrCoreNodes": {
+            "Description": "Number of EMR Core Nodes. Minimum 1",
+            "MaxValue": "500",
+            "MinValue": "1",
+            "Type": "Number",
+			"Default": "2"
+        },
         "JobserverAutoscaleDesiredCapacity": {
             "Description": "Talend Jobserver autoscale maximum size",
             "Type": "Number",
             "MinValue": "1",
             "MaxValue": "10",
-            "Default": "2"
+            "Default": "1"
         },
         "DistantRunAutoscaleMaxSize": {
             "Description": "Talend DistantRun autoscale maximum size",
@@ -765,7 +801,7 @@
             "Type": "Number",
             "MinValue": "1",
             "MaxValue": "10",
-            "Default": "2"
+            "Default": "1"
         },
         "GitProtocol": {
             "Description": "Git protocol.",
@@ -818,24 +854,6 @@
             "Description": "TAC contact email.",
             "Type": "String",
             "Default": ""
-        },
-        "EnableTCPForwarding": {
-            "Type": "String",
-            "Description": "Enable/Disable TCP Forwarding",
-            "Default": "false",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
-        },
-        "EnableX11Forwarding": {
-            "Type": "String",
-            "Description": "Enable/Disable X11 Forwarding",
-            "Default": "false",
-            "AllowedValues": [
-                "true",
-                "false"
-            ]
         },
         "NumBastionHosts": {
             "AllowedValues": [ "0", "1", "2", "3", "4" ],
@@ -910,18 +928,37 @@
         },
         "isSaveCredentialsEnabled": {
             "Fn::Equals": [ "true", { "Fn::FindInMap": [ "Talend", "flags", "SaveCredentialsEnabled" ] } ]
+        },
+        "enableDeleteBuckets": {
+            "Fn::Equals": [
+                "false",
+                "true"
+            ]
         }
     },
     "Resources": {
+
+        "BucketsStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-buckets.template" },
+                "Parameters": {
+                    "CreateEmr": { "Ref": "CreateEmr" }
+                }
+            }
+        },
+
         "IamStack": {
 			"Type" : "AWS::CloudFormation::Stack",
 			"Properties" : {
                 "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template" },
 				"Parameters" : {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
-                    "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" },
+                    "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
 					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
-                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
+                    "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
+                    "TalendSourceBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
+                    "TalendTargetBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendTargetBucket" ] }
                 }
             }
         },
@@ -1029,8 +1066,8 @@
                     "BastionInstanceType": { "Ref": "BastionInstanceType" },
                     "BastionBanner": "https://s3.amazonaws.com/quickstart-reference/linux/bastion/latest/scripts/banner_message.txt",
                     "EnableBanner": "false",
-                    "EnableTCPForwarding": { "Ref": "EnableTCPForwarding" },
-                    "EnableX11Forwarding": { "Ref": "EnableX11Forwarding" }
+                    "EnableTCPForwarding": "true",
+                    "EnableX11Forwarding": "true"
                 }
             }
         },
@@ -1046,7 +1083,7 @@
                         { "Ref": "PrivateSubnetId2" } ]
                     ] },
                     "SecurityGroups": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.DatabaseSecurityGroupID" ] },
-                    "Engine": { "Ref": "TacDbEngine" },
+                    "Engine": "mysql",
                     "DbClass": { "Ref": "DbClass" },
                     "Port": "3306",
                     "DbAllocatedStorage": { "Ref": "DbAllocatedStorage" },
@@ -1071,6 +1108,7 @@
 					"KeyName": { "Ref": "KeyPairName" },
                     "SubnetId": { "Ref": "PublicSubnetId1" },
                     "PrivateSubnet": "public",
+                    "TacIp": { "Fn::GetAtt": [ "TalendServersStack", "Outputs.TacPrivateIp" ] },
                     "SecurityGroupIds": { "Fn::GetAtt": [ "TalendSecurityGroupsStack", "Outputs.StudioSecurityGroupID" ] },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" }
 				},
@@ -1101,31 +1139,46 @@
                     "GitTacUserid": { "Ref": "GitTacUserid" },
                     "GitTacPassword": { "Ref": "GitTacPassword" },
                     "GitTacEmail": { "Ref": "GitTacEmail" },
-                    "GitRepo": { "Ref": "GitRepo" },
-                    "GitSourceUrl": "https://raw.githubusercontent.com/EdwardOst/bash-util/master/util.sh"
+                    "GitRepo": { "Ref": "GitRepo" }
                 }
             }
         },
 
-        "DataSourceStack": {
+        "RedshiftStack": {
             "Type": "AWS::CloudFormation::Stack",
+            "Condition": "CreateRedshiftCondition",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource.template" },
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-redshift.template" },
+                "TimeoutInMinutes": 30,
+                "Parameters": {
+                    "RedshiftSubnetA": { "Ref": "PrivateSubnetId1" },
+                    "RedshiftSubnetB": { "Ref": "PrivateSubnetId2" },
+                    "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
+                    "RedshiftUsername": { "Ref": "RedshiftUsername" },
+                    "RedshiftPassword": { "Ref": "RedshiftPassword" },
+                    "RedshiftDbName": { "Ref": "RedshiftDbName" },
+                    "RedshiftPort": "5439",
+                    "RedshiftNodeType": { "Ref": "RedshiftNodeType" },
+                    "RedshiftNumberOfNodes": { "Ref": "RedshiftNumberOfNodes" }
+                }
+            }
+        },
+
+        "EmrStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Condition": "CreateEmrCondition",
+            "Properties": {
+                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-emr.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
                     "KeyPair": { "Ref": "KeyPairName" },
                     "EmrSubnetA": { "Ref": "PrivateSubnetId1" },
-                    "CreateEmr": { "Ref": "CreateEmr" },
+                    "EmrLogBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket" ] },
+                    "EmrMasterInstanceType": { "Ref": "EmrMasterInstanceType" },
+                    "EmrCoreInstanceType": { "Ref": "EmrCoreInstanceType" },
+                    "EmrCoreNodes": { "Ref": "EmrCoreNodes" },
                     "EmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.EmrSecurityGroupID" ] },
-                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] },
-                    "CreateRedshift": { "Fn::If": [ "CreateRedshiftCondition", "true", "false" ] },
-                    "RedshiftSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RedshiftSecurityGroupID"] },
-                    "RedshiftSubnetA":  { "Ref": "PrivateSubnetId1" },
-                    "RedshiftSubnetB":  { "Ref": "PrivateSubnetId2" },
-                    "RedshiftUsername": { "Ref": "RedshiftUsername" },
-                    "RedshiftPassword": { "Ref": "RedshiftPassword" },
-                    "RedshiftDbName": { "Ref": "RedshiftDbName" },
-                    "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "Redshift", "port" ] }
+                    "RemoteAccessEmrSecurityGroup": { "Fn::GetAtt": [ "DataSourceSecurityGroupsStack", "Outputs.RemoteAccessEmrSecurityGroupID" ] }
                 }
             }
         },
@@ -1141,6 +1194,7 @@
 
 					"TalendLicenseBucket":  { "Ref": "TalendLicenseBucket" },
                     "TalendResourceBucket": { "Ref": "TalendResourceBucket" },
+                    "TalendSourceBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
 
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
@@ -1151,7 +1205,6 @@
                     "CreateNexusStack": "true",
                     "CreateLogserverStack": "true",
                     "CreateTacStack": "true",
-                    "CreateJobserverAutoscaleStack": { "Ref": "CreateJobserverAutoscaleStack" },
                     "CreateDistantRunStack": { "Ref": "CreateDistantRunStack" },
 
                     "PrivateNexus": "public",
@@ -1199,7 +1252,7 @@
                     "AmcDbUser": { "Ref": "AmcDbUser" },
                     "AmcDbPassword": { "Ref": "AmcDbPassword" },
                     "CreateTacDatabase": { "Ref": "CreateTacDatabase" },
-                    "CreateAmcDatabase": { "Ref": "CreateAmcDatabase" },
+                    "CreateAmcDatabase": { "Ref": "CreateTacDatabase" },
 
                     "GitHost": {
                         "Fn::If": [
@@ -1227,13 +1280,13 @@
                 "TimeoutInMinutes": "10",
                 "Parameters": {
 
-                    "TalendSourceBucket": { "Fn::GetAtt": [ "DataSourceStack", "Outputs.TalendSourceBucket" ] },
-                    "TalendTargetBucket": { "Fn::GetAtt": [ "DataSourceStack", "Outputs.TalendTargetBucket" ] },
+                    "TalendSourceBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
+                    "TalendTargetBucket": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendTargetBucket" ] },
 
                     "EmrMaster": {
                         "Fn::If": [
                             "CreateEmrCondition",
-                            { "Fn::GetAtt": [ "DataSourceStack", "Outputs.EmrMasterPublicDns" ] },
+                            { "Fn::GetAtt": [ "EmrStack", "Outputs.EmrMasterPublicDns" ] },
                             {"Ref" : "AWS::NoValue"} 
                         ]
                     },
@@ -1241,7 +1294,7 @@
                     "RedshiftHost": {
                         "Fn::If": [
                             "CreateRedshiftCondition",
-                            { "Fn::GetAtt": [ "DataSourceStack", "Outputs.RedshiftEndpoint" ] },
+                            { "Fn::GetAtt": [ "RedshiftStack", "Outputs.RedshiftEndpoint" ] },
                             { "Ref": "RedshiftHost" } 
                         ]
                     },
@@ -1280,7 +1333,24 @@
                     "NexusAdminPassword": { "Ref": "NexusAdminPassword" }
                 }
 			}
+        },
+
+		"DeleteBuckets": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Condition": "enableDeleteBuckets",
+            "DependsOn": "BucketsStack",
+            "Properties": {
+                "TemplateURL": {
+                        "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/delete-buckets.template"
+                },
+                "Parameters": {
+                    "DelBucket1": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },
+                    "DelBucket2": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendTargetBucket" ] },
+                    "DelBucket3": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket" ] }
+                }
+            }
         }
+
     },
     "Outputs": {
         "IamStack": {

@@ -184,6 +184,12 @@
                 { "Condition": "EmrCondition" }
             ]
         },
+        "DistantRunEmrCondition": {
+            "Fn::And": [
+                { "Condition": "DistantRunCondition" },
+                { "Condition": "EmrCondition" }
+            ]
+        },
         "BastionEmrCondition": {
             "Fn::And": [
                 { "Condition": "BastionCondition" },
@@ -199,6 +205,12 @@
         "JobserverRedshiftCondition": {
             "Fn::And": [
                 { "Condition": "JobserverCondition" },
+                { "Condition": "RedshiftCondition" }
+            ]
+        },
+        "DistantRunRedshiftCondition": {
+            "Fn::And": [
+                { "Condition": "DistantRunCondition" },
                 { "Condition": "RedshiftCondition" }
             ]
         },
@@ -431,6 +443,21 @@
                 }
             }
         },
+        "RedshiftIngressDistantRun": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "DistantRunRedshiftCondition",
+            "Properties": {
+                "GroupId": {
+                    "Ref": "RedshiftSecurityGroupID"
+                },
+                "IpProtocol": "tcp",
+                "FromPort": { "Ref": "RedshiftPort" },
+                "ToPort": { "Ref": "RedshiftPort" },
+                "SourceSecurityGroupId": {
+                    "Ref": "DistantRunSecurityGroupID"
+                }
+            }
+        },
         "EmrIngressStudio": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Condition": "StudioEmrCondition",
@@ -455,6 +482,21 @@
                 "ToPort": "65535",
                 "SourceSecurityGroupId": {
                     "Ref": "JobserverSecurityGroupID"
+                },
+                "GroupId": {
+                    "Ref": "EmrSecurityGroupID"
+                }
+            }
+        },
+        "EmrIngressDistantRun": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "DistantRunEmrCondition",
+            "Properties": {
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535",
+                "SourceSecurityGroupId": {
+                    "Ref": "DistantRunSecurityGroupID"
                 },
                 "GroupId": {
                     "Ref": "EmrSecurityGroupID"

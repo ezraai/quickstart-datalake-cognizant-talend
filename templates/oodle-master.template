@@ -22,7 +22,8 @@
                     "Parameters": [
                         "CreateDistantRunStack",
                         "CreateEmr",
-                        "CreateTacDatabase"
+                        "CreateTacDatabase",
+						"CreateStudioStack"
                     ]
                 },
                 {
@@ -49,14 +50,23 @@
                 },
                 {
                     "Label": {
-                        "default": "Amazon EC2 configuration"
+                        "default": "Sizing configuration"
                     },
                     "Parameters": [
                         "KeyPairName",
                         "TacInstanceType",
                         "LogserverInstanceType",
                         "JobserverInstanceType",
-                        "NexusInstanceType"
+                        "NexusInstanceType",
+						"StudioInstanceType",
+						"BastionInstanceType",
+						"NumBastionHosts",
+						"RedshiftNodeType",
+						"RedshiftNumberOfNodes",
+						"EmrMasterInstanceType",
+						"EmrCoreInstanceType",
+						"EmrMasterInstanceType",
+						"EmrCoreNodes"
                     ]
                 },
                 {
@@ -95,7 +105,9 @@
                         "TacDbUser",
                         "TacDbPassword",
                         "DbClass",
-                        "DbAllocatedStorage"
+                        "DbAllocatedStorage",
+						"AmcDbUser",
+						"AmcDbPassword"
                     ]
                 },
                 {

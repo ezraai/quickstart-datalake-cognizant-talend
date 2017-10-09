@@ -1,3 +1,5 @@
+# Talend Data Lake Accelerator Quickstart
+
 The Talend Data Lake Accelerator Quickstart will get you launched on your big Data journey rapdily with a simple but highly relevant workflow focused on common Data Lake use cases.
 
 1. Begin by **[registering for a Talend Platform for Big Data evaluation license](https://info.talend.com/trial-talend-aws-quickstart.html)**.  

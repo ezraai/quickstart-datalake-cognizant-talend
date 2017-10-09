@@ -8,7 +8,7 @@ This quick start helps extend your AWS Data Lake foundation with Talend Platform
 
 Digital transformation requires a sustainable, long term perspective on achieving continuous innovation through data agility.  It requires an extended team with complementary skills to get your Data Lake initiative up and running quickly so that you can focus on your data rather than the technology.  
 
-![Data Agility](data-agility)
+![Data Agility](data-agility.png)
 
 The Talend Data Lake Accelerator will get you launched on your journey rapdily with a simple but highly relevant workflow focused on common Data Lake use cases.
 

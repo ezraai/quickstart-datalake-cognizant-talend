@@ -1,4 +1,4 @@
-The Talend Data Lake Accelerator will get you launched on your big Data journey rapdily with a simple but highly relevant workflow focused on common Data Lake use cases.
+The Talend Data Lake Accelerator Quickstart will get you launched on your big Data journey rapdily with a simple but highly relevant workflow focused on common Data Lake use cases.
 
 1. Begin by **[registering for a Talend Platform for Big Data evaluation license](https://info.talend.com/trial-talend-aws-quickstart.html)**.  
 2. Once you have registered you will receive your license attached in an email.
@@ -42,6 +42,6 @@ With Devops based on AWS Cloud Formation, you will have your Talend big data env
 
 ![Talend Quickstart Architecture](talend-quickstart-architecture.png)
 
-Data is your companies core asset.  Digital transformation requires a sustainable, long term perspective on achieving continuous innovation through data agility.  You need an extended team with complementary skills to get your Data Lake initiative up and running quickly so that you can focus on your data rather than the technology.  The Talend Data Lake Accelerator is just the first step.  Work with Cognizant and Talend to tailor a custom soluton offering for your AWS Data Lake.
+Data is your companies core asset.  Digital transformation requires a sustainable, long term perspective on achieving continuous innovation through data agility.  You need an extended team with complementary skills to get your Data Lake initiative up and running quickly so that you can focus on your data rather than the technology.  The Talend Data Lake Accelerator (TDLA) Quickstart is just the first step.  Work with Cognizant and Talend to tailor a custom soluton offering for your AWS Data Lake.
 
 ![Data Agility](data-agility.png)

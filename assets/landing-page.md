@@ -1,4 +1,4 @@
-The Talend Data Lake Accelerator will get you launched on your journey rapdily with a simple but highly relevant workflow focused on common Data Lake use cases.
+The Talend Data Lake Accelerator will get you launched on your big Data journey rapdily with a simple but highly relevant workflow focused on common Data Lake use cases.
 
 1. Begin by registering for a Talend Platform for Big Data evaluation license **(url to be provided)**.  
 2. Once you have registered you will receive your license attached in an email.

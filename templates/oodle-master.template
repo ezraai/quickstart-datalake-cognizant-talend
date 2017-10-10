@@ -963,7 +963,6 @@
             "Properties": {
                 "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle.template" },
                 "Parameters": {
-                    "QSS3URL": "https://s3.amazonaws.com",
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" },
                     "KeyPairName": { "Ref": "KeyPairName" },

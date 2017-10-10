@@ -9,7 +9,6 @@
                         "default": "Quick Start"
                     },
                     "Parameters": [
-                        "QSS3URL",
                         "QSS3BucketName",
                         "QSS3KeyPrefix",
                         "TalendResourceBucket",
@@ -113,9 +112,6 @@
                 }
             ],
             "ParameterLabels": {
-                "QSS3URL": {
-                    "default": "Quick Start S3 URL"
-                },
                 "QSS3BucketName": {
                     "default": "Quick Start S3 Bucket"
                 },
@@ -243,12 +239,6 @@
         }
     },
     "Parameters": {
-        "QSS3URL": {
-            "Description": "Encapsulate variation in s3 root url for commercial or gov-cloud",
-            "Type": "String",
-            "Default": "https://s3.amazonaws.com",
-            "AllowedValues": [ "https://s3.amazonaws.com", "https://s3-us-gov-west-1.amazonaws.com" ]
-        },
         "QSS3BucketName": {
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$",
             "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-) or period (.).",
@@ -885,11 +875,6 @@
         }
     },
     "Mappings": {
-        "Talend": {
-            "flags": {
-                "SaveCredentialsEnabled": "true"
-            }
-        },
         "Datasource": {
             "Redshift": {
                 "port": "5439"
@@ -926,9 +911,6 @@
                 { "Fn::Equals": [ { "Ref": "NumBastionHosts" }, "0" ] }
             ]
         },
-        "isSaveCredentialsEnabled": {
-            "Fn::Equals": [ "true", { "Fn::FindInMap": [ "Talend", "flags", "SaveCredentialsEnabled" ] } ]
-        },
         "enableDeleteBuckets": {
             "Fn::Equals": [
                 "false",
@@ -941,7 +923,7 @@
         "BucketsStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-buckets.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-buckets.template" },
                 "Parameters": {
                     "CreateEmr": { "Ref": "CreateEmr" }
                 }
@@ -951,7 +933,7 @@
         "IamStack": {
 			"Type" : "AWS::CloudFormation::Stack",
 			"Properties" : {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-iam.template" },
 				"Parameters" : {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
@@ -967,7 +949,7 @@
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": {
-                    "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion-securitygroups.template"
+                    "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion-securitygroups.template"
                 },
                 "Parameters": {
                     "VPCID": { "Ref": "VpcId" },
@@ -979,7 +961,7 @@
         "TalendSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-securitygroups.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-securitygroups.template" },
                 "Parameters": {
                     "VpcId": { "Ref": "VpcId" },
                     "RemoteAccessCIDR": { "Ref": "RemoteAccessCIDR" }
@@ -990,7 +972,7 @@
         "DataSourceSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-securitygroups.template" },
                 "Parameters": {
                     "VpcId": { "Ref": "VpcId" },
                     "RedshiftPort": { "Fn::FindInMap": [ "Datasource", "Redshift", "port" ] },
@@ -1004,7 +986,7 @@
         "OodleSecurityGroupsStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle-securitygroups.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle-securitygroups.template" },
                 "Parameters": {
                     "BastionSecurityGroupID": { 
                         "Fn::If": [ 
@@ -1051,7 +1033,7 @@
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateBastionCondition",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/bastion/templates/linux-bastion.template" },
                 "Parameters": {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/bastion/" },
@@ -1076,7 +1058,7 @@
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateRdsCondition",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-rds.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-rds.template" },
                 "Parameters": {
                     "Subnets": { "Fn::Join": [ ",",
                         [ { "Ref": "PrivateSubnetId1" },
@@ -1097,7 +1079,7 @@
 			"Type" : "AWS::CloudFormation::Stack",
             "Condition" : "CreateStudioCondition",
 			"Properties" : {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-studio-ubuntu.template" },
 				"Parameters" : {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Fn::Sub": "${QSS3KeyPrefix}submodules/talend/" },
@@ -1120,7 +1102,7 @@
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateGitCondition",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/gitlab.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/gitlab.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
@@ -1148,7 +1130,7 @@
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateRedshiftCondition",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-redshift.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-redshift.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
                     "RedshiftSubnetA": { "Ref": "PrivateSubnetId1" },
@@ -1168,7 +1150,7 @@
             "Type": "AWS::CloudFormation::Stack",
             "Condition": "CreateEmrCondition",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-emr.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/datasource/templates/datasource-emr.template" },
                 "TimeoutInMinutes": 30,
                 "Parameters": {
                     "KeyPair": { "Ref": "KeyPairName" },
@@ -1186,7 +1168,7 @@
         "TalendServersStack": {
 			"Type" : "AWS::CloudFormation::Stack",
 			"Properties" : {
-                "TemplateURL": { "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
+                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}submodules/talend/templates/talend-servers.template" },
 				"TimeoutInMinutes" : "10",
 				"Parameters" : {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
@@ -1199,8 +1181,10 @@
                     "InstanceRole": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceRole" ] },
                     "InstanceProfile": { "Fn::GetAtt": [ "IamStack", "Outputs.InstanceProfile" ] },
 
-                    "PublicSubnetId": { "Ref": "PublicSubnetId1" },
-                    "PrivateSubnetId": { "Ref": "PrivateSubnetId1" },
+                    "PublicSubnetId1": { "Ref": "PublicSubnetId1" },
+                    "PublicSubnetId2": { "Ref": "PublicSubnetId2" },
+                    "PrivateSubnetId1": { "Ref": "PrivateSubnetId1" },
+                    "PrivateSubnetId2": { "Ref": "PrivateSubnetId2" },
 
                     "CreateNexusStack": "true",
                     "CreateLogserverStack": "true",
@@ -1272,10 +1256,9 @@
 
 		"CredentialStore": {
             "Type": "AWS::CloudFormation::Stack",
-            "Condition": "isSaveCredentialsEnabled",
             "Properties": {
                 "TemplateURL": {
-                        "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/credential-store.template"
+                        "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}templates/credential-store.template"
                 },
                 "TimeoutInMinutes": "10",
                 "Parameters": {
@@ -1341,7 +1324,7 @@
             "DependsOn": "BucketsStack",
             "Properties": {
                 "TemplateURL": {
-                        "Fn::Sub": "${QSS3URL}/${QSS3BucketName}/${QSS3KeyPrefix}templates/delete-buckets.template"
+                        "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}templates/delete-buckets.template"
                 },
                 "Parameters": {
                     "DelBucket1": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket" ] },

@@ -244,6 +244,17 @@
                 "ToPort": "22"
             }
         },
+        "StudioIngressEmr": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "StudioEmrCondition",
+            "Properties": {
+                "GroupId": { "Ref": "StudioSecurityGroupID" },
+                "SourceSecurityGroupId": { "Ref": "EmrSecurityGroupID" },
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535"
+            }
+        },
         "TacIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Condition": "BastionTacCondition",
@@ -277,6 +288,17 @@
                 "ToPort": "22"
             }
         },
+        "JobserverIngressEmr": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "JobserverEmrCondition",
+            "Properties": {
+                "GroupId": { "Ref": "JobserverSecurityGroupID" },
+                "SourceSecurityGroupId": { "Ref": "EmrSecurityGroupID" },
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535"
+            }
+        },
         "DistantRunIngressBastionSsh": {
             "Type": "AWS::EC2::SecurityGroupIngress",
             "Condition": "BastionDistantRunCondition",
@@ -286,6 +308,17 @@
                 "IpProtocol": "tcp",
                 "FromPort": "22",
                 "ToPort": "22"
+            }
+        },
+        "DistantRunIngressEmr": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "Condition": "DistantRunEmrCondition",
+            "Properties": {
+                "GroupId": { "Ref": "DistantRunSecurityGroupID" },
+                "SourceSecurityGroupId": { "Ref": "EmrSecurityGroupID" },
+                "IpProtocol": "tcp",
+                "FromPort": "0",
+                "ToPort": "65535"
             }
         },
         "NexusIngressBastionSsh": {

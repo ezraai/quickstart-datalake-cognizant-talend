@@ -17,22 +17,13 @@
                 },
                 {
                     "Label": {
-                        "default": "Options"
+                        "default": "Creation options for existing deployments"
                     },
                     "Parameters": [
                         "CreateDistantRunStack",
                         "CreateEmr",
                         "CreateTacDatabase",
 						"CreateStudioStack"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "Availability Zone configuration"
-                    },
-                    "Parameters": [
-                        "AvailabilityZones",
-                        "NumberOfAZs"
                     ]
                 },
                 {
@@ -45,7 +36,8 @@
                         "PublicSubnet2CIDR",
                         "PrivateSubnet1CIDR",
                         "PrivateSubnet2CIDR",
-                        "RemoteAccessCIDR"
+                        "RemoteAccessCIDR",
+						"AvailabilityZones"
                     ]
                 },
                 {
@@ -142,7 +134,7 @@
                     "default": "Quick Start S3 Bucket"
                 },
                 "QSS3KeyPrefix": {
-                    "default": "Quick Start S3 Key Prefix"
+                    "default": "Quick Start S3 Key Prefix (optional)"
                 },
                 "TalendResourceBucket": {
                     "default": "Talend Resource Bucket for Talend binaries."
@@ -161,9 +153,6 @@
                 },
                 "AvailabilityZones": {
                     "default": "Availability Zones"
-                },
-                "NumberOfAZs": {
-                    "default": "Number Of Availability Zones"
                 },
                 "VPCCIDR": {
                     "default": "VPC CIDR"
@@ -196,7 +185,7 @@
                     "default": "TAC Database Password"
                 },
                 "TacDbHost": {
-                    "default": "TAC Database Host"
+                    "default": "TAC Database Host (optional)"
                 },
                 "TacDbSchema": {
                     "default": "TAC Database Schema"
@@ -241,7 +230,7 @@
                     "default": "DistantRun Autoscale Maximum Capacity"
                 },
                 "RedshiftHost": {
-                    "default": "Redshift Host"
+                    "default": "Redshift Host (optional)"
                 },
                 "RedshiftDbName": {
                     "default": "Redshift Database Name"
@@ -256,7 +245,7 @@
                     "default": "Git Protocol"
                 },
                 "GitHost": {
-                    "default": "Git Host"
+                    "default": "Git Host (optional)"
                 },
                 "GitPort": {
                     "default": "Git TCP Port"

@@ -149,7 +149,7 @@
                     "default": "TAC Database Password"
                 },
                 "TacDbHost": {
-                    "default": "TAC Database Host"
+                    "default": "TAC Database Host (optional)"
                 },
                 "TacDbSchema": {
                     "default": "TAC Database Schema"
@@ -194,7 +194,7 @@
                     "default": "DistantRun Autoscale Maximum Capacity"
                 },
                 "RedshiftHost": {
-                    "default": "Redshift Host"
+                    "default": "Redshift Host (optional)"
                 },
                 "RedshiftDbName": {
                     "default": "Redshift Database Name"
@@ -209,7 +209,7 @@
                     "default": "Git Protocol"
                 },
                 "GitHost": {
-                    "default": "Git Host"
+                    "default": "Git Host (optional)"
                 },
                 "GitPort": {
                     "default": "Git TCP Port"

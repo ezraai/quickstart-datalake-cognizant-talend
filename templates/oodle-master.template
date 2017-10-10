@@ -1040,6 +1040,88 @@
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:OodleStack" } 
 				} 
-        }
+        },
+        "GitPublicDNS": {
+            "Condition": "CreateGitCondition",				
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.GitPublicDNS"] },
+            "Description": "Git URL",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:GitPublicDNS" } 
+			}
+        },		
+        "TacPublicDNS": {
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.TacPublicDNS"] },
+            "Description": "TAC URL",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:TacPublicDnsName" } 
+			}
+        },
+        "NexusPublicDNS": {
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.NexusPublicDNS"] },
+            "Description": "Nexus public DNS address",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:NexusPublicDnsName" } 
+			}
+        },	
+        "StudioPublicDNS": {
+            "Condition": "CreateStudioCondition",			
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.publicDnsName"] },
+            "Description": "Studio public URL",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:StudioPublicDnsName" } 
+			}
+        },		
+        "RedshiftJDBC": {
+            "Condition": "CreateRedshiftCondition",		
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.RedshiftJDBC"] },
+            "Description": "Redshift JDBC Url",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:RedshiftJDBC" } 
+			}
+        },
+		"RedshiftEndpoint": {
+            "Condition": "CreateRedshiftCondition",		
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.RedshiftEndpoint"] },
+            "Description": "Redshift Endpoint",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:RedshiftEndpoint" } 
+			}
+        },
+		"EMRPublicDNS": {
+            "Condition": "CreateEmrCondition",		
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.EMRPublicDNS"] },
+            "Description": "EMR public DNS",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:EMRPublicDNS" } 
+			}
+        },
+		"CredentialBucket": {	
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.CredentialBucket"] },
+            "Description": "Talend Credential Bucket",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:CredentialBucket" } 
+			}
+        },		
+		"TalendSourceBucket": {	
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.TalendSourceBucket"] },
+            "Description": "Talend Source Bucket",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:TalendSourceBucket" } 
+			}
+        },	
+		"TalendTargetBucket": {	
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.TalendTargetBucket"] },
+            "Description": "Talend Target Bucket",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:TalendTargetBucket" } 
+			}
+        },	
+		"EmrLogBucket": {	
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.EmrLogBucket"] },
+            "Description": "Emr Log Bucket",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:EmrLogBucket" } 
+			}
+        }		
     }
 }

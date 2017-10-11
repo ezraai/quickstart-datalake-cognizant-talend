@@ -1065,7 +1065,7 @@
         },	
         "StudioPublicDnsName": {
             "Condition": "CreateStudioCondition",			
-            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.publicDnsName"] },
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.StudioPublicDnsName"] },
             "Description": "Studio public URL",
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:StudioPublicDnsName" } 

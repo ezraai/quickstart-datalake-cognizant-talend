@@ -149,7 +149,7 @@
                     "default": "TAC Database Password"
                 },
                 "TacDbHost": {
-                    "default": "TAC Database Host"
+                    "default": "TAC Database Host (optional)"
                 },
                 "TacDbSchema": {
                     "default": "TAC Database Schema"
@@ -194,7 +194,7 @@
                     "default": "DistantRun Autoscale Maximum Capacity"
                 },
                 "RedshiftHost": {
-                    "default": "Redshift Host"
+                    "default": "Redshift Host (optional)"
                 },
                 "RedshiftDbName": {
                     "default": "Redshift Database Name"
@@ -209,7 +209,7 @@
                     "default": "Git Protocol"
                 },
                 "GitHost": {
-                    "default": "Git Host"
+                    "default": "Git Host (optional)"
                 },
                 "GitPort": {
                     "default": "Git TCP Port"
@@ -1394,6 +1394,89 @@
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:TalendServersStack" } 
 				} 
-        }
+        },
+        "GitPublicDNS": {
+		     "Condition": "CreateGitCondition",				
+            "Value": { "Fn::GetAtt": [ "GitStack", "Outputs.publicDnsName"] },
+            "Description": "Git public DNS address",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:publicDnsName" } 
+			}
+        },		
+        "TacPublicDNS": {
+            "Value": { "Fn::GetAtt": [ "TalendServersStack", "Outputs.TacPublicDNS"] },
+            "Description": "TAC public DNS address",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:TacPublicDnsName" } 
+			}
+        },
+        "NexusPublicDNS": {
+            "Value": { "Fn::GetAtt": [ "TalendServersStack", "Outputs.NexusPublicDNS"] },
+            "Description": "Nexus public DNS address",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:NexusPublicDnsName" } 
+			}
+        },	
+        "StudioPublicDNS": {
+            "Condition": "CreateStudioCondition",			
+            "Value": { "Fn::GetAtt": [ "StudioStack", "Outputs.publicDnsName"] },
+            "Description": "Studio public DNS address",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:StudioPublicDnsName" } 
+			}
+        },		
+        "RedshiftJDBC": {
+            "Condition": "CreateRedshiftCondition",		
+            "Value": { "Fn::GetAtt": [ "RedshiftStack", "Outputs.RedshiftJdbcUrl"] },
+            "Description": "Redshift JDBC Url",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:RedshiftJDBC" } 
+			}
+        },
+		"RedshiftEndpoint": {
+            "Condition": "CreateRedshiftCondition",		
+            "Value": { "Fn::GetAtt": [ "RedshiftStack", "Outputs.RedshiftEndpoint"] },
+            "Description": "Redshift Endpoint",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:RedshiftEndpoint" } 
+			}
+        },
+		"EMRPublicDNS": {
+            "Condition": "CreateEmrCondition",		
+            "Value": { "Fn::GetAtt": [ "EmrStack", "Outputs.EmrMasterPublicDns"] },
+            "Description": "EMR public DNS",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:EmrMasterPublicDns" } 
+			}
+        },
+		"CredentialBucket": {	
+            "Value": { "Fn::GetAtt": [ "CredentialStore", "Outputs.CredentialBucket"] },
+            "Description": "Credential Bucket",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:CredentialBucket" } 
+			}
+        },		
+		"TalendSourceBucket": {	
+            "Value": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendSourceBucket"] },
+            "Description": "Talend Source Bucket",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:TalendSourceBucket" } 
+			}
+        },	
+		"TalendTargetBucket": {	
+            "Value": { "Fn::GetAtt": [ "BucketsStack", "Outputs.TalendTargetBucket"] },
+            "Description": "Talend Target Bucket",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:TalendTargetBucket" } 
+			}
+        },	
+		"EmrLogBucket": {	
+            "Value": { "Fn::GetAtt": [ "BucketsStack", "Outputs.EmrLogBucket"] },
+            "Description": "Emr Log Bucket",
+			"Export": {
+				"Name": { "Fn::Sub": "${AWS::StackName}:EmrLogBucket" } 
+			}
+        }			
+		
     }
 }

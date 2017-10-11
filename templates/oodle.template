@@ -1395,7 +1395,7 @@
 				"Name": { "Fn::Sub": "${AWS::StackName}:TalendServersStack" } 
 				} 
         },
-        "GitPublicDNS": {
+        "GitPublicDnsName": {
 		     "Condition": "CreateGitCondition",				
             "Value": { "Fn::GetAtt": [ "GitStack", "Outputs.publicDnsName"] },
             "Description": "Git public DNS address",
@@ -1403,21 +1403,21 @@
 				"Name": { "Fn::Sub": "${AWS::StackName}:publicDnsName" } 
 			}
         },		
-        "TacPublicDNS": {
-            "Value": { "Fn::GetAtt": [ "TalendServersStack", "Outputs.TacPublicDNS"] },
-            "Description": "TAC public DNS address",
+        "TacPublicDnsName": {
+            "Value": { "Fn::GetAtt": [ "TalendServersStack", "Outputs.TacPublicDnsName"] },
+            "Description": "TAC public DNS",
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:TacPublicDnsName" } 
 			}
         },
-        "NexusPublicDNS": {
-            "Value": { "Fn::GetAtt": [ "TalendServersStack", "Outputs.NexusPublicDNS"] },
+        "NexusPublicDnsName": {
+            "Value": { "Fn::GetAtt": [ "TalendServersStack", "Outputs.NexusPublicDnsName"] },
             "Description": "Nexus public DNS address",
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:NexusPublicDnsName" } 
 			}
         },	
-        "StudioPublicDNS": {
+        "StudioPublicDnsName": {
             "Condition": "CreateStudioCondition",			
             "Value": { "Fn::GetAtt": [ "StudioStack", "Outputs.publicDnsName"] },
             "Description": "Studio public DNS address",
@@ -1441,7 +1441,7 @@
 				"Name": { "Fn::Sub": "${AWS::StackName}:RedshiftEndpoint" } 
 			}
         },
-		"EMRPublicDNS": {
+		"EmrMasterPublicDns": {
             "Condition": "CreateEmrCondition",		
             "Value": { "Fn::GetAtt": [ "EmrStack", "Outputs.EmrMasterPublicDns"] },
             "Description": "EMR public DNS",

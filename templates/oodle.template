@@ -613,15 +613,12 @@
         "NexusAdminUserid": {
             "Description": "Nexus administrator userid.",
             "Type": "String",
-            "Default": "admin",
-             "AllowedValues": [ "admin" ]
+            "Default": "admin"
        },
         "NexusAdminPassword": {
             "Description": "Nexus password.",
             "Type": "String",
-            "NoEcho": "true",
-            "Default": "Talend123",
-            "AllowedValues": [ "Talend123" ]
+            "NoEcho": "true"
         },
         "TacDbHost": {
             "Description": "Specify an external mysql database hostname, or leave blank to create a new RDS instance.",

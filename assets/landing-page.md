@@ -2,7 +2,7 @@
 
 This Quickstart will get you launched on your big Data journey rapidly with a simple but highly relevant workflow focused on common Data Lake use cases.
 
-1. Begin by **[registering for a Talend Platform for Big Data evaluation license](https://info.talend.com/trial-talend-datalake-accelerator.html)**.  
+1. Begin by **[registering for a Talend Platform for Big Data evaluation license](https://info.talend.com/trial-talend-quickstart-datalakes.html)**.  
 2. Once you have registered you will receive your license attached in an email.
 3. Load the license file into a private S3 bucket.
 3. Follow the [Deployment Guide](https://s3.amazonaws.com/docs.quickstart.talend/Data+Lake+Quick+Start+from+Cognizant+and+Talend+-+Deployment+Guide.pdf) to launch Cloud Formation templates for automated deployment of your Talend infrastructure as well as AWS EMR and Redshift clusters.

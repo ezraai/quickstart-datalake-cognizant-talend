@@ -1,12 +1,12 @@
-# Talend Data Lake Accelerator
+# Data Lake Quick Start from Cognizant and Talend
 
-The Talend Data Lake Accelerator will get you launched on your big Data journey rapdily with a simple but highly relevant workflow focused on common Data Lake use cases.
+This Quickstart will get you launched on your big Data journey rapidly with a simple but highly relevant workflow focused on common Data Lake use cases.
 
 1. Begin by **[registering for a Talend Platform for Big Data evaluation license](https://info.talend.com/trial-talend-datalake-accelerator.html)**.  
 2. Once you have registered you will receive your license attached in an email.
 3. Load the license file into a private S3 bucket.
-3. Follow the [Deployment Guide](https://s3.amazonaws.com/docs.quickstart.talend/Out+of+the+Box+Datalake+-+Deployment+Guide.pdf) to launch Cloud Formation templates for automated deployment of your Talend infrastructure as well as AWS EMR and Redshift clusters.
-4. Follow up with the step-by-step [User's Guide](https://s3.amazonaws.com/docs.quickstart.talend/Out+of+the+Box+Data+Lake+-+User+Guide.pdf) to see the different Talend components in action.
+3. Follow the [Deployment Guide](https://s3.amazonaws.com/docs.quickstart.talend/Data+Lake+Quick+Start+from+Cognizant+and+Talend+-+Deployment+Guide.pdf) to launch Cloud Formation templates for automated deployment of your Talend infrastructure as well as AWS EMR and Redshift clusters.
+4. Follow up with the step-by-step [User's Guide](https://s3.amazonaws.com/docs.quickstart.talend/Data+Lake+Quick+Start+from+Cognizant+and+Talend+-+User+Guide.pdf) to see the different Talend components in action.
 
 You can **[deploy on AWS into a new VPC](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?templateURL=https://s3.amazonaws.com/oodle.app.talend/templates/oodle-master.template)** or **[deploy into an Existing VPC](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?templateURL=https://s3.amazonaws.com/oodle.app.talend/templates/oodle.template)**.
 
@@ -38,11 +38,11 @@ With Devops based on AWS Cloud Formation, you will have your Talend big data env
 
 * Your choice to create a new VPC or deploy into your existing VPC on AWS. The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks above.
 
-* See the [Deployment Guide](https://s3.amazonaws.com/docs.quickstart.talend/Out+of+the+Box+Datalake+-+Deployment+Guide.pdf) for more detials.
+* See the [Deployment Guide](https://s3.amazonaws.com/docs.quickstart.talend/Data+Lake+Quick+Start+from+Cognizant+and+Talend+-+Deployment+Guide.pdf) for more detials.
 
-* See the [User's Guide](https://s3.amazonaws.com/docs.quickstart.talend/Out+of+the+Box+Data+Lake+-+User+Guide.pdf) for a tour of the sample jobs.
+* See the [User's Guide](https://s3.amazonaws.com/docs.quickstart.talend/Data+Lake+Quick+Start+from+Cognizant+and+Talend+-+User+Guide.pdf) for a tour of the sample jobs.
 
-![Talend Quickstart Architecture](talend-quickstart-architecture.png)
+![Talend Quickstart Architecture](Data Lake Quick Start from Cognizant and Talend_Architecture.png)
 
 Data is your companies core asset.  Digital transformation requires a sustainable, long term perspective on achieving continuous innovation through data agility.  You need an extended team with complementary skills to get your Data Lake initiative up and running quickly so that you can focus on your data rather than the technology.  The Talend Data Lake Accelerator (TDLA) Quickstart is just the first step.  Work with Cognizant and Talend to tailor a custom soluton offering for your AWS Data Lake.
 

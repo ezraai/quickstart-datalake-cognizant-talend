@@ -1041,31 +1041,31 @@
 				"Name": { "Fn::Sub": "${AWS::StackName}:OodleStack" } 
 				} 
         },
-        "GitPublicDNS": {
+        "GitPublicDnsName": {
             "Condition": "CreateGitCondition",				
-            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.GitPublicDNS"] },
-            "Description": "Git URL",
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.GitPublicDnsName"] },
+            "Description": "Git DNS",
 			"Export": {
-				"Name": { "Fn::Sub": "${AWS::StackName}:GitPublicDNS" } 
+				"Name": { "Fn::Sub": "${AWS::StackName}:GitPublicDnsName" } 
 			}
         },		
-        "TacPublicDNS": {
-            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.TacPublicDNS"] },
-            "Description": "TAC URL",
+        "TacPublicDnsName": {
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.TacPublicDnsName"] },
+            "Description": "TAC public DNS",
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:TacPublicDnsName" } 
 			}
         },
-        "NexusPublicDNS": {
-            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.NexusPublicDNS"] },
-            "Description": "Nexus public DNS address",
+        "NexusPublicDnsName": {
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.NexusPublicDnsName"] },
+            "Description": "Nexus public DNS",
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:NexusPublicDnsName" } 
 			}
         },	
-        "StudioPublicDNS": {
+        "StudioPublicDnsName": {
             "Condition": "CreateStudioCondition",			
-            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.publicDnsName"] },
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.StudioPublicDnsName"] },
             "Description": "Studio public URL",
 			"Export": {
 				"Name": { "Fn::Sub": "${AWS::StackName}:StudioPublicDnsName" } 
@@ -1087,12 +1087,12 @@
 				"Name": { "Fn::Sub": "${AWS::StackName}:RedshiftEndpoint" } 
 			}
         },
-		"EMRPublicDNS": {
+		"EmrMasterPublicDns": {
             "Condition": "CreateEmrCondition",		
-            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.EMRPublicDNS"] },
+            "Value": { "Fn::GetAtt": [ "OodleStack", "Outputs.EmrMasterPublicDns"] },
             "Description": "EMR public DNS",
 			"Export": {
-				"Name": { "Fn::Sub": "${AWS::StackName}:EMRPublicDNS" } 
+				"Name": { "Fn::Sub": "${AWS::StackName}:EmrMasterPublicDns" } 
 			}
         },
 		"CredentialBucket": {	

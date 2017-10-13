@@ -44,6 +44,4 @@ With Devops based on AWS Cloud Formation, you will have your Talend big data env
 
 ![Talend Quickstart Architecture](Data%20Lake%20Quick%20Start%20from%20Cognizant%20and%20Talend_Architecture.png)
 
-Data is your companies core asset.  Digital transformation requires a sustainable, long term perspective on achieving continuous innovation through data agility.  You need an extended team with complementary skills to get your Data Lake initiative up and running quickly so that you can focus on your data rather than the technology.  The Talend Data Lake Accelerator (TDLA) Quickstart is just the first step.  Work with Cognizant and Talend to tailor a custom soluton offering for your AWS Data Lake.
-
-![Data Agility](data-agility.png)
+Data is your companies core asset.  Digital transformation requires a sustainable, long term perspective on achieving continuous innovation through data agility.  You need an extended team with complementary skills to get your Data Lake initiative up and running quickly so that you can focus on your data rather than the technology.  This Quickstart is just the first step.  Work with Cognizant and Talend to tailor a custom soluton offering for your AWS Data Lake.

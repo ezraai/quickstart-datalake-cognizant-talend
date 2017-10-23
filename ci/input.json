@@ -1,0 +1,50 @@
+[
+  {
+      "ParameterKey": "TalendLicenseBucket",
+      "ParameterValue": "license.quickstart.talend"
+  },
+  {
+      "ParameterKey": "NexusAdminPassword",
+      "ParameterValue": "$[alfred_genpass_16]"
+  },
+  {
+      "ParameterKey": "TacPassword",
+      "ParameterValue": "$[alfred_genpass_16]"
+  },
+  {
+      "ParameterKey": "MasterDbPassword",
+      "ParameterValue": "$[alfred_genpass_16]"
+  },
+  {
+      "ParameterKey": "TacDbPassword",
+      "ParameterValue": "$[alfred_genpass_16]"
+  },
+  {
+      "ParameterKey": "AmcDbPassword",
+      "ParameterValue": "$[alfred_genpass_16]"
+  },
+  {
+      "ParameterKey": "RedshiftPassword",
+      "ParameterValue": "$[alfred_genpass_16]"
+  },
+  {
+      "ParameterKey": "GitAdminPassword",
+      "ParameterValue": "$[alfred_genpass_16]"
+  },
+  {
+      "ParameterKey": "GitTacPassword",
+      "ParameterValue": "$[alfred_genpass_16]"
+  },
+  {
+      "ParameterKey": "AvailabilityZones",
+      "ParameterValue": "$[alfred_genaz_2]"
+  },
+  {
+      "ParameterKey": "KeyPairName",
+      "ParameterValue": "$[alfred_getkeypair]"
+  },
+  {
+      "ParameterKey": "RemoteAccessCIDR",
+      "ParameterValue": "10.0.0.0/16"
+  }
+]

@@ -6,7 +6,7 @@
             "ParameterGroups": [
                 {
                     "Label": {
-                        "default": "Quick Start"
+                        "default": "Quick Start Configuration"
                     },
                     "Parameters": [
                         "QSS3BucketName",
@@ -17,7 +17,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Options"
+                        "default": "Creation options for existing deployments"
                     },
                     "Parameters": [
                         "CreateDistantRunStack",

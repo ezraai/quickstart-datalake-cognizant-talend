@@ -1,31 +1,9 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template uses the Talend Server templates with the AWS VPC quickstart.  The AWS VPC creates a multi-AZ, multi-subnet VPC infrastructure with managed NAT gateways in the public subnet for each Availability Zone. The Talend servers are deployed to the public subnet with the exception of the Jobservers which are deployed to the private subnet. **WARNING** This template creates AWS resources. You will be billed for the AWS resources used if you create a stack from this template. QS(0027)",
+    "Description": "This template uses the Talend Server templates with the AWS VPC quickstart. The AWS VPC creates a multi-AZ, multi-subnet VPC infrastructure with managed NAT gateways in the public subnet for each Availability Zone. The Talend servers are deployed to the public subnet with the exception of the Jobservers which are deployed to the private subnet. **WARNING** This template creates AWS resources. You will be billed for the AWS resources used if you create a stack from this template.",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
-                {
-                    "Label": {
-                        "default": "Quick Start"
-                    },
-                    "Parameters": [
-                        "QSS3BucketName",
-                        "QSS3KeyPrefix",
-                        "TalendResourceBucket",
-                        "TalendLicenseBucket"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "Creation options for existing deployments"
-                    },
-                    "Parameters": [
-                        "CreateDistantRunStack",
-                        "CreateEmr",
-                        "CreateTacDatabase",
-						"CreateStudioStack"
-                    ]
-                },
                 {
                     "Label": {
                         "default": "Network configuration"
@@ -38,6 +16,17 @@
                         "PrivateSubnet2CIDR",
                         "RemoteAccessCIDR",
 						"AvailabilityZones"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Creation options for existing deployments"
+                    },
+                    "Parameters": [
+                        "CreateDistantRunStack",
+                        "CreateEmr",
+                        "CreateTacDatabase",
+						"CreateStudioStack"
                     ]
                 },
                 {
@@ -55,7 +44,6 @@
 						"NumBastionHosts",
 						"RedshiftNodeType",
 						"RedshiftNumberOfNodes",
-						"EmrMasterInstanceType",
 						"EmrCoreInstanceType",
 						"EmrMasterInstanceType",
 						"EmrCoreNodes"
@@ -127,9 +115,38 @@
                         "GitTacPassword",
                         "GitTacEmail"
                     ]
+                },
+                {
+                    "Label": {
+                        "default": "Quick Start configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix",
+                        "TalendResourceBucket",
+                        "TalendLicenseBucket"
+                    ]
                 }
             ],
             "ParameterLabels": {
+                "RedshiftNodeType": {
+                    "default": "Redshift Node Type"
+                },
+                "RedshiftNumberOfNodes": {
+                    "default": "Number of Redshift Nodes"
+                },
+                "EmrCoreInstanceType": {
+                    "default": "EMR Core Instance Type"
+                },
+                "EmrMasterInstanceType": {
+                    "default": "EMR Master Instance Type"
+                },
+                "EmrCoreNodes": {
+                    "default": "Number of EMR Core Nodes"
+                },
+                "NumBastionHosts": {
+                    "default": "Number of Bastion Servers"
+                },
                 "QSS3BucketName": {
                     "default": "Quick Start S3 Bucket"
                 },
@@ -142,6 +159,18 @@
                 "TalendLicenseBucket": {
                     "default": "Talend License Bucket"
                 },
+                "TacUsername": {
+                    "default": "TAC Username"
+                },
+                "TacPassword": {
+                    "default": "TAC Password"
+                },
+                "AmcDbUser": {
+                    "default": "AMC DB Username"
+                },
+				"AmcDbPassword": {
+                    "default": "AMC DB Password"
+                },
                 "CreateDistantRunStack": {
                     "default": "Create Distant Run Stack"
                 },
@@ -150,6 +179,9 @@
                 },
                 "CreateTacDatabase": {
                     "default": "Create TAC Database"
+                },
+                "CreateStudioStack": {
+                	"default": "Create Talend Studio"
                 },
                 "AvailabilityZones": {
                     "default": "Availability Zones"
@@ -207,6 +239,12 @@
                 },
                 "NexusAdminPassword": {
                     "default": "Nexus Admin Password"
+                },
+                "StudioInstanceType": {
+                    "default": "Studio Server Instance Type"
+                },
+                "BastionInstanceType": {
+                    "default": "Bastion Server Instance Type"
                 },
                 "LogserverInstanceType": {
                     "default": "Logserver Instance Type"

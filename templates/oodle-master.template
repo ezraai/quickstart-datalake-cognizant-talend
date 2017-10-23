@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template uses the Talend Server templates with the AWS VPC quickstart. The AWS VPC creates a multi-AZ, multi-subnet VPC infrastructure with managed NAT gateways in the public subnet for each Availability Zone. The Talend servers are deployed to the public subnet with the exception of the Jobservers which are deployed to the private subnet. **WARNING** This template creates AWS resources. You will be billed for the AWS resources used if you create a stack from this template.",
+    "Description": "This template uses the Talend Server templates with the AWS VPC quickstart. The AWS VPC creates a multi-AZ, multi-subnet VPC infrastructure with managed NAT gateways in the public subnet for each Availability Zone. The Talend servers are deployed to the public subnet with the exception of the Jobservers which are deployed to the private subnet. **WARNING** This template creates AWS resources. You will be billed for the AWS resources used if you create a stack from this template.(qs-1nq1073ob)",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [

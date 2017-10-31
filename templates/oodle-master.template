@@ -860,7 +860,7 @@
         "VpcStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}modules/bastion/submodules/quickstart-aws-vpc/templates/aws-vpc.template" },
+                "TemplateURL": { "Fn::Sub": "http://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}modules/bastion/submodules/quickstart-aws-vpc/templates/aws-vpc.template" },
                 "Parameters": {
                     "AvailabilityZones": {
                         "Fn::Join": [ ",", { "Ref": "AvailabilityZones" } ]
@@ -879,7 +879,7 @@
         "OodleStack": {
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
-                "TemplateURL": { "Fn::Sub": "https://s3.amazonaws.com/${QSS3BucketName}/${QSS3KeyPrefix}templates/oodle.template" },
+                "TemplateURL": { "Fn::Sub": "http://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/oodle.template" },
                 "Parameters": {
                     "QSS3BucketName": { "Ref": "QSS3BucketName" },
                     "QSS3KeyPrefix": { "Ref": "QSS3KeyPrefix" },

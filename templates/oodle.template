@@ -6,13 +6,15 @@
             "ParameterGroups": [
                 {
                     "Label": {
-                        "default": "Quick Start"
+                        "default": "Network configuration"
                     },
                     "Parameters": [
-                        "QSS3BucketName",
-                        "QSS3KeyPrefix",
-                        "TalendResourceBucket",
-                        "TalendLicenseBucket"
+                        "RemoteAccessCIDR",
+						"VpcId",
+						"PublicSubnetId1",
+						"PublicSubnetId2",
+						"PrivateSubnetId1",
+						"PrivateSubnetId2"
                     ]
                 },
                 {
@@ -24,19 +26,6 @@
                         "CreateEmr",
                         "CreateTacDatabase",
 						"CreateStudioStack"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "Network configuration"
-                    },
-                    "Parameters": [
-                        "RemoteAccessCIDR",
-						"VpcId",
-						"PublicSubnetId1",
-						"PublicSubnetId2",
-						"PrivateSubnetId1",
-						"PrivateSubnetId2"
                     ]
                 },
                 {
@@ -98,7 +87,9 @@
                         "DbClass",
                         "DbAllocatedStorage",
 						"AmcDbUser",
-						"AmcDbPassword"
+						"AmcDbPassword",
+                        "TalendResourceBucket",
+                        "TalendLicenseBucket"
                     ]
                 },
                 {
@@ -125,6 +116,15 @@
                         "GitTacUserid",
                         "GitTacPassword",
                         "GitTacEmail"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Quick Start Configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
                     ]
                 }
             ],
@@ -319,14 +319,14 @@
         "QSS3BucketName": {
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-.]*[0-9a-zA-Z])*$",
             "ConstraintDescription": "Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-) or period (.).",
-            "Default": "oodle.quickstart.talend",
+            "Default": "quickstart-reference",
             "Description": "S3 bucket name for the Quick Start assets. Quick Start bucket name can include numbers, lowercase letters, uppercase letters, periods (.), and hyphens (-). It cannot start or end with a hyphen (-) or period (.).",
             "Type": "String"
         },
         "QSS3KeyPrefix": {
             "AllowedPattern": "^[0-9a-zA-Z-/]*$",
             "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).  Prefix cannot start with a slash but must end with a slash unless it is the empty string.",
-            "Default": "",
+            "Default": "datalake/cognizant/talend/latest/",
             "Description": "The S3 key name prefix used to simulate a folder for your copy of Quick Start assets, if you decide to customize or extend the Quick Start for your own use. This prefix can include numbers, lowercase letters, uppercase letters, hyphens, and forward slashes",
             "Type": "String"
         },

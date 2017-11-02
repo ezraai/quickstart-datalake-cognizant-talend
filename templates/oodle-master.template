@@ -9,13 +9,13 @@
                         "default": "Network configuration"
                     },
                     "Parameters": [
-                        "VPCCIDR",
+                       	"AvailabilityZones",
+						"VPCCIDR",
                         "PublicSubnet1CIDR",
                         "PublicSubnet2CIDR",
                         "PrivateSubnet1CIDR",
                         "PrivateSubnet2CIDR",
-                        "RemoteAccessCIDR",
-						"AvailabilityZones"
+                        "RemoteAccessCIDR"
                     ]
                 },
                 {
@@ -31,7 +31,7 @@
                 },
                 {
                     "Label": {
-                        "default": "EC2 Autoscaling configuration"
+                        "default": "EC2 Auto Scaling configuration"
                     },
                     "Parameters": [
                         "JobserverAutoscaleDesiredCapacity",
@@ -42,7 +42,7 @@
                 },
                 {
                     "Label": {
-                        "default": "Redshift configuration"
+                        "default": "Amazon Redshift configuration"
                     },
                     "Parameters": [
                         "RedshiftHost",
@@ -116,7 +116,6 @@
 						"RedshiftNumberOfNodes",
 						"EmrMasterInstanceType",
 						"EmrCoreInstanceType",
-						"EmrMasterInstanceType",
 						"EmrCoreNodes"
                     ]
                 },
@@ -138,7 +137,7 @@
                     "default": "Quick Start S3 Key Prefix (optional)"
                 },
                 "TalendResourceBucket": {
-                    "default": "Talend Resource Bucket for Talend binaries."
+                    "default": "Talend Resource Bucket"
                 },
                 "TalendLicenseBucket": {
                     "default": "Talend License Bucket"
@@ -147,7 +146,7 @@
                     "default": "Create Distant Run Stack"
                 },
                 "CreateEmr": {
-                    "default": "Create EMR"
+                    "default": "Create Amazon EMR"
                 },
                 "CreateTacDatabase": {
                     "default": "Create TAC Database"
@@ -207,7 +206,7 @@
                     "default": "Database Allocated Storage"
                 },
                 "NexusAdminUserid": {
-                    "default": "Nexus Admin Userid"
+                    "default": "Nexus Admin User ID"
                 },
                 "NexusAdminPassword": {
                     "default": "Nexus Admin Password"
@@ -234,16 +233,16 @@
                     "default": "DistantRun Autoscale Maximum Capacity"
                 },
                 "RedshiftHost": {
-                    "default": "Redshift Host (optional)"
+                    "default": "Amazon Redshift Host (optional)"
                 },
                 "RedshiftDbName": {
-                    "default": "Redshift Database Name"
+                    "default": "Amazon Redshift Database Name"
                 },
                 "RedshiftUsername": {
-                    "default": "Redshift Username"
+                    "default": "Amazon Redshift Username"
                 },
                 "RedshiftPassword": {
-                    "default": "Redshift Password"
+                    "default": "Amazon Redshift Password"
                 },
                 "GitProtocol": {
                     "default": "Git Protocol"
@@ -258,7 +257,7 @@
                     "default": "Git Repository"
                 },
                 "GitAdminUserid": {
-                    "default": "Git Admin Userid"
+                    "default": "Git Admin User ID"
                 },
                 "GitAdminPassword": {
                     "default": "Git Admin Password"
@@ -267,13 +266,49 @@
                     "default": "Git Admin Email"
                 },
                 "GitTacUserid": {
-                    "default": "Git TAC Userid"
+                    "default": "Git TAC User ID"
                 },
                 "GitTacPassword": {
                     "default": "Git TAC Password"
                 },
                 "GitTacEmail": {
                     "default": "Git TAC Email"
+                },
+                "TacPassword": {
+                    "default": "TAC Password"
+                },
+                "AmcDbUser": {
+                    "default": "AMC Database Username"
+                },
+                "AmcDbPassword": {
+                    "default": "AMC Database Password"
+                },
+                "StudioInstanceType": {
+                    "default": "Studio Instance Type"
+                },
+                "BastionInstanceType": {
+                    "default": "Bastion Instance Type"
+                },
+                "NumBastionHosts": {
+                    "default": "Number of Bastion Hosts"
+                },
+                "RedshiftNodeType": {
+                    "default": "Amazon Redshift Node Type"
+                },
+                "RedshiftNumberOfNodes": {
+                    "default": "Number of Amazon Redshift Nodes"
+                },
+                "EmrMasterInstanceType": {
+                    "default": "Amazon EMR Master Node Instance Type"
+                },
+                "EmrCoreInstanceType": {
+                    "default": "Amazon EMR Core Node Instance Type"
+                },
+                "EmrCoreNodes": {
+                    "default": "Number of Amazon EMR Core Nodes"
+                },
+                "CreateStudioStack": {
+                    "default": "Create Studio Stack"
                 }
             }
         }
@@ -645,7 +680,7 @@
                 "i3.16xlarge"
             ],
             "Default": "c4.xlarge",
-            "Description": "Instance type for the EMR master node. Default is m4.large",
+            "Description": "Instance type for the EMR master node.",
             "Type": "String"
         },
 		"EmrCoreInstanceType": {
@@ -678,7 +713,7 @@
                 "i3.16xlarge"
             ],
             "Default": "c4.xlarge",
-            "Description": "Instance type for the EMR core nodes. Default is m4.large",
+            "Description": "Instance type for the EMR core nodes.",
             "Type": "String"
         },
 		"EmrCoreNodes": {

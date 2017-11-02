@@ -43,18 +43,7 @@
 						"BastionInstanceType",
 						"EmrCoreInstanceType",
 						"EmrMasterInstanceType",
-						"RedshiftNodeType"
-                    ]
-                },
-                {
-                    "Label": {
-                        "default": "Autoscaling configuration"
-                    },
-                    "Parameters": [
-                        "JobserverAutoscaleDesiredCapacity",
-                        "JobserverAutoscaleMaxSize",
-                        "DistantRunAutoscaleDesiredCapacity",
-                        "DistantRunAutoscaleMaxSize",
+						"RedshiftNodeType",
 						"EmrCoreNodes",
 						"NumBastionHosts",
 						"RedshiftNumberOfNodes"
@@ -62,7 +51,18 @@
                 },
                 {
                     "Label": {
-                        "default": "Redshift configuration"
+                        "default": "Auto Scaling configuration"
+                    },
+                    "Parameters": [
+                        "JobserverAutoscaleDesiredCapacity",
+                        "JobserverAutoscaleMaxSize",
+                        "DistantRunAutoscaleDesiredCapacity",
+                        "DistantRunAutoscaleMaxSize"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Amazon Redshift configuration"
                     },
                     "Parameters": [
                         "RedshiftHost",
@@ -145,16 +145,16 @@
                     "default": "VPC ID"
                 },
                 "PublicSubnetId1": {
-                    "default": "Public Subnet1 Id"
+                    "default": "Public Subnet 1 ID"
                 },
                 "PublicSubnetId2": {
-                    "default": "Public Subnet2 Id"
+                    "default": "Public Subnet 2 ID"
                 },
                 "PrivateSubnetId1": {
-                    "default": "Private Subnet1 Id"
+                    "default": "Private Subnet 1 ID"
                 },
                 "PrivateSubnetId2": {
-                    "default": "Private Subnet2 Id"
+                    "default": "Private Subnet 2 ID"
                 },
                 "CreateDistantRunStack": {
                     "default": "Create Distant Run Stack"
@@ -166,7 +166,7 @@
                     "default": "Delete Buckets"
                 },
                 "CreateEmr": {
-                    "default": "Create EMR"
+                    "default": "Create Amazon EMR"
                 },
                 "CreateTacDatabase": {
                     "default": "Create TAC Database"
@@ -217,7 +217,7 @@
                     "default": "Database Allocated Storage"
                 },
                 "NexusAdminUserid": {
-                    "default": "Nexus Admin Userid"
+                    "default": "Nexus Admin User ID"
                 },
                 "NexusAdminPassword": {
                     "default": "Nexus Admin Password"
@@ -250,37 +250,34 @@
                     "default": "DistantRun Autoscale Maximum Capacity"
                 },
                 "NumBastionHosts": {
-                    "default": "No. of Bastion Hosts"
+                    "default": "Number of Bastion Hosts"
                 },
                 "RedshiftNodeType": {
-                    "default": "Redshift Node Type"
-                },
-                "RedshiftNodeType": {
-                    "default": "Redshift Node Type"
+                    "default": "Amazon Redshift Node Type"
                 },
                 "RedshiftNumberOfNodes": {
-                    "default": "No. of Nodes in Redshift Cluster"
+                    "default": "Number of Amazon Redshift Nodes"
                 },
                 "EmrMasterInstanceType": {
-                    "default": "EMR Master Node Instance Type"
+                    "default": "Amazon EMR Master Node Instance Type"
                 },
                 "EmrCoreInstanceType": {
-                    "default": "EMR Core Node Instance Type"
+                    "default": "Amazon EMR Core Node Instance Type"
                 },
                 "EmrCoreNodes": {
-                    "default": "No. of EMR Core Nodes"
+                    "default": "Number of Amazon EMR Core Nodes"
                 },
                 "RedshiftHost": {
-                    "default": "Redshift Host (optional)"
+                    "default": "Amazon Redshift Host (optional)"
                 },
                 "RedshiftDbName": {
-                    "default": "Redshift Database Name"
+                    "default": "Amazon Redshift Database Name"
                 },
                 "RedshiftUsername": {
-                    "default": "Redshift Username"
+                    "default": "Amazon Redshift Username"
                 },
                 "RedshiftPassword": {
-                    "default": "Redshift Password"
+                    "default": "Amazon Redshift Password"
                 },
                 "GitProtocol": {
                     "default": "Git Protocol"
@@ -295,7 +292,7 @@
                     "default": "Git Repository"
                 },
                 "GitAdminUserid": {
-                    "default": "Git Admin Userid"
+                    "default": "Git Admin User ID"
                 },
                 "GitAdminPassword": {
                     "default": "Git Admin Password"
@@ -304,7 +301,7 @@
                     "default": "Git Admin Email"
                 },
                 "GitTacUserid": {
-                    "default": "Git TAC Userid"
+                    "default": "Git TAC User ID"
                 },
                 "GitTacPassword": {
                     "default": "Git TAC Password"

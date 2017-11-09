@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template deploys Talend Servers, Datasources (RDS, EMR, Redshift) and Bastion servers to a VPC.  The Talend servers are deployed to the public subnet with the exception of the Jobservers which are deployed to the private subnet. The RDS, EMR, and Redshift servers are all dpeloyed to the private subnet.  Private subnets must be available in at least two availability zones.  **WARNING** This template creates AWS resources. You will be billed for the AWS resources used if you create a stack from this template. QS(0027)",
+    "Description": "This template deploys Talend Servers, Datasources (RDS, EMR, Redshift) and Bastion servers to a VPC.  The Talend servers are deployed to the public subnet with the exception of the Jobservers which are deployed to the private subnet. The RDS, EMR, and Redshift servers are all dpeloyed to the private subnet.  Private subnets must be available in at least two availability zones.  **WARNING** This template creates AWS resources. You will be billed for the AWS resources used if you create a stack from this template. (qs-1nrlpbhna)",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [

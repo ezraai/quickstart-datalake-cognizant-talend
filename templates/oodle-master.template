@@ -774,7 +774,7 @@
             "Default": "oodlejobs"
         },
         "GitAdminUserid": {
-            "Description": "User Id of Git administrator",
+            "Description": "Unique user Id of Git administrator, must be different than GitTacUserid",
             "Type": "String",
             "Default": "tadmin"
         },
@@ -784,12 +784,12 @@
             "NoEcho": "true"
         },
         "GitAdminEmail": {
-            "Description": "Email address of Git administrator",
+            "Description": "Unique email address of Git administrator, must be different than GitTacEmail",
             "Type": "String",
             "Default": ""
         },
         "GitTacUserid": {
-            "Description": "User id for GIT TAC",
+            "Description": "Unique user id for GIT TAC, must be different than GitAdminUserid",
             "Type": "String",
             "Default": "tac"
         },
@@ -799,7 +799,7 @@
             "NoEcho": "true"
         },
         "GitTacEmail": {
-            "Description": "Contact email address for TAC",
+            "Description": "Unique contact email address for TAC, must be different than GitAdminEmail",
             "Type": "String",
             "Default": ""
         },

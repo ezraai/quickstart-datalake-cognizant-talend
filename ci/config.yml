@@ -23,4 +23,4 @@ tests:
     parameter_input: input.json
     template_file: oodle-master.template
     regions:
-      - us-west-1
+      - us-east-1

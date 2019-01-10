@@ -46,5 +46,9 @@
   {
       "ParameterKey": "RemoteAccessCIDR",
       "ParameterValue": "10.0.0.0/16"
+  },
+  {
+    "ParameterKey": "RedshiftNodeType",
+    "ParameterValue": "dc1.large"
   }
 ]

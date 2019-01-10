@@ -686,7 +686,8 @@
                 "dc2.large",
                 "dc2.8xlarge",
                 "ds2.xlarge",
-                "ds2.8xlarge"
+                "ds2.8xlarge",
+                "dc1.large"
             ]
         },
 		"RedshiftNumberOfNodes": {

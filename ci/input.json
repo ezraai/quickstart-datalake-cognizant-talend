@@ -49,7 +49,7 @@
   },
   {
       "ParameterKey": "RedshiftNodeType",
-      "ParameterValue": "dc1.large"
+      "ParameterValue": "ds2.xlarge"
   },
   {
       "ParameterKey": "QSS3BucketName",

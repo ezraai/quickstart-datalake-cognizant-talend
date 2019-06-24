@@ -1,0 +1,4 @@
+.DS_Store
+taskcat_outputs/
+ci/taskcat-dev*
+maint/

@@ -1,6 +1,3 @@
-[submodule "modules/talend"]
-	path = modules/talend
-	url = https://github.com/Talend/baseline.quickstart.talend.git
 [submodule "modules/datasource"]
 	path = modules/datasource
 	url = https://github.com/Talend/datasource.quickstart.talend.git
